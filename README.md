@@ -1,2 +1,3 @@
 # heavy-metal
-My favourite rock and metal groups
+
+My favorite rock and metal groups
