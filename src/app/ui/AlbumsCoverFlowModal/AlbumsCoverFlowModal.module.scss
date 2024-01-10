@@ -1,0 +1,57 @@
+.content {
+  height: 100%;
+
+  :global {
+    .swiper {
+      width: 100%;
+      padding-bottom: 15%;
+    }
+
+    .swiper-slide {
+      background-position: center;
+      background-size: cover;
+      width: 40%;
+    }
+
+    .swiper-slide img {
+      display: block;
+      width: 100%;
+
+      -webkit-box-reflect: below 4px
+        linear-gradient(transparent, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.9));
+    }
+  }
+}
+
+.header {
+  font-size: 50px;
+  text-align: center;
+}
+
+.bottom {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 2;
+  font-size: 50px;
+  line-height: 50px;
+  width: 100%;
+  text-align: center;
+  padding-block: 24px;
+  display: flex;
+  flex-direction: column;
+
+  background: linear-gradient(transparent, black, black);
+}
+
+.link {
+  width: fit-content;
+  height: fit-content;
+}
+
+.album-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}

@@ -1,0 +1,68 @@
+.album {
+  position: relative;
+  height: fit-content;
+  transform: translate3d(0, 0, 0);
+
+  &:hover {
+    z-index: 2;
+    border-radius: 12px;
+    overflow: hidden;
+
+    .image {
+      height: auto;
+    }
+
+    .bottom-block {
+      filter: opacity(1);
+    }
+  }
+}
+
+.image {
+  width: 200px;
+  height: 200px;
+}
+
+.bottom-block {
+  position: absolute;
+
+  width: 100%;
+  bottom: 0;
+  left: 0;
+
+  filter: opacity(0);
+  transition: filter 200ms ease-in-out;
+
+  display: flex;
+  justify-content: end;
+
+  padding: 8px;
+  gap: 4px;
+}
+
+.button {
+  background-color: hsl(var(--nextui-background) / 50%);
+
+  transition: all 200ms ease-in-out;
+
+  &:hover {
+    background-color: hsl(var(--nextui-background));
+    box-shadow: 1px 1px 0 0 rgb(32, 32, 32);
+  }
+
+  &:active {
+    box-shadow: none;
+  }
+}
+
+.carousel-button {
+  top: 0;
+  left: 0;
+}
+
+.link {
+  height: 100%;
+  width: 40px;
+  height: 40px;
+  margin-inline-end: auto;
+}
