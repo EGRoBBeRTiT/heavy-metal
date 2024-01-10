@@ -1,1 +1,1 @@
-export { AlbumsCoverFlowModal } from "./AlbumsCoverFlowModal";
+export { AlbumsCoverFlowModal } from './AlbumsCoverFlowModal';

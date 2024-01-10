@@ -1,1 +1,1 @@
-export { AlbumsFullScreenModal } from "./AlbumsFullScreenModal";
+export { AlbumsFullScreenModal } from './AlbumsFullScreenModal';

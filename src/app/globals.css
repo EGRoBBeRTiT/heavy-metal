@@ -1,12 +1,1 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-root {
-}
-
-@media (prefers-color-scheme: dark) {
-}
-
-body {
-}
+@import './tailwind.css';

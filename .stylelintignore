@@ -1,0 +1,6 @@
+**/*.(js|jsx|ts|tsx|json)
+public/styles/theme.css
+public/styles/theme-light.css
+public/styles/theme-dark.css
+**/tailwind.css
+

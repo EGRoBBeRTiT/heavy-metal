@@ -1,39 +1,68 @@
 {
-  "name": "h-m",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@nextui-org/button": "^2.0.26",
-    "@nextui-org/react": "^2.2.9",
-    "@nextui-org/system": "^2.0.15",
-    "@nextui-org/theme": "^2.1.17",
-    "framer-motion": "^10.17.11",
-    "next": "14.0.4",
-    "react": "^18",
-    "react-dom": "^18",
-    "react-vanilla-tilt": "^1.0.0",
-    "swiper": "^11.0.5",
-    "vanilla-tilt": "^1.8.1"
-  },
-  "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "autoprefixer": "^10.0.1",
-    "classnames": "^2.5.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.0.4",
-    "i": "^0.3.7",
-    "npm": "^10.2.5",
-    "postcss": "^8",
-    "sass": "^1.69.7",
-    "tailwindcss": "^3.3.0",
-    "typescript": "^5"
-  }
+    "name": "h-m",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+        "lint:fix": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
+        "stylelint": "stylelint 'src/**/*.{css,scss,less,sass}'",
+        "stylelint:fix": "stylelint 'src/**/*.{css,scss,less,sass}' --fix",
+        "prettier": "prettier --write \"src/**/*.+(js|jsx|ts|tsx|json|css|scss|less|sass)\"",
+        "format": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix && stylelint 'src/**/*.{css,scss,less,sass}' --fix && prettier --write \"src/**/*.+(js|jsx|ts|tsx|json|css|scss|less|sass)\"",
+        "commit": "git-cz",
+        "precommit": "lint-staged -c .lintstagedrc && tsc && next build"
+    },
+    "dependencies": {
+        "@nextui-org/button": "^2.0.26",
+        "@nextui-org/react": "^2.2.9",
+        "@nextui-org/system": "^2.0.15",
+        "@nextui-org/theme": "^2.1.17",
+        "framer-motion": "^10.17.11",
+        "next": "14.0.4",
+        "react": "^18",
+        "react-dom": "^18",
+        "react-vanilla-tilt": "^1.0.0",
+        "swiper": "^11.0.5",
+        "vanilla-tilt": "^1.8.1"
+    },
+    "devDependencies": {
+        "@total-typescript/ts-reset": "^0.5.1",
+        "@types/node": "^20",
+        "@types/react": "^18",
+        "@types/react-dom": "^18",
+        "@typescript-eslint/eslint-plugin": "^6.0.0",
+        "@typescript-eslint/parser": "^6.0.0",
+        "autoprefixer": "^10.0.1",
+        "classnames": "^2.5.1",
+        "commitizen": "^4.3.0",
+        "eslint-config-airbnb": "^19.0.4",
+        "eslint-config-prettier": "^9.0.0",
+        "eslint-plugin-cypress": "^2.15.1",
+        "eslint-plugin-prettier": "^5.0.1",
+        "husky": "^8.0.3",
+        "lint-staged": "^14.0.1",
+        "prettier": "^3.0.3",
+        "eslint": "^8",
+        "eslint-config-next": "14.0.4",
+        "i": "^0.3.7",
+        "npm": "^10.2.5",
+        "postcss": "^8",
+        "sass": "^1.69.7",
+        "stylelint": "^15.10.3",
+        "stylelint-config-prettier-scss": "^1.0.0",
+        "stylelint-config-rational-order": "^0.1.2",
+        "stylelint-config-sass-guidelines": "^10.0.0",
+        "stylelint-config-standard": "^34.0.0",
+        "stylelint-config-standard-scss": "^11.0.0",
+        "tailwindcss": "^3.3.0",
+        "typescript": "^5"
+    },
+    "config": {
+        "commitizen": {
+            "path": "./node_modules/cz-conventional-changelog"
+        }
+    }
 }

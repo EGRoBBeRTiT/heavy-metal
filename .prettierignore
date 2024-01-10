@@ -1,0 +1,6 @@
+# Add files here to ignore them from prettier formatting
+/dist
+/build
+package-lock.json
+yarn.lock
+/.vscode
