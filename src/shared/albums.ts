@@ -32,7 +32,7 @@ const albums: AlbumType[] = [
             'Warning',
             'Wicked World',
         ],
-        link: 'https://music.apple.com/album/black-sabbath-remastered/1438648677',
+        link: 'https://music.apple.com/ru/album/black-sabbath-remastered/1438648677',
     },
     {
         band: Band.BLACK_SABBATH,
@@ -49,7 +49,7 @@ const albums: AlbumType[] = [
             'Rat Salad',
             'Jack the Stripper / Fairies Wear Boots',
         ],
-        link: 'https://music.apple.com/album/paranoid/1533659667',
+        link: 'https://music.apple.com/ru/album/paranoid/1533659667',
     },
     {
         band: Band.BLACK_SABBATH,
@@ -314,7 +314,7 @@ const albums: AlbumType[] = [
         album: 'Holy Diver',
         imageSrc: '/albums/Dio_1983_Holy-Diver.png',
         releasedAt: new Date('1983-05-25'),
-        link: 'https://music.apple.com/album/holy-diver-remastered/1440757603',
+        link: 'https://music.apple.com/ru/album/holy-diver-remastered/1440757603',
         songs: [
             'Stand Up and Shout',
             'Holy Diver',
