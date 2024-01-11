@@ -10,9 +10,10 @@ import type { AlbumType } from '@/shared/albums';
 import styles from './Album.module.scss';
 
 export interface AlbumProps extends AlbumType {
-    onClick?: () => void;
-    onCoverFlowClick?: () => void;
-    onFullScreenClick?: () => void;
+    index?: number;
+    onClick?: (index?: number) => void;
+    onCoverFlowClick?: (index?: number) => void;
+    onFullScreenClick?: (index?: number) => void;
 }
 const cx = cnBind.bind(styles);
 
@@ -26,6 +27,7 @@ export const Album = React.memo(
         onCoverFlowClick,
         onFullScreenClick,
         link,
+        index,
     }: AlbumProps) => {
         const imageRef = useRef<HTMLDivElement | null>(null);
 
@@ -40,7 +42,13 @@ export const Album = React.memo(
         }, []);
 
         return (
-            <div ref={imageRef} className={styles.album} onClick={onClick}>
+            <div
+                ref={imageRef}
+                className={styles.album}
+                onClick={() => {
+                    onClick?.(index);
+                }}
+            >
                 <Image
                     className={styles.image}
                     src={imageSrc}
@@ -63,7 +71,9 @@ export const Album = React.memo(
                     <Button
                         isIconOnly
                         className={cx('button', 'carousel-button')}
-                        onClick={onCoverFlowClick}
+                        onClick={() => {
+                            onCoverFlowClick?.(index);
+                        }}
                     >
                         <span
                             className={cx(
@@ -77,7 +87,9 @@ export const Album = React.memo(
                     <Button
                         isIconOnly
                         className={cx('button', 'carousel-button')}
-                        onClick={onFullScreenClick}
+                        onClick={() => {
+                            onFullScreenClick?.(index);
+                        }}
                     >
                         <span className="material-symbols-outlined">
                             fullscreen

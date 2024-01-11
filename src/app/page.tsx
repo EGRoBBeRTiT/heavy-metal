@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useRef } from 'react';
-import cnBind from 'classnames/bind';
 
 import { AlbumsCoverFlowModal } from '@/app/ui/AlbumsCoverFlowModal';
 import { Album } from '@/app/ui/Album';
@@ -11,8 +10,6 @@ import { AlbumsFullScreenModal } from '@/app/ui/AlbumsFullScreenModal';
 import { useDisclosureState } from '@/hooks/useDisclosureState';
 
 import styles from './page.module.scss';
-
-const cx = cnBind.bind(styles);
 
 const Home = () => {
     const activeIndex = useRef(0);
@@ -34,6 +31,7 @@ const Home = () => {
         (album: AlbumType, index: number) => {
             setActiveIndex(index);
             onCloseCoverFlow();
+
             setTimeout(onOpenFull);
         },
         [onCloseCoverFlow, onOpenFull, setActiveIndex],
@@ -44,23 +42,34 @@ const Home = () => {
         setTimeout(onOpenCoverFlow);
     }, [onOpenChangeFull, onOpenCoverFlow]);
 
+    const handleCoverFlowClick = useCallback(
+        (index?: number) => {
+            setActiveIndex(index ?? 0);
+            onOpenCoverFlow();
+        },
+        [onOpenCoverFlow, setActiveIndex],
+    );
+
+    const handleFullScreenClick = useCallback(
+        (index?: number) => {
+            setActiveIndex(index ?? 0);
+            onOpenFull();
+        },
+        [onOpenFull, setActiveIndex],
+    );
+
     return (
         <main className={styles.main}>
             <div className={styles.container}>
                 {ALBUMS.map((album, index) => (
-                    <div
+                    <Album
+                        {...album}
                         key={index}
-                        onClick={() => {
-                            setActiveIndex(index);
-                        }}
-                        className={cx('album-container')}
-                    >
-                        <Album
-                            {...album}
-                            onCoverFlowClick={onOpenCoverFlow}
-                            onFullScreenClick={onOpenFull}
-                        />
-                    </div>
+                        index={index}
+                        onClick={handleCoverFlowClick}
+                        onCoverFlowClick={handleCoverFlowClick}
+                        onFullScreenClick={handleFullScreenClick}
+                    />
                 ))}
             </div>
             <AlbumsCoverFlowModal
