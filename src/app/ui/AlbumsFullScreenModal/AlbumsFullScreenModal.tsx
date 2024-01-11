@@ -3,7 +3,13 @@ import type { ModalProps } from '@nextui-org/react';
 import { Modal, ModalBody, ModalContent } from '@nextui-org/react';
 import cnBind from 'classnames/bind';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Keyboard, Pagination, Zoom, Scrollbar } from 'swiper/modules';
+import {
+    Keyboard,
+    Pagination,
+    Zoom,
+    Scrollbar,
+    Mousewheel,
+} from 'swiper/modules';
 import { useState } from 'react';
 
 import 'swiper/css';
@@ -52,7 +58,9 @@ export const AlbumsFullScreenModal = ({
                                     Pagination,
                                     Zoom,
                                     Scrollbar,
+                                    Mousewheel,
                                 ]}
+                                mousewheel
                                 zoom
                                 keyboard={{
                                     enabled: true,

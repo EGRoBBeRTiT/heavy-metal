@@ -2,10 +2,10 @@
 import type { ModalProps } from '@nextui-org/react';
 import { Modal, ModalBody, ModalContent, ModalHeader } from '@nextui-org/react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { EffectCoverflow, Keyboard } from 'swiper/modules';
+import { EffectCoverflow, Keyboard, Mousewheel } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import cnBind from 'classnames/bind';
 
@@ -27,7 +27,35 @@ export const AlbumsCoverFlowModal = ({
     onAlbumClick,
     ...props
 }: AlbumsModalProps) => {
-    const [activeIndex, setActiveIndex] = useState(0);
+    const [activeIndex, setActiveIndex] = useState(initialIndex ?? 0);
+    const activeIndexRef = useRef<number>(activeIndex);
+    const onAlbumClickRef = useRef(onAlbumClick);
+
+    useEffect(() => {
+        activeIndexRef.current = activeIndex;
+    }, [activeIndex]);
+
+    useEffect(() => {
+        onAlbumClickRef.current = onAlbumClick;
+    }, [onAlbumClick]);
+
+    useEffect(() => {
+        const listener = (event: KeyboardEvent) => {
+            if (event.code === 'Enter' || event.code === 'NumpadEnter') {
+                event.preventDefault();
+
+                onAlbumClickRef.current?.(
+                    ALBUMS[activeIndexRef.current],
+                    activeIndexRef.current,
+                );
+            }
+        };
+        document.addEventListener('keydown', listener);
+
+        return () => {
+            document.removeEventListener('keydown', listener);
+        };
+    }, []);
 
     return (
         <Modal {...props}>
@@ -53,8 +81,12 @@ export const AlbumsCoverFlowModal = ({
                                         modifier: 1.7,
                                         slideShadows: true,
                                     }}
-                                    modules={[Keyboard, EffectCoverflow]}
-                                    zoom
+                                    modules={[
+                                        Keyboard,
+                                        EffectCoverflow,
+                                        Mousewheel,
+                                    ]}
+                                    mousewheel
                                     keyboard={{
                                         enabled: true,
                                     }}
