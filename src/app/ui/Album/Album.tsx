@@ -63,10 +63,7 @@ export const Album = React.memo(
                     <Button
                         isIconOnly
                         className={cx('button', 'carousel-button')}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            onCoverFlowClick?.();
-                        }}
+                        onClick={onCoverFlowClick}
                     >
                         <span
                             className={cx(
@@ -80,10 +77,7 @@ export const Album = React.memo(
                     <Button
                         isIconOnly
                         className={cx('button', 'carousel-button')}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            onFullScreenClick?.();
-                        }}
+                        onClick={onFullScreenClick}
                     >
                         <span className="material-symbols-outlined">
                             fullscreen

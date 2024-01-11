@@ -57,7 +57,6 @@ const Home = () => {
                     >
                         <Album
                             {...album}
-                            onClick={onOpenCoverFlow}
                             onCoverFlowClick={onOpenCoverFlow}
                             onFullScreenClick={onOpenFull}
                         />
