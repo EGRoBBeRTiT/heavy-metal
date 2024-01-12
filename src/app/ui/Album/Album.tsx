@@ -6,6 +6,7 @@ import cnBind from 'classnames/bind';
 import { Button } from '@nextui-org/button';
 
 import type { AlbumType } from '@/shared/albums';
+import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
 
 import styles from './Album.module.scss';
 
@@ -29,19 +30,22 @@ export const Album = React.memo(
         link,
         index,
     }: AlbumProps) => {
+        const { isMobile, isTablet } = useScreenConfig();
         const imageRef = useRef<HTMLDivElement | null>(null);
 
         useEffect(() => {
             setTimeout(() => {
-                VanillaTilt.init(imageRef.current as HTMLElement, {
-                    max: 16,
-                    speed: 1000,
-                    scale: 1.5,
-                    glare: true,
-                    'max-glare': 0.4,
-                });
+                if (!isMobile && !isTablet) {
+                    VanillaTilt.init(imageRef.current as HTMLElement, {
+                        max: 16,
+                        speed: 1000,
+                        scale: 1.5,
+                        glare: true,
+                        'max-glare': 0.4,
+                    });
+                }
             });
-        }, []);
+        }, [isMobile, isTablet]);
 
         return (
             <div

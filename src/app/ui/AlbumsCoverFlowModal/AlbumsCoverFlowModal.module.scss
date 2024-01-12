@@ -30,7 +30,7 @@
     background: linear-gradient(transparent, #000000, #000000);
     padding-block: 24px;
 
-    @include mobile {
+    @include tablet {
         flex-direction: row;
         gap: 16px;
         align-items: center;
