@@ -1,3 +1,7 @@
+/* stylelint-disable scss/at-import-partial-extension */
+/* stylelint-disable-next-line scss/at-import-partial-extension-blacklist */
+@import '@/styles/mixins.scss';
+
 .image {
     width: 100%;
     aspect-ratio: 1;
@@ -22,6 +26,10 @@
     width: 10%;
     height: fit-content;
     transform: translate3d(0, 0, 0);
+
+    @include mobile {
+        width: 50%;
+    }
 
     &:hover {
         z-index: 2;

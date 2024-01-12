@@ -7,6 +7,7 @@ export enum Band {
     DIO = 'DIO',
     TESTAMENT = 'Testament',
     DAMAGEPLAN = 'Damageplan',
+    AC_DC = 'AC/DC',
 }
 
 export interface AlbumType {
@@ -393,6 +394,24 @@ const albums: AlbumType[] = [
         imageSrc: '/albums/Damageplan_2004_New-Found-Power.png',
         releasedAt: new Date('2004-02-10'),
         link: 'https://music.apple.com/ru/album/new-found-power/5356931',
+    },
+    {
+        band: Band.AC_DC,
+        album: 'High Voltage',
+        imageSrc: '/albums/AC-DC_1976_High-Voltage.png',
+        releasedAt: new Date('1976-05-14'),
+        link: 'https://music.apple.com/ru/album/high-voltage/574124734',
+        songs: [
+            "It's a Long Way to the Top (If You Wanna Rock 'N' Roll)",
+            "Rock 'N' Roll Singer",
+            'The Jack',
+            'Live Wire',
+            'T.N.T.',
+            'Can I Sit Next to You Girl',
+            'Little Lover',
+            "She's Got Balls",
+            'High Voltage',
+        ],
     },
 ] as const;
 

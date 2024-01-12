@@ -32,12 +32,14 @@ export const Album = React.memo(
         const imageRef = useRef<HTMLDivElement | null>(null);
 
         useEffect(() => {
-            VanillaTilt.init(imageRef.current as HTMLElement, {
-                max: 16,
-                speed: 1000,
-                scale: 1.5,
-                glare: true,
-                'max-glare': 0.4,
+            setTimeout(() => {
+                VanillaTilt.init(imageRef.current as HTMLElement, {
+                    max: 16,
+                    speed: 1000,
+                    scale: 1.5,
+                    glare: true,
+                    'max-glare': 0.4,
+                });
             });
         }, []);
 

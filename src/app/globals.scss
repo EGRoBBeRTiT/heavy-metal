@@ -1,0 +1,16 @@
+/* stylelint-disable scss/at-import-partial-extension */
+@import './tailwind.css';
+/* stylelint-disable-next-line scss/at-import-partial-extension-blacklist */
+/* stylelint-disable-next-line scss/at-import-partial-extension-blacklist */
+@import '@/styles/mixins.scss';
+
+:root {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-size-adjust: 100%;
+
+    @include mobile {
+        font-size: 8px;
+    }
+}

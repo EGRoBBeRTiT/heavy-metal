@@ -27,11 +27,10 @@ const Home = () => {
         activeIndex.current = index;
     }, []);
 
-    const handleAlbumCOverFlowClick = useCallback(
+    const handleAlbumCoverFlowClick = useCallback(
         (album: AlbumType, index: number) => {
             setActiveIndex(index);
             onCloseCoverFlow();
-
             setTimeout(onOpenFull);
         },
         [onCloseCoverFlow, onOpenFull, setActiveIndex],
@@ -77,7 +76,7 @@ const Home = () => {
                 onOpenChange={onOpenChangeCoverFlow}
                 size="full"
                 initialIndex={activeIndex.current}
-                onAlbumClick={handleAlbumCOverFlowClick}
+                onAlbumClick={handleAlbumCoverFlowClick}
             />
             <AlbumsFullScreenModal
                 isOpen={isOpenFull}

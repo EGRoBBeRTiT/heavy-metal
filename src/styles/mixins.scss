@@ -1,0 +1,51 @@
+/* Screen */
+$screen-mobile-max: 768px;
+$screen-tablet-max: 992px;
+$screen-notebook-max: 1200px;
+$screen-large-monitor-min: calc($screen-notebook-max + 1px);
+
+@mixin cut-for-n-rows($n: 2) {
+    /* stylelint-disable-next-line value-no-vendor-prefix */
+    display: -webkit-box;
+    overflow: hidden;
+    white-space: pre-line;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: $n;
+    -webkit-box-orient: vertical;
+}
+
+@mixin centered-flexbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin mobile {
+    @media screen and (max-width: #{$screen-mobile-max}) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media screen and (max-width: #{$screen-tablet-max}) {
+        @content;
+    }
+}
+
+@mixin notebook {
+    @media screen and (max-width: #{$screen-notebook-max}) {
+        @content;
+    }
+}
+
+@mixin desktop {
+    @media screen and (min-width: #{$screen-tablet-max}) {
+        @content;
+    }
+}
+
+@mixin large-monitor {
+    @media screen and (min-width: #{$screen-large-monitor-min}) {
+        @content;
+    }
+}

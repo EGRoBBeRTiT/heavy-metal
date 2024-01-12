@@ -20,6 +20,7 @@ import 'swiper/css/scrollbar';
 import type { AlbumType } from '@/shared/albums';
 import { ALBUMS } from '@/shared/albums';
 import { cloisterBlack, playfair } from '@/shared/fonts/fonts';
+import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
 
 import styles from './AlbumsFullScreenModal.module.scss';
 
@@ -35,13 +36,15 @@ export const AlbumsFullScreenModal = ({
     onActiveIndexChange,
     ...props
 }: AlbumsModalProps) => {
+    const { isMobile } = useScreenConfig();
+
     const [zoomed, setZoomed] = useState(false);
     const [activeAlbum, setActiveAlbum] = useState<AlbumType>(
         ALBUMS[initialIndex ?? 0],
     );
 
     return (
-        <Modal {...props} className={styles.modal}>
+        <Modal scrollBehavior="normal" {...props} className={styles.modal}>
             <ModalContent>
                 {() => (
                     <ModalBody className={styles.body}>
@@ -81,7 +84,6 @@ export const AlbumsFullScreenModal = ({
                                 {ALBUMS.map(({ imageSrc, album }, index) => (
                                     <SwiperSlide key={index}>
                                         <div className="swiper-zoom-container">
-                                            {}
                                             <img
                                                 src={imageSrc}
                                                 alt={album}
@@ -92,52 +94,58 @@ export const AlbumsFullScreenModal = ({
                                 ))}
                             </Swiper>
                         </div>
-                        <div
-                            className={cx(
-                                'left-info',
-                                cloisterBlack.className,
-                                {
-                                    hidden: zoomed,
-                                },
-                            )}
-                        >
-                            <span>{activeAlbum.band}</span>
-                            <span>{activeAlbum.releasedAt.getFullYear()}</span>
-                            <span>{activeAlbum.album}</span>
-                            {activeAlbum.link && (
-                                <a
-                                    className={cx('link')}
-                                    target="_blank"
-                                    rel="noopener"
-                                    href={activeAlbum.link}
-                                >
-                                    <img
-                                        src="apple-music.png"
-                                        alt="apple music"
-                                        width={40}
-                                        height={40}
-                                    />
-                                </a>
-                            )}
-                        </div>
-                        {activeAlbum.songs && activeAlbum.songs.length && (
+                        {!isMobile && (
                             <div
                                 className={cx(
-                                    'right-info',
-                                    playfair.className,
+                                    'left-info',
+                                    cloisterBlack.className,
                                     {
                                         hidden: zoomed,
                                     },
                                 )}
                             >
-                                <span>Список композиций</span>
-                                {activeAlbum.songs.map((song, index) => (
-                                    <span key={index}>{`${
-                                        index + 1
-                                    }. ${song}`}</span>
-                                ))}
+                                <span>{activeAlbum.band}</span>
+                                <span>
+                                    {activeAlbum.releasedAt.getFullYear()}
+                                </span>
+                                <span>{activeAlbum.album}</span>
+                                {activeAlbum.link && (
+                                    <a
+                                        className={cx('link')}
+                                        target="_blank"
+                                        rel="noopener"
+                                        href={activeAlbum.link}
+                                    >
+                                        <img
+                                            src="apple-music.png"
+                                            alt="apple music"
+                                            width={40}
+                                            height={40}
+                                        />
+                                    </a>
+                                )}
                             </div>
                         )}
+                        {!isMobile &&
+                            activeAlbum.songs &&
+                            activeAlbum.songs.length && (
+                                <div
+                                    className={cx(
+                                        'right-info',
+                                        playfair.className,
+                                        {
+                                            hidden: zoomed,
+                                        },
+                                    )}
+                                >
+                                    <span>Список композиций</span>
+                                    {activeAlbum.songs.map((song, index) => (
+                                        <span key={index}>{`${
+                                            index + 1
+                                        }. ${song}`}</span>
+                                    ))}
+                                </div>
+                            )}
                     </ModalBody>
                 )}
             </ModalContent>
