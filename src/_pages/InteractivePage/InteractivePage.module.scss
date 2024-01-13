@@ -1,0 +1,72 @@
+.main {
+    padding: 2%;
+}
+
+.box {
+    $padding: 4px;
+
+    position: relative;
+    width: 100%;
+    min-height: 200px;
+    padding: 2%;
+    overflow: visible;
+    border: 6px solid #ffffff;
+
+    &::before {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 1;
+        width: calc(100% - 2 * $padding - 6px);
+        height: calc(100% - 2 * $padding - 6px);
+        border: 1.5px solid #ffffff;
+        transform: translateX(-50%) translateY(-50%);
+        content: '';
+    }
+
+    &::after {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 2;
+        width: calc(100% + 26px);
+        height: calc(100% + 26px);
+        border: 1.5px solid #ffffff;
+        transform: translateX(-50%) translateY(-50%);
+        content: '';
+    }
+
+    .corner {
+        position: absolute;
+        z-index: 3;
+        background-color: hsl(var(--nextui-background));
+
+        &:nth-child(1) {
+            top: $padding;
+            left: $padding;
+        }
+
+        &:nth-child(2) {
+            top: $padding;
+            right: $padding;
+            transform: rotate(90deg);
+        }
+
+        &:nth-child(3) {
+            right: $padding;
+            bottom: $padding;
+            transform: rotate(180deg);
+        }
+
+        &:nth-child(4) {
+            bottom: $padding;
+            left: $padding;
+            transform: rotate(-90deg);
+        }
+    }
+}
+
+.content {
+    position: relative;
+    z-index: 4;
+}

@@ -1,0 +1,1 @@
+export { InteractivePageContent } from './InteractivePageContent';

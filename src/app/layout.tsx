@@ -1,15 +1,31 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.scss';
-import './globalicons.css';
+import type React from 'react';
 
+import '@/styles/tailwind.css';
+import '@/styles/globalicons.css';
+import '@/styles/globals.scss';
 import { Providers } from '@/app/providers';
-
-const inter = Inter({ subsets: ['latin'] });
+import { inter } from '@/styles/fonts';
 
 export const metadata: Metadata = {
-    title: 'Heavy metal',
-    description: 'Мои сборник любимых групп',
+    title: "The Best Rock 'n' Roll Albums",
+    description: "List of my favorite Rock 'n' Roll albums of all time",
+    keywords: [
+        'rock',
+        "rock 'n' roll",
+        'metal',
+
+        'hard rock',
+        'albums',
+        'favorite rock albums',
+        "favorite rock 'n' roll albums",
+        'favorite heavy metal albums',
+        'favorite metal albums',
+        "best rock 'n' roll albums",
+        'best rock albums',
+        'best metal albums',
+        'best heavy albums',
+    ],
 };
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => (

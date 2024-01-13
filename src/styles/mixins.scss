@@ -1,9 +1,3 @@
-/* Screen */
-$screen-mobile-max: 768px;
-$screen-tablet-max: 992px;
-$screen-notebook-max: 1200px;
-$screen-large-monitor-min: calc($screen-notebook-max + 1px);
-
 @mixin cut-for-n-rows($n: 2) {
     /* stylelint-disable-next-line value-no-vendor-prefix */
     display: -webkit-box;
