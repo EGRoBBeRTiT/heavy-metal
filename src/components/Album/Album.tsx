@@ -3,6 +3,8 @@ import VanillaTilt from 'vanilla-tilt';
 import cnBind from 'classnames/bind';
 import { Button } from '@nextui-org/button';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { Tooltip } from '@nextui-org/react';
 
 import type { AlbumType } from '@/shared/albums';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
@@ -10,10 +12,9 @@ import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
 import styles from './Album.module.scss';
 
 export interface AlbumProps extends AlbumType {
-    index?: number;
-    onClick?: (index?: number) => void;
-    onCoverFlowClick?: (index?: number) => void;
-    onFullScreenClick?: (index?: number) => void;
+    fullScreenHref?: string;
+    href?: string;
+    coverFlowHref?: string;
 }
 const cx = cnBind.bind(styles);
 
@@ -23,12 +24,12 @@ export const Album = React.memo(
         album,
         releasedAt,
         band,
-        onClick,
-        onCoverFlowClick,
-        onFullScreenClick,
         link,
-        index,
+        href,
+        fullScreenHref,
+        coverFlowHref,
     }: AlbumProps) => {
+        const router = useRouter();
         const { isMobile, isTablet } = useScreenConfig();
         const imageRef = useRef<HTMLDivElement | null>(null);
 
@@ -48,20 +49,27 @@ export const Album = React.memo(
 
         return (
             <div
+                onClick={() => {
+                    if (href) {
+                        router.replace(href);
+                    }
+                }}
                 ref={imageRef}
                 className={cx('album')}
-                onClick={() => {
-                    onClick?.(index);
-                }}
             >
-                <Image
-                    className={cx('image')}
-                    src={imageSrc}
-                    alt={album}
-                    width={200}
-                    height={200}
-                    title={`${band}  ·  ${album}  ·  ${releasedAt.getFullYear()}`}
-                />
+                <Tooltip
+                    content={`${band}  ·  ${album}  ·  ${releasedAt.getFullYear()}`}
+                    offset={60}
+                >
+                    <Image
+                        className={cx('image')}
+                        src={imageSrc}
+                        alt={album}
+                        width={200}
+                        height={200}
+                        quality={100}
+                    />
+                </Tooltip>
                 <div className={cx('bottom-block')}>
                     {link && (
                         <a
@@ -83,7 +91,9 @@ export const Album = React.memo(
                         isIconOnly
                         className={cx('button', 'carousel-button')}
                         onClick={() => {
-                            onCoverFlowClick?.(index);
+                            if (coverFlowHref) {
+                                router.replace(coverFlowHref);
+                            }
                         }}
                     >
                         <span
@@ -95,17 +105,22 @@ export const Album = React.memo(
                             view_carousel
                         </span>
                     </Button>
-                    <Button
-                        isIconOnly
-                        className={cx('button', 'carousel-button')}
-                        onClick={() => {
-                            onFullScreenClick?.(index);
-                        }}
-                    >
-                        <span className="material-symbols-outlined">
-                            fullscreen
-                        </span>
-                    </Button>
+
+                    <Tooltip content="Во весь экран">
+                        <Button
+                            isIconOnly
+                            className={cx('button', 'carousel-button')}
+                            onClick={() => {
+                                if (fullScreenHref) {
+                                    router.replace(fullScreenHref);
+                                }
+                            }}
+                        >
+                            <span className="material-symbols-outlined">
+                                fullscreen
+                            </span>
+                        </Button>
+                    </Tooltip>
                 </div>
             </div>
         );

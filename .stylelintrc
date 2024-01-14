@@ -16,6 +16,7 @@
         "color-hex-length": "long",
         "no-duplicate-selectors": true,
         "max-nesting-depth": 10,
-        "selector-max-compound-selectors": 10
+        "selector-max-compound-selectors": 10,
+        "selector-no-qualifying-type": null
     }
 }

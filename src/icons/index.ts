@@ -1,0 +1,1 @@
+export { IcClose } from './IcClose';

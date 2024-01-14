@@ -5,7 +5,7 @@ import '@/styles/tailwind.css';
 import '@/styles/globalicons.css';
 import '@/styles/globals.scss';
 import { Providers } from '@/app/providers';
-import { inter } from '@/styles/fonts';
+import { roboto } from '@/styles/fonts';
 
 export const metadata: Metadata = {
     title: "The Best Rock 'n' Roll Albums",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => (
     <html lang="ru-RU" className="dark">
-        <body className={inter.className}>
+        <body className={roboto.className}>
             <Providers>{children}</Providers>
         </body>
     </html>

@@ -1,0 +1,63 @@
+.column {
+    width: fit-content;
+    white-space: nowrap;
+    padding-block: 8px;
+}
+
+.row {
+    display: flex;
+    flex-wrap: nowrap;
+    width: fit-content;
+    width: 100%;
+}
+
+.bands-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    color: rgb(46 46 46 / 80%);
+    font-size: 1.5rem;
+
+    &.animated {
+        .row {
+            &:nth-child(2n) {
+                .column {
+                    animation: marquee-right 48s linear infinite;
+                }
+            }
+
+            &:nth-child(2n + 1) {
+                .column {
+                    animation: marquee-left 48s linear infinite;
+                }
+            }
+        }
+    }
+}
+
+@keyframes marquee-left {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+@keyframes marquee-right {
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(0%);
+    }
+}
+
+.dot {
+    margin-inline: 8px;
+}

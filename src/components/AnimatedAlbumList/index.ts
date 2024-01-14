@@ -1,0 +1,1 @@
+export { AnimatedAlbumList } from './AnimatedAlbumList';

@@ -1,18 +1,29 @@
+'use client';
+
 import throttle from 'lodash.throttle';
 import { useEffect, useMemo, useState } from 'react';
 
 export const useWindowSize = (throttleWait = 200) => {
     const [windowSize, setWindowSize] = useState({
-        width: window.innerWidth,
-        height: window.innerHeight,
+        width: typeof window !== 'undefined' ? window.innerWidth : 0,
+        height: typeof window !== 'undefined' ? window.innerHeight : 0,
     });
+
+    useEffect(() => {
+        setWindowSize({
+            width: typeof window !== 'undefined' ? window.innerWidth : 0,
+            height: typeof window !== 'undefined' ? window.innerHeight : 0,
+        });
+    }, []);
 
     const throttleWindowChange = useMemo(
         () =>
             throttle(() => {
                 setWindowSize({
-                    width: window.innerWidth,
-                    height: window.innerHeight,
+                    width:
+                        typeof window !== 'undefined' ? window.innerWidth : 0,
+                    height:
+                        typeof window !== 'undefined' ? window.innerHeight : 0,
                 });
             }, throttleWait),
         [throttleWait],

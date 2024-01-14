@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import type { DetailedHTMLProps, HTMLAttributes } from 'react';
 import cnBind from 'classnames/bind';
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { ALBUMS } from '@/shared/albums';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
@@ -19,6 +19,9 @@ export interface AlbumListProps
     > {
     albumsInRow?: number;
     mobileAlbumsInRow?: number;
+    quality?: number;
+    width?: number;
+    mobileWidth?: number;
 }
 
 export const AlbumList = React.memo(
@@ -26,6 +29,9 @@ export const AlbumList = React.memo(
         albumsInRow = 10,
         mobileAlbumsInRow = 2,
         className,
+        quality = 100,
+        width = 300,
+        mobileWidth = 100,
     }: AlbumListProps) => {
         const [isDesktop, setIsDesktop] = useState(true);
 
@@ -42,26 +48,56 @@ export const AlbumList = React.memo(
         return (
             <div className={cx('list', className)}>
                 {ALBUMS.map((album, index) => (
-                    <Suspense key={index}>
-                        <div
-                            key={index}
-                            className={cx('image-container')}
-                            style={{
-                                width: `calc(100% / ${
-                                    isDesktop ? albumsInRow : mobileAlbumsInRow
-                                })`,
-                            }}
-                        >
+                    <article
+                        key={index}
+                        className={cx('image-container')}
+                        style={{
+                            width: `calc(100% / ${
+                                isDesktop ? albumsInRow : mobileAlbumsInRow
+                            })`,
+                        }}
+                        itemScope
+                        itemType="https://schema.org/MusicAlbum"
+                    >
+                        <div className={cx('hidden')}>
+                            <h1 itemProp="name">{album.album}</h1>
+                            <span
+                                itemScope
+                                itemProp="byArtist"
+                                itemType="https://schema.org/MusicGroup"
+                            >
+                                <h1 itemProp="name">{album.band}</h1>
+                            </span>
+                            {album.songs?.length && (
+                                <meta
+                                    content={`${album.songs.length}`}
+                                    itemProp="numTracks"
+                                />
+                            )}
+                            <meta content="Rock" itemProp="genre" />
+                            {album.link && (
+                                <a
+                                    itemProp="url"
+                                    href={album.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Listen
+                                </a>
+                            )}
+                        </div>
+                        <p>
                             <Image
+                                itemProp="image"
                                 key={index}
                                 src={album.imageSrc}
-                                alt={album.album}
-                                width={300}
-                                height={300}
-                                quality={100}
+                                alt={`${album.band} ${album.album}`}
+                                width={isDesktop ? width : mobileWidth}
+                                height={isDesktop ? width : mobileWidth}
+                                quality={quality}
                             />
-                        </div>
-                    </Suspense>
+                        </p>
+                    </article>
                 ))}
             </div>
         );

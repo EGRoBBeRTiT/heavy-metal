@@ -1,0 +1,1 @@
+export { AnimatedBands } from './AnimatedBands';

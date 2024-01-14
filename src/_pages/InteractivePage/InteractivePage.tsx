@@ -1,8 +1,13 @@
+'use client';
+
 import cnBind from 'classnames/bind';
+import { Suspense } from 'react';
 
 import { IcCorner } from '@/assets';
+import { AlbumSkeleton, AlbumLazy } from '@/components/Album';
+import { appRoutes } from '@/routes';
+import { ALBUMS } from '@/shared/albums';
 
-import { InteractivePageContent } from './InteractivePageContent';
 import styles from './InteractivePage.module.scss';
 
 const cx = cnBind.bind(styles);
@@ -19,7 +24,19 @@ export const InteractivePage = () => (
                 />
             ))}
             <div className={cx('content')}>
-                <InteractivePageContent />
+                <div className={cx('container')}>
+                    {ALBUMS.map((album, index) => (
+                        <Suspense key={index} fallback={<AlbumSkeleton />}>
+                            <AlbumLazy
+                                {...album}
+                                key={index}
+                                href={appRoutes.fullscreen(index)}
+                                fullScreenHref={appRoutes.fullscreen(index)}
+                                coverFlowHref={appRoutes.coverflow(index)}
+                            />
+                        </Suspense>
+                    ))}
+                </div>
             </div>
         </div>
     </main>

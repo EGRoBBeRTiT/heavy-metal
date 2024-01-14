@@ -10,6 +10,7 @@
     left: 0;
     display: flex;
     gap: 4px;
+    align-items: center;
     justify-content: flex-end;
     width: 100%;
     padding: var(--medium-padding);
@@ -32,7 +33,7 @@
         width: 50%;
     }
 
-    &:hover {
+    @include hover {
         z-index: 2;
         overflow: hidden;
         border-radius: 12px;
@@ -53,7 +54,7 @@
     background-color: hsl(var(--nextui-background) / 50%);
     transition: all 200ms ease-in-out;
 
-    &:hover {
+    @include hover {
         background-color: hsl(var(--nextui-background));
         box-shadow: 1px 1px 0 0 rgb(32 32 32);
     }
@@ -70,6 +71,6 @@
 
 .link {
     width: 40px;
-    height: 40px;
+    aspect-ratio: 1;
     margin-inline-end: auto;
 }
