@@ -549,7 +549,7 @@ const albums: AlbumType[] = [
         band: Band.ACCEPT,
         album: 'Breaker',
         imageSrc: '/albums/Accept_1981_Breaker.png',
-        releasedAt: new Date('1981-03-30'),
+        releasedAt: new Date('1981-03-16'),
         link: 'https://music.apple.com/ru/album/breaker/1705761372',
         songs: [
             'Starlight',

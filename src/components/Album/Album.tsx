@@ -2,9 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import VanillaTilt from 'vanilla-tilt';
 import cnBind from 'classnames/bind';
 import { Button } from '@nextui-org/button';
-import Image from 'next/image';
+import NextImage from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Tooltip } from '@nextui-org/react';
+import { Image, Tooltip } from '@nextui-org/react';
 
 import type { AlbumType } from '@/shared/albums';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
@@ -51,7 +51,7 @@ export const Album = React.memo(
             <div
                 onClick={() => {
                     if (href) {
-                        router.replace(href);
+                        router.push(href);
                     }
                 }}
                 ref={imageRef}
@@ -61,14 +61,17 @@ export const Album = React.memo(
                     content={`${band}  ·  ${album}  ·  ${releasedAt.getFullYear()}`}
                     offset={60}
                 >
-                    <Image
-                        className={cx('image')}
-                        src={imageSrc}
-                        alt={album}
-                        width={200}
-                        height={200}
-                        quality={100}
-                    />
+                    <div className={cx('image-container')}>
+                        <Image
+                            as={NextImage}
+                            className={cx('image')}
+                            src={imageSrc}
+                            alt={album}
+                            width={200}
+                            height={200}
+                            quality={100}
+                        />
+                    </div>
                 </Tooltip>
                 <div className={cx('bottom-block')}>
                     {link && (
@@ -78,7 +81,7 @@ export const Album = React.memo(
                             target="_blank"
                             rel="noopener"
                         >
-                            <Image
+                            <NextImage
                                 src="/apple-music.png"
                                 alt="apple music"
                                 width={100}
@@ -92,7 +95,7 @@ export const Album = React.memo(
                         className={cx('button', 'carousel-button')}
                         onClick={() => {
                             if (coverFlowHref) {
-                                router.replace(coverFlowHref);
+                                router.push(coverFlowHref);
                             }
                         }}
                     >
@@ -105,14 +108,13 @@ export const Album = React.memo(
                             view_carousel
                         </span>
                     </Button>
-
                     <Tooltip content="Во весь экран">
                         <Button
                             isIconOnly
                             className={cx('button', 'carousel-button')}
                             onClick={() => {
                                 if (fullScreenHref) {
-                                    router.replace(fullScreenHref);
+                                    router.push(fullScreenHref);
                                 }
                             }}
                         >

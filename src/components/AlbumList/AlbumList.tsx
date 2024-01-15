@@ -1,9 +1,10 @@
 'use client';
 
-import Image from 'next/image';
+import NextImage from 'next/image';
 import type { DetailedHTMLProps, HTMLAttributes } from 'react';
 import cnBind from 'classnames/bind';
 import React, { useEffect, useState } from 'react';
+import { Image } from '@nextui-org/react';
 
 import { ALBUMS } from '@/shared/albums';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
@@ -86,8 +87,9 @@ export const AlbumList = React.memo(
                                 </a>
                             )}
                         </div>
-                        <p>
+                        <span className={cx('image')}>
                             <Image
+                                as={NextImage}
                                 itemProp="image"
                                 key={index}
                                 src={album.imageSrc}
@@ -96,7 +98,7 @@ export const AlbumList = React.memo(
                                 height={isDesktop ? width : mobileWidth}
                                 quality={quality}
                             />
-                        </p>
+                        </span>
                     </article>
                 ))}
             </div>

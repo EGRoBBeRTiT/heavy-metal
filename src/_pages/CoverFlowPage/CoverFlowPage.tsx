@@ -2,12 +2,10 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button } from '@nextui-org/button';
 import cnBind from 'classnames/bind';
+import { Modal, ModalContent, ModalBody } from '@nextui-org/react';
 
 import { AlbumCowerFlowSwiper } from '@/components/AlbumCowerFlowSwiper';
-import { appRoutes } from '@/routes';
-import { IcClose } from '@/icons';
 
 import styles from './CoverFlowPage.module.scss';
 
@@ -23,7 +21,7 @@ export const CoverFlowPage = ({ index }: CoverFlowPageProps) => {
     useEffect(() => {
         const listener = (event: KeyboardEvent) => {
             if (event.code === 'Escape') {
-                router.replace(appRoutes.interactive());
+                router.back();
             }
         };
 
@@ -35,19 +33,28 @@ export const CoverFlowPage = ({ index }: CoverFlowPageProps) => {
     }, [router]);
 
     return (
-        <main>
-            <AlbumCowerFlowSwiper initialSlide={Number(index)} />
-            <Button
-                isIconOnly
-                className={cx('close-button')}
-                onClick={() => {
-                    router.replace(appRoutes.interactive());
+        <main className={cx('main')}>
+            <Modal
+                isOpen
+                defaultOpen
+                onOpenChange={() => {
+                    router.back();
                 }}
-                size="lg"
-                variant="light"
+                placement="center"
+                scrollBehavior="inside"
+                size="full"
+                className={cx('modal')}
             >
-                <IcClose />
-            </Button>
+                <ModalContent>
+                    {() => (
+                        <ModalBody>
+                            <AlbumCowerFlowSwiper
+                                initialSlide={Number(index)}
+                            />
+                        </ModalBody>
+                    )}
+                </ModalContent>
+            </Modal>
         </main>
     );
 };

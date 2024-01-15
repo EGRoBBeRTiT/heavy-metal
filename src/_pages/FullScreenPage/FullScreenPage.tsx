@@ -21,13 +21,15 @@ export interface FullScreenPageProps {
 export const FullScreenPage = ({ index }: FullScreenPageProps) => {
     const router = useRouter();
     const [isFullScreenAccessed, setIsFullScreenAccessed] = useState(false);
-    const [activeIndex, setActiveIndex] = useState(Number(index));
+    // const [activeIndex, setActiveIndex] = useState(Number(index));
 
     const divRef = useRef<HTMLDivElement | null>(null);
 
     const handlePushBack = useCallback(() => {
-        router.replace(appRoutes.coverflow(activeIndex));
-    }, [activeIndex, router]);
+        router.back();
+
+        // router.replace(appRoutes.coverflow(activeIndex));
+    }, [router]);
 
     useEffect(() => {
         const listener = (event: KeyboardEvent) => {
@@ -56,7 +58,7 @@ export const FullScreenPage = ({ index }: FullScreenPageProps) => {
 
     const handleActiveIndexChange = useCallback((index: number) => {
         window.history.replaceState(null, '', appRoutes.fullscreen(index));
-        setActiveIndex(index);
+        // setActiveIndex(index);
     }, []);
 
     return (

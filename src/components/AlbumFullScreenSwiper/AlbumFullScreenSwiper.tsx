@@ -1,11 +1,11 @@
 'use client';
 
 /* eslint-disable react/no-unused-prop-types */
-/* eslint-disable @next/next/no-img-element */
+
 import type { SwiperProps } from 'swiper/react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { CSSProperties } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import {
     Keyboard,
     Mousewheel,
@@ -14,11 +14,13 @@ import {
     Scrollbar,
 } from 'swiper/modules';
 import cnBind from 'classnames/bind';
+import { Spinner } from '@nextui-org/react';
 
 import type { AlbumType } from '@/shared/albums';
 import { ALBUMS } from '@/shared/albums';
 import { MainInfo } from '@/components/AlbumFullScreenSwiper/MainInfo';
 import { SongList } from '@/components/AlbumFullScreenSwiper/SongList';
+import { ImageSlideLazy } from '@/components/AlbumFullScreenSwiper/ImageSlide';
 import { useWindowSize } from '@/hooks/useWindowSize';
 
 import 'swiper/css';
@@ -99,13 +101,16 @@ export const AlbumFullScreenSwiper = React.memo(
                         >
                             {ALBUMS.map(({ imageSrc, album }, index) => (
                                 <SwiperSlide key={index}>
-                                    <div className="swiper-zoom-container">
-                                        <img
+                                    <Suspense
+                                        key={index}
+                                        fallback={<Spinner />}
+                                    >
+                                        <ImageSlideLazy
                                             src={imageSrc}
                                             alt={album}
-                                            loading="lazy"
+                                            className="swiper-zoom-container"
                                         />
-                                    </div>
+                                    </Suspense>
                                 </SwiperSlide>
                             ))}
                         </Swiper>

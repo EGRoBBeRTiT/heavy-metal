@@ -11,5 +11,5 @@ export interface AlbumSkeletonProps {
 }
 
 export const AlbumSkeleton = ({ className }: AlbumSkeletonProps) => (
-    <Skeleton className={cx('album', className)} />
+    <Skeleton className={cx('album-skeleton', className)} />
 );

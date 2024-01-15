@@ -1,7 +1,9 @@
 .image {
+    z-index: 0;
     width: 100%;
-    aspect-ratio: 1;
     object-fit: cover;
+    aspect-ratio: 1;
+    border-radius: 0;
 }
 
 .bottom-block {
@@ -18,9 +20,13 @@
     transition: filter 200ms ease-in-out;
 }
 
+.album,
+.album-skeleton {
+    width: 10%;
+}
+
 .album {
     position: relative;
-    width: 10%;
     height: fit-content;
     transform: translate3d(0, 0, 0);
     aspect-ratio: 1;
@@ -73,4 +79,18 @@
     width: 40px;
     aspect-ratio: 1;
     margin-inline-end: auto;
+}
+
+.image-container {
+    width: 100%;
+    height: 100%;
+
+    > div {
+        max-width: 100% !important;
+    }
+}
+
+.album-skeleton {
+    border-radius: 12px;
+    aspect-ratio: 1;
 }

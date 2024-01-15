@@ -1,16 +1,20 @@
+'use client';
+
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type SwiperProps from 'swiper';
 import Image from 'next/image';
-import React, { useCallback, useState } from 'react';
+import React, { Suspense, useCallback, useState } from 'react';
 import { EffectCoverflow, Keyboard, Mousewheel } from 'swiper/modules';
 import cnBind from 'classnames/bind';
 import { useRouter } from 'next/navigation';
+import { Spinner } from '@nextui-org/react';
 
 import { ALBUMS } from '@/shared/albums';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import { cloisterBlack } from '@/styles/fonts';
 import { appRoutes } from '@/routes';
 import { useEnterListener } from '@/hooks/useEnterListener';
+import { ImageSlideLazy } from '@/components/AlbumFullScreenSwiper/ImageSlide';
 
 import styles from './AlbumCowerFlowSwiper.module.scss';
 
@@ -73,18 +77,21 @@ export const AlbumCowerFlowSwiper = React.memo(
                     >
                         {ALBUMS.map((album, index) => (
                             <SwiperSlide key={index}>
-                                <Image
-                                    src={album.imageSrc}
-                                    alt={album.album}
-                                    width={750}
-                                    height={750}
-                                    quality={100}
-                                    onClick={() => {
-                                        router.push(
-                                            appRoutes.fullscreen(index),
-                                        );
-                                    }}
-                                />
+                                <Suspense fallback={<Spinner />}>
+                                    <ImageSlideLazy
+                                        as={Image}
+                                        src={album.imageSrc}
+                                        alt={album.album}
+                                        width={750}
+                                        height={750}
+                                        onClick={() => {
+                                            router.replace(
+                                                appRoutes.fullscreen(index),
+                                            );
+                                        }}
+                                        loading="lazy"
+                                    />
+                                </Suspense>
                             </SwiperSlide>
                         ))}
                     </Swiper>
