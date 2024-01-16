@@ -13,7 +13,12 @@ export const StaticPage = () => (
         </h1>
         <section>
             <h1 className={cx('hidden')}>Albums list</h1>
-            <AlbumList width={5000} mobileWidth={200} quality={100} />
+            <AlbumList
+                width={5000}
+                mobileWidth={200}
+                quality={100}
+                withNextImage
+            />
         </section>
     </main>
 );

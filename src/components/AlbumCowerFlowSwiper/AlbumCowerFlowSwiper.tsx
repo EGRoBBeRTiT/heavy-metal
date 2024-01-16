@@ -20,9 +20,10 @@ import { cloisterBlack } from '@/styles/fonts';
 import { appRoutes } from '@/routes';
 import { useEnterListener } from '@/hooks/useEnterListener';
 import { AlbumSkeleton } from '@/components/Album';
-import { ImageSlideLazy } from '@/components/AlbumFullScreenSwiper/ImageSlide';
+import { LazyImage } from '@/components/LazyImage';
 
 import 'swiper/css';
+
 import styles from './AlbumCowerFlowSwiper.module.scss';
 
 const cx = cnBind.bind(styles);
@@ -98,8 +99,7 @@ export const AlbumCowerFlowSwiper = React.memo(
                                         />
                                     }
                                 >
-                                    <ImageSlideLazy
-                                        as={Image}
+                                    <LazyImage
                                         src={album.imageSrc}
                                         alt={album.album}
                                         width={750}
@@ -127,7 +127,7 @@ export const AlbumCowerFlowSwiper = React.memo(
                                 <a
                                     className={cx('link')}
                                     target="_blank"
-                                    rel="noopener"
+                                    rel="noopener noreferrer"
                                     href={ALBUMS[activeIndex].link}
                                 >
                                     <Image

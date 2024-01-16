@@ -3,11 +3,13 @@
 import NextImage from 'next/image';
 import type { DetailedHTMLProps, HTMLAttributes } from 'react';
 import cnBind from 'classnames/bind';
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { Image } from '@nextui-org/react';
 
 import { ALBUMS } from '@/shared/albums';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
+import { LazyImage } from '@/components/LazyImage';
+import { AlbumSkeleton } from '@/components/Album';
 
 import styles from './AlbumList.module.scss';
 
@@ -91,15 +93,23 @@ export const AlbumList = React.memo(
                         </div>
                         <span className={cx('image')}>
                             {withNextImage ? (
-                                <NextImage
-                                    itemProp="image"
-                                    key={index}
-                                    src={album.imageSrc}
-                                    alt={`${album.band} ${album.album}`}
-                                    width={isDesktop ? width : mobileWidth}
-                                    height={isDesktop ? width : mobileWidth}
-                                    quality={quality}
-                                />
+                                <Suspense
+                                    fallback={
+                                        <AlbumSkeleton
+                                            className={cx('skeleton')}
+                                        />
+                                    }
+                                >
+                                    <LazyImage
+                                        itemProp="image"
+                                        key={index}
+                                        src={album.imageSrc}
+                                        alt={`${album.band} ${album.album}`}
+                                        width={isDesktop ? width : mobileWidth}
+                                        height={isDesktop ? width : mobileWidth}
+                                        quality={quality}
+                                    />
+                                </Suspense>
                             ) : (
                                 <Image
                                     as={NextImage}

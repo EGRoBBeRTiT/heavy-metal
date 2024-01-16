@@ -29,7 +29,7 @@ export const MainInfo = ({ album, className, ...props }: MainInfoProps) => (
             <a
                 className={cx('link')}
                 target="_blank"
-                rel="noopener"
+                rel="noopener noreferrer"
                 href={album.link}
             >
                 <Image

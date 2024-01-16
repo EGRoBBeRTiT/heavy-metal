@@ -2,9 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import VanillaTilt from 'vanilla-tilt';
 import cnBind from 'classnames/bind';
 import { Button } from '@nextui-org/button';
-import NextImage from 'next/image';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Image, Tooltip } from '@nextui-org/react';
+import { Tooltip } from '@nextui-org/react';
 
 import type { AlbumType } from '@/shared/albums';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
@@ -63,7 +63,6 @@ export const Album = React.memo(
                 >
                     <div className={cx('image-container')}>
                         <Image
-                            as={NextImage}
                             className={cx('image')}
                             src={imageSrc}
                             alt={album}
@@ -80,9 +79,9 @@ export const Album = React.memo(
                                 className={cx('link')}
                                 href={link}
                                 target="_blank"
-                                rel="noopener"
+                                rel="noopener noreferrer"
                             >
-                                <NextImage
+                                <Image
                                     src="/apple-music.png"
                                     alt="apple music"
                                     width={100}
