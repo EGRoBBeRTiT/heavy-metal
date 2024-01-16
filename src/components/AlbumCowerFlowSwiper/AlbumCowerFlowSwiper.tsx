@@ -3,22 +3,27 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type SwiperProps from 'swiper';
 import Image from 'next/image';
-import React, { Suspense, useCallback, useState } from 'react';
+import type { CSSProperties } from 'react';
+import React, {
+    Suspense,
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 import { EffectCoverflow, Keyboard, Mousewheel } from 'swiper/modules';
 import cnBind from 'classnames/bind';
 import { useRouter } from 'next/navigation';
-import { Spinner } from '@nextui-org/react';
 
 import { ALBUMS } from '@/shared/albums';
-import { useWindowSize } from '@/hooks/useWindowSize';
 import { cloisterBlack } from '@/styles/fonts';
 import { appRoutes } from '@/routes';
 import { useEnterListener } from '@/hooks/useEnterListener';
+import { AlbumSkeleton } from '@/components/Album';
 import { ImageSlideLazy } from '@/components/AlbumFullScreenSwiper/ImageSlide';
 
-import styles from './AlbumCowerFlowSwiper.module.scss';
-
 import 'swiper/css';
+import styles from './AlbumCowerFlowSwiper.module.scss';
 
 const cx = cnBind.bind(styles);
 
@@ -29,10 +34,10 @@ export interface AlbumCowerFlowSwiperProps {
 
 export const AlbumCowerFlowSwiper = React.memo(
     ({ initialSlide = 0, className }: AlbumCowerFlowSwiperProps) => {
+        const [swiperStyle, setSwiperStyle] = useState<CSSProperties>({});
+        const bottomRef = useRef<HTMLDivElement | null>(null);
         const router = useRouter();
         const [activeIndex, setActiveIndex] = useState(initialSlide ?? 0);
-
-        const { width } = useWindowSize();
 
         const handleActiveIndexChange = useCallback((swiper: SwiperProps) => {
             window.history.replaceState(
@@ -47,22 +52,31 @@ export const AlbumCowerFlowSwiper = React.memo(
             router.replace(appRoutes.fullscreen(activeIndex));
         });
 
+        useEffect(() => {
+            setSwiperStyle({
+                paddingBlockEnd: `calc(${
+                    bottomRef.current?.clientHeight ?? 24
+                }px - var(--bottom-block-padding))`,
+            });
+        }, []);
+
         return (
             <div className={cx('content-container')}>
-                <div className={cx(cloisterBlack.className, 'header')}>
-                    {ALBUMS[activeIndex].band}
-                </div>
+                <header className={cx(cloisterBlack.className, 'header')}>
+                    <h1>{ALBUMS[activeIndex].band}</h1>
+                </header>
                 <div className={cx('body')}>
                     <Swiper
+                        style={swiperStyle}
                         className={cx('swiper', className)}
                         effect="coverflow"
                         grabCursor
                         centeredSlides
                         slidesPerView="auto"
                         coverflowEffect={{
-                            rotate: 15,
-                            stretch: 0.1 * width,
-                            depth: 0.1 * width,
+                            rotate: 30,
+                            stretch: 200,
+                            depth: 200,
                             modifier: 1,
                             slideShadows: true,
                         }}
@@ -77,7 +91,13 @@ export const AlbumCowerFlowSwiper = React.memo(
                     >
                         {ALBUMS.map((album, index) => (
                             <SwiperSlide key={index}>
-                                <Suspense fallback={<Spinner />}>
+                                <Suspense
+                                    fallback={
+                                        <AlbumSkeleton
+                                            className={cx('skeleton')}
+                                        />
+                                    }
+                                >
                                     <ImageSlideLazy
                                         as={Image}
                                         src={album.imageSrc}
@@ -89,13 +109,15 @@ export const AlbumCowerFlowSwiper = React.memo(
                                                 appRoutes.fullscreen(index),
                                             );
                                         }}
-                                        loading="lazy"
                                     />
                                 </Suspense>
                             </SwiperSlide>
                         ))}
                     </Swiper>
-                    <div className={cx(cloisterBlack.className, 'bottom')}>
+                    <div
+                        ref={bottomRef}
+                        className={cx(cloisterBlack.className, 'bottom')}
+                    >
                         <span>
                             {ALBUMS[activeIndex].releasedAt.getFullYear()}
                         </span>

@@ -45,7 +45,7 @@ export const RootPage = () => (
         </main>
         <section>
             <h1 className={cx('hidden')}>Rock Albums images</h1>
-            <AnimatedAlbumList />
+            <AnimatedAlbumList withNextImage />
         </section>
         <section>
             <h1 className={cx('hidden')}>Rock Bands</h1>

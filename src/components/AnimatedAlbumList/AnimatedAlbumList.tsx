@@ -19,6 +19,7 @@ export type AnimatedAlbumListProps = Omit<
         | 'width'
         | 'mobileAlbumsInRow'
         | 'mobileWidth'
+        | 'withNextImage'
     >;
 
 export const AnimatedAlbumList = ({
@@ -28,6 +29,7 @@ export const AnimatedAlbumList = ({
     width = 80,
     mobileWidth = 80,
     mobileAlbumsInRow,
+    withNextImage,
     ...props
 }: AnimatedAlbumListProps) => (
     <div {...props} className={cx('container', className)}>
@@ -40,6 +42,7 @@ export const AnimatedAlbumList = ({
                         mobileWidth={mobileWidth}
                         quality={quality}
                         mobileAlbumsInRow={mobileAlbumsInRow}
+                        withNextImage={withNextImage}
                     />
                 </div>
             ))}

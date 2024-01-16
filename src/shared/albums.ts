@@ -488,7 +488,7 @@ const albums: AlbumType[] = [
     },
     {
         band: Band.KINO,
-        album: '46',
+        album: 'Начальник камчатки',
         imageSrc: '/albums/Kino_1984_The-head-of-Kamchatka.png',
         releasedAt: new Date('1984-06-23'),
         link: 'https://music.apple.com/ru/album/начальник-камчатки/1333012776',

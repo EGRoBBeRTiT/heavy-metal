@@ -47,7 +47,7 @@ export const CoverFlowPage = ({ index }: CoverFlowPageProps) => {
             >
                 <ModalContent>
                     {() => (
-                        <ModalBody>
+                        <ModalBody className={cx('body')}>
                             <AlbumCowerFlowSwiper
                                 initialSlide={Number(index)}
                             />

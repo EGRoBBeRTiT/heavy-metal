@@ -54,6 +54,12 @@
             filter: opacity(1);
         }
     }
+
+    @include mobile {
+        .bottom-block {
+            filter: opacity(1);
+        }
+    }
 }
 
 .button {

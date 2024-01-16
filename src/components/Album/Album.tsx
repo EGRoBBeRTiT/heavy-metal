@@ -75,39 +75,43 @@ export const Album = React.memo(
                 </Tooltip>
                 <div className={cx('bottom-block')}>
                     {link && (
-                        <a
-                            className={cx('link')}
-                            href={link}
-                            target="_blank"
-                            rel="noopener"
-                        >
-                            <NextImage
-                                src="/apple-music.png"
-                                alt="apple music"
-                                width={100}
-                                height={100}
-                                quality={100}
-                            />
-                        </a>
+                        <Tooltip content="Перейти в Apple Music">
+                            <a
+                                className={cx('link')}
+                                href={link}
+                                target="_blank"
+                                rel="noopener"
+                            >
+                                <NextImage
+                                    src="/apple-music.png"
+                                    alt="apple music"
+                                    width={100}
+                                    height={100}
+                                    quality={100}
+                                />
+                            </a>
+                        </Tooltip>
                     )}
-                    <Button
-                        isIconOnly
-                        className={cx('button', 'carousel-button')}
-                        onClick={() => {
-                            if (coverFlowHref) {
-                                router.push(coverFlowHref);
-                            }
-                        }}
-                    >
-                        <span
-                            className={cx(
-                                'material-symbols-outlined',
-                                'carousel-icon',
-                            )}
+                    <Tooltip content="Просмотр пластинок">
+                        <Button
+                            isIconOnly
+                            className={cx('button', 'carousel-button')}
+                            onClick={() => {
+                                if (coverFlowHref) {
+                                    router.push(coverFlowHref);
+                                }
+                            }}
                         >
-                            view_carousel
-                        </span>
-                    </Button>
+                            <span
+                                className={cx(
+                                    'material-symbols-outlined',
+                                    'carousel-icon',
+                                )}
+                            >
+                                view_carousel
+                            </span>
+                        </Button>
+                    </Tooltip>
                     <Tooltip content="Во весь экран">
                         <Button
                             isIconOnly

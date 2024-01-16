@@ -23,6 +23,7 @@ export interface AlbumListProps
     quality?: number;
     width?: number;
     mobileWidth?: number;
+    withNextImage?: boolean;
 }
 
 export const AlbumList = React.memo(
@@ -33,6 +34,7 @@ export const AlbumList = React.memo(
         quality = 100,
         width = 300,
         mobileWidth = 100,
+        withNextImage,
     }: AlbumListProps) => {
         const [isDesktop, setIsDesktop] = useState(true);
 
@@ -88,16 +90,28 @@ export const AlbumList = React.memo(
                             )}
                         </div>
                         <span className={cx('image')}>
-                            <Image
-                                as={NextImage}
-                                itemProp="image"
-                                key={index}
-                                src={album.imageSrc}
-                                alt={`${album.band} ${album.album}`}
-                                width={isDesktop ? width : mobileWidth}
-                                height={isDesktop ? width : mobileWidth}
-                                quality={quality}
-                            />
+                            {withNextImage ? (
+                                <NextImage
+                                    itemProp="image"
+                                    key={index}
+                                    src={album.imageSrc}
+                                    alt={`${album.band} ${album.album}`}
+                                    width={isDesktop ? width : mobileWidth}
+                                    height={isDesktop ? width : mobileWidth}
+                                    quality={quality}
+                                />
+                            ) : (
+                                <Image
+                                    as={NextImage}
+                                    itemProp="image"
+                                    key={index}
+                                    src={album.imageSrc}
+                                    alt={`${album.band} ${album.album}`}
+                                    width={isDesktop ? width : mobileWidth}
+                                    height={isDesktop ? width : mobileWidth}
+                                    quality={quality}
+                                />
+                            )}
                         </span>
                     </article>
                 ))}
