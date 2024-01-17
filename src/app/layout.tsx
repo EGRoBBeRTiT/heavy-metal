@@ -25,12 +25,12 @@ export const metadata: Metadata = {
         'best metal albums',
         'best heavy albums',
     ],
-    themeColor: '#000000',
     appleWebApp: true,
     applicationName: "The Best Rock 'n' Roll Albums",
     authors: [{ url: 'https://github.com/EGRoBBeRTiT', name: 'Egor Titov' }],
     creator: 'Egor Titov',
     publisher: 'Vercel',
+    manifest: '/manifest.json',
 };
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => (
