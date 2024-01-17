@@ -1,0 +1,22 @@
+.image {
+    &.with-reflect {
+        -webkit-box-reflect: below var(--reflect-margin)
+            linear-gradient(transparent, rgb(0 0 0 / 85%), rgb(0 0 0 / 90%));
+    }
+}
+
+.reflect {
+    position: absolute;
+    top: calc(100% + var(--reflect-margin));
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background-size: contain;
+    transform: scaleY(-1);
+    mask-image: linear-gradient(
+        transparent,
+        rgb(0 0 0 / 85%),
+        rgb(0 0 0 / 90%)
+    );
+}

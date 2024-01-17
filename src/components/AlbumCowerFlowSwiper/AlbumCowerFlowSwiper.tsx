@@ -100,6 +100,8 @@ export const AlbumCowerFlowSwiper = React.memo(
                                     }
                                 >
                                     <LazyImage
+                                        id={`image-${index}`}
+                                        className={cx('class-10')}
                                         src={album.imageSrc}
                                         alt={album.album}
                                         width={750}
@@ -109,6 +111,7 @@ export const AlbumCowerFlowSwiper = React.memo(
                                                 appRoutes.fullscreen(index),
                                             );
                                         }}
+                                        withReflect
                                     />
                                 </Suspense>
                             </SwiperSlide>

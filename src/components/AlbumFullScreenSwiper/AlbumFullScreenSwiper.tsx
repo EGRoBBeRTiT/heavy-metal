@@ -108,7 +108,10 @@ export const AlbumFullScreenSwiper = React.memo(
                                         <ImageSlideLazy
                                             src={imageSrc}
                                             alt={album}
-                                            className="swiper-zoom-container"
+                                            className={cx(
+                                                'image-container',
+                                                'swiper-zoom-container',
+                                            )}
                                         />
                                     </Suspense>
                                 </SwiperSlide>
