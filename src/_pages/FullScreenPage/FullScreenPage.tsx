@@ -20,8 +20,13 @@ export interface FullScreenPageProps {
 
 export const FullScreenPage = ({ index }: FullScreenPageProps) => {
     const router = useRouter();
+    const [mounted, setMounted] = useState(false);
     const [isFullScreenAccessed, setIsFullScreenAccessed] = useState(false);
     // const [activeIndex, setActiveIndex] = useState(Number(index));
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const divRef = useRef<HTMLDivElement | null>(null);
 
@@ -62,7 +67,7 @@ export const FullScreenPage = ({ index }: FullScreenPageProps) => {
     }, []);
 
     return (
-        <main>
+        <div className={cx('page', { mounted })}>
             <AlbumFullScreenSwiper
                 ref={divRef}
                 initialSlide={Number(index)}
@@ -78,6 +83,6 @@ export const FullScreenPage = ({ index }: FullScreenPageProps) => {
                     <IcClose />
                 </Button>
             )}
-        </main>
+        </div>
     );
 };

@@ -5,7 +5,9 @@
         .swiper-slide {
             display: flex;
             justify-content: center;
-            height: 100vh;
+            height: 100dvh;
+            min-height: 100svh;
+            max-height: 100vh;
             background-position: center;
             background-size: cover;
         }

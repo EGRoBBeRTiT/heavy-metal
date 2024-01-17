@@ -14,7 +14,6 @@ export const metadata: Metadata = {
         'rock',
         "rock 'n' roll",
         'metal',
-
         'hard rock',
         'albums',
         'favorite rock albums',
@@ -26,10 +25,16 @@ export const metadata: Metadata = {
         'best metal albums',
         'best heavy albums',
     ],
+    themeColor: '#000000',
+    appleWebApp: true,
+    applicationName: "The Best Rock 'n' Roll Albums",
+    authors: [{ url: 'https://github.com/EGRoBBeRTiT', name: 'Egor Titov' }],
+    creator: 'Egor Titov',
+    publisher: 'Vercel',
 };
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => (
-    <html lang="ru-RU" className="dark">
+    <html lang="en-US" className="dark">
         <body className={roboto.className}>
             <Providers>{children}</Providers>
         </body>

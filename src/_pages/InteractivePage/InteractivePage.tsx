@@ -13,7 +13,7 @@ import styles from './InteractivePage.module.scss';
 const cx = cnBind.bind(styles);
 
 export const InteractivePage = () => (
-    <main className={cx('main')}>
+    <div className={cx('main')}>
         <div className={cx('box')}>
             {Array.from({ length: 4 }, (_, index) => (
                 <IcCorner
@@ -39,5 +39,5 @@ export const InteractivePage = () => (
                 </div>
             </div>
         </div>
-    </main>
+    </div>
 );

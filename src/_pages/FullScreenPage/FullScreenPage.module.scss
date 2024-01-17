@@ -4,3 +4,23 @@
     right: 8px;
     z-index: 2;
 }
+
+.page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    width: 100vw;
+    height: 100dvh;
+    min-height: 100svh;
+    max-height: 100vh;
+    background-color: hsl(var(--nextui-background));
+    transform: translateY(50px);
+    filter: opacity(0);
+    transition: all 400ms ease-in-out;
+
+    &.mounted {
+        transform: translateY(0);
+        filter: opacity(1);
+    }
+}
