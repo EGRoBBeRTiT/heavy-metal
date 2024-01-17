@@ -21,6 +21,7 @@ import { appRoutes } from '@/routes';
 import { useEnterListener } from '@/hooks/useEnterListener';
 import { AlbumSkeleton } from '@/components/Album';
 import { LazyImage } from '@/components/LazyImage';
+import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
 
 import 'swiper/css';
 
@@ -35,6 +36,7 @@ export interface AlbumCowerFlowSwiperProps {
 
 export const AlbumCowerFlowSwiper = React.memo(
     ({ initialSlide = 0, className }: AlbumCowerFlowSwiperProps) => {
+        const { isMobile, isTablet } = useScreenConfig();
         const [swiperStyle, setSwiperStyle] = useState<CSSProperties>({});
         const bottomRef = useRef<HTMLDivElement | null>(null);
         const router = useRouter();
@@ -104,14 +106,17 @@ export const AlbumCowerFlowSwiper = React.memo(
                                         className={cx('class-10')}
                                         src={album.imageSrc}
                                         alt={album.album}
-                                        width={750}
-                                        height={750}
+                                        width={isMobile || isTablet ? 300 : 750}
+                                        height={
+                                            isMobile || isTablet ? 300 : 750
+                                        }
                                         onClick={() => {
                                             router.replace(
                                                 appRoutes.fullscreen(index),
                                             );
                                         }}
                                         withReflect
+                                        priority={activeIndex === index}
                                     />
                                 </Suspense>
                             </SwiperSlide>

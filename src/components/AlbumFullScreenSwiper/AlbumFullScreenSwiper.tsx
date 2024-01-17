@@ -16,12 +16,13 @@ import {
 import cnBind from 'classnames/bind';
 import { Spinner } from '@nextui-org/react';
 
-import type { AlbumType } from '@/shared/albums';
 import { ALBUMS } from '@/shared/albums';
 import { MainInfo } from '@/components/AlbumFullScreenSwiper/MainInfo';
 import { SongList } from '@/components/AlbumFullScreenSwiper/SongList';
 import { ImageSlideLazy } from '@/components/AlbumFullScreenSwiper/ImageSlide';
 import { useWindowSize } from '@/hooks/useWindowSize';
+import { LazyImage } from '@/components/LazyImage';
+import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
 
 import 'swiper/css';
 
@@ -66,10 +67,9 @@ export const AlbumFullScreenSwiper = React.memo(
             { onActiveIndexChange, initialSlide = 0, className, ...props },
             ref,
         ) => {
+            const { isMobile, isTablet } = useScreenConfig();
             const [zoomed, setZoomed] = useState(false);
-            const [activeAlbum, setActiveAlbum] = useState<AlbumType>(
-                ALBUMS[initialSlide],
-            );
+            const [activeIndex, setActiveIndex] = useState(initialSlide);
 
             const [styles, setStyle] = useState<CSSProperties>({});
 
@@ -94,7 +94,7 @@ export const AlbumFullScreenSwiper = React.memo(
                             }}
                             initialSlide={initialSlide}
                             onActiveIndexChange={(swiper) => {
-                                setActiveAlbum(ALBUMS[swiper.activeIndex]);
+                                setActiveIndex(swiper.activeIndex);
                                 onActiveIndexChange?.(swiper.activeIndex ?? 0);
                             }}
                             {...SWIPER_CONFIG}
@@ -105,35 +105,56 @@ export const AlbumFullScreenSwiper = React.memo(
                                         key={index}
                                         fallback={<Spinner />}
                                     >
-                                        <ImageSlideLazy
-                                            src={imageSrc}
-                                            alt={album}
-                                            className={cx(
-                                                'image-container',
-                                                'swiper-zoom-container',
-                                            )}
-                                        />
+                                        {isMobile || isTablet ? (
+                                            <div
+                                                className={cx(
+                                                    'image-container',
+                                                    'swiper-zoom-container',
+                                                )}
+                                            >
+                                                <LazyImage
+                                                    src={imageSrc}
+                                                    alt={album}
+                                                    width={800}
+                                                    height={800}
+                                                    quality={100}
+                                                    priority={
+                                                        activeIndex === index
+                                                    }
+                                                />
+                                            </div>
+                                        ) : (
+                                            <ImageSlideLazy
+                                                src={imageSrc}
+                                                alt={album}
+                                                className={cx(
+                                                    'image-container',
+                                                    'swiper-zoom-container',
+                                                )}
+                                            />
+                                        )}
                                     </Suspense>
                                 </SwiperSlide>
                             ))}
                         </Swiper>
                     </div>
                     <MainInfo
-                        album={activeAlbum}
+                        album={ALBUMS[activeIndex]}
                         className={cx('info', {
                             hidden: zoomed,
                         })}
                         style={styles}
                     />
-                    {activeAlbum.songs && activeAlbum.songs.length && (
-                        <SongList
-                            album={activeAlbum}
-                            className={cx('info', {
-                                hidden: zoomed,
-                            })}
-                            style={styles}
-                        />
-                    )}
+                    {ALBUMS[activeIndex].songs &&
+                        ALBUMS[activeIndex].songs?.length && (
+                            <SongList
+                                album={ALBUMS[activeIndex]}
+                                className={cx('info', {
+                                    hidden: zoomed,
+                                })}
+                                style={styles}
+                            />
+                        )}
                 </div>
             );
         },

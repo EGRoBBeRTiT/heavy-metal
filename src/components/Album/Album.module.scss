@@ -55,7 +55,7 @@
         }
     }
 
-    @include mobile {
+    @include tablet {
         .bottom-block {
             filter: opacity(1);
         }

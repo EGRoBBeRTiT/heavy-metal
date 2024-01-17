@@ -22,7 +22,6 @@ export const FullScreenPage = ({ index }: FullScreenPageProps) => {
     const router = useRouter();
     const [mounted, setMounted] = useState(false);
     const [isFullScreenAccessed, setIsFullScreenAccessed] = useState(false);
-    // const [activeIndex, setActiveIndex] = useState(Number(index));
 
     useEffect(() => {
         setMounted(true);
@@ -32,8 +31,6 @@ export const FullScreenPage = ({ index }: FullScreenPageProps) => {
 
     const handlePushBack = useCallback(() => {
         router.back();
-
-        // router.replace(appRoutes.coverflow(activeIndex));
     }, [router]);
 
     useEffect(() => {
@@ -63,7 +60,6 @@ export const FullScreenPage = ({ index }: FullScreenPageProps) => {
 
     const handleActiveIndexChange = useCallback((index: number) => {
         window.history.replaceState(null, '', appRoutes.fullscreen(index));
-        // setActiveIndex(index);
     }, []);
 
     return (
