@@ -1625,7 +1625,7 @@ const albums: AlbumType[] = [
     },
     {
         band: Band.SEKTOR_GAZA,
-        imageSrc: '/albums/Sektor-gaza_2000_Восставший-Из-Ада.png',
+        imageSrc: '/albums/Sektor-gaza_1994_Гуляй-Мужик.png',
         album: 'Гуляй, Мужик',
         releasedAt: new Date('1994-01-01'),
         songs: [
