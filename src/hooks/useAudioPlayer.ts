@@ -10,6 +10,8 @@ export interface Song {
     year: string;
 }
 
+const DEFAULT_SKIP_SECONDS = 10;
+
 export const useAudioPlayer = (
     audioRef: MutableRefObject<HTMLAudioElement | null>,
 ) => {
@@ -49,23 +51,22 @@ export const useAudioPlayer = (
     }, [songsList.length]);
 
     const handleSeekForward = useCallback(() => {
-        if (
-            (audioRef.current?.currentTime ?? 0) + 15 >
-            (audioRef.current?.duration ?? 0)
-        ) {
-            handleNextTrack();
-        } else if (audioRef.current) {
-            audioRef.current.currentTime += 15;
+        if (audioRef.current) {
+            audioRef.current.currentTime = Math.min(
+                (audioRef.current?.currentTime ?? 0) + DEFAULT_SKIP_SECONDS,
+                audioRef.current?.duration,
+            );
         }
-    }, [audioRef, handleNextTrack]);
+    }, [audioRef]);
 
     const handleSeekBackward = useCallback(() => {
-        if ((audioRef.current?.currentTime ?? 0) - 15 < 0) {
-            handlePrevTrack();
-        } else if (audioRef.current) {
-            audioRef.current.currentTime -= 15;
+        if (audioRef.current) {
+            audioRef.current.currentTime = Math.max(
+                (audioRef.current?.currentTime ?? 0) - DEFAULT_SKIP_SECONDS,
+                0,
+            );
         }
-    }, [audioRef, handlePrevTrack]);
+    }, [audioRef]);
 
     const handleTogglePlaying = useCallback(() => {
         if (isPlaying) {
@@ -93,16 +94,6 @@ export const useAudioPlayer = (
     }, [activeTrackIndex, isPlaying, songsList]);
 
     useEffect(() => {
-        if (!isPlaying || !songsList[activeTrackIndex]) {
-            return;
-        }
-
-        navigator.mediaSession.setActionHandler(
-            'previoustrack',
-            handlePrevTrack,
-        );
-        navigator.mediaSession.setActionHandler('nexttrack', handleNextTrack);
-
         navigator.mediaSession.setActionHandler(
             'seekbackward',
             handleSeekBackward,
@@ -111,14 +102,43 @@ export const useAudioPlayer = (
             'seekforward',
             handleSeekForward,
         );
+        navigator.mediaSession.setActionHandler(
+            'previoustrack',
+            handlePrevTrack,
+        );
+        navigator.mediaSession.setActionHandler('nexttrack', handleNextTrack);
+        navigator.mediaSession.setActionHandler('play', () => {
+            void audioRef.current?.play();
+        });
+        navigator.mediaSession.setActionHandler('stop', () => {
+            void audioRef.current?.pause();
+        });
+        navigator.mediaSession.setActionHandler('pause', () => {
+            void audioRef.current?.pause();
+        });
+        navigator.mediaSession.setActionHandler('seekto', (details) => {
+            if (
+                details.fastSeek &&
+                details.seekTime &&
+                audioRef.current &&
+                'fastSeek' in audioRef.current
+            ) {
+                // Only use fast seek if supported.
+                audioRef.current.fastSeek(details.seekTime ?? 0);
+
+                return;
+            }
+
+            if (audioRef.current && details.seekTime) {
+                audioRef.current.currentTime = details.seekTime;
+            }
+        });
     }, [
-        activeTrackIndex,
+        audioRef,
         handleNextTrack,
         handlePrevTrack,
         handleSeekBackward,
         handleSeekForward,
-        isPlaying,
-        songsList,
     ]);
 
     useEffect(() => {
