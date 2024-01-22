@@ -1,6 +1,8 @@
 import type { MutableRefObject } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
+
 export interface Song {
     src: string;
     title: string;
@@ -15,6 +17,8 @@ const DEFAULT_SKIP_SECONDS = 10;
 export const useAudioPlayer = (
     audioRef: MutableRefObject<HTMLAudioElement | null>,
 ) => {
+    const { isMobile, isTablet } = useScreenConfig();
+    const isDesktop = !isMobile && !isTablet;
     const [songsList, setSongsList] = useState<Song[]>([]);
     const [isPlaying, setIsPlaying] = useState(false);
     const [activeTrackIndex, setActiveTrackIndex] = useState(0);
@@ -94,14 +98,17 @@ export const useAudioPlayer = (
     }, [activeTrackIndex, isPlaying, songsList]);
 
     useEffect(() => {
-        navigator.mediaSession.setActionHandler(
-            'seekbackward',
-            handleSeekBackward,
-        );
-        navigator.mediaSession.setActionHandler(
-            'seekforward',
-            handleSeekForward,
-        );
+        if (isDesktop) {
+            navigator.mediaSession.setActionHandler(
+                'seekbackward',
+                handleSeekBackward,
+            );
+            navigator.mediaSession.setActionHandler(
+                'seekforward',
+                handleSeekForward,
+            );
+        }
+
         navigator.mediaSession.setActionHandler(
             'previoustrack',
             handlePrevTrack,
@@ -119,7 +126,7 @@ export const useAudioPlayer = (
         navigator.mediaSession.setActionHandler('seekto', (details) => {
             if (
                 details.fastSeek &&
-                details.seekTime &&
+                details.seekTime !== undefined &&
                 audioRef.current &&
                 'fastSeek' in audioRef.current
             ) {
@@ -129,7 +136,7 @@ export const useAudioPlayer = (
                 return;
             }
 
-            if (audioRef.current && details.seekTime) {
+            if (audioRef.current && details.seekTime !== undefined) {
                 audioRef.current.currentTime = details.seekTime;
             }
         });
@@ -139,6 +146,7 @@ export const useAudioPlayer = (
         handlePrevTrack,
         handleSeekBackward,
         handleSeekForward,
+        isDesktop,
     ]);
 
     useEffect(() => {
