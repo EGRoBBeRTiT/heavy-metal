@@ -106,6 +106,7 @@ export const Album = React.memo(
                                     'material-symbols-outlined',
                                     'carousel-icon',
                                 )}
+                                aria-hidden
                             >
                                 view_carousel
                             </span>
@@ -120,6 +121,7 @@ export const Album = React.memo(
                                     router.push(fullScreenHref);
                                 }
                             }}
+                            aria-hidden
                         >
                             <span className="material-symbols-outlined">
                                 fullscreen

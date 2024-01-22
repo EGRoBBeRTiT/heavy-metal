@@ -1,0 +1,41 @@
+.aside {
+    position: fixed;
+    bottom: 16px;
+    left: 50%;
+    z-index: 99999;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    width: calc(100% - 32px);
+    padding: var(--main-padding);
+    background-color: hsl(var(--nextui-foreground-100) / 40%);
+    border: 1px solid hsl(var(--nextui-foreground-200));
+    border-radius: 8px;
+    box-shadow:
+        rgb(0 0 0 / 25%) 0 54px 55px,
+        rgb(0 0 0 / 12%) 0 -12px 30px,
+        rgb(0 0 0 / 12%) 0 4px 6px,
+        rgb(0 0 0 / 17%) 0 12px 13px,
+        rgb(0 0 0 / 9%) 0 -3px 5px;
+    transform: translateX(-50%);
+    backdrop-filter: blur(10px);
+
+    @include mobile {
+        flex-direction: column;
+        font-size: 0.8rem;
+        text-align: center;
+    }
+}
+
+.control-buttons {
+    display: flex;
+    column-gap: 8px;
+
+    @include mobile {
+        order: 3;
+    }
+}
+
+.cover {
+    border-radius: 4px;
+}
