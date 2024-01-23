@@ -124,23 +124,23 @@ export const useAudioPlayer = (
         navigator.mediaSession.setActionHandler('pause', () => {
             void audioRef.current?.pause();
         });
-        navigator.mediaSession.setActionHandler('seekto', (details) => {
-            if (
-                details.fastSeek &&
-                details.seekTime !== undefined &&
-                audioRef.current &&
-                'fastSeek' in audioRef.current
-            ) {
-                // Only use fast seek if supported.
-                audioRef.current.fastSeek(details.seekTime ?? 0);
+        // navigator.mediaSession.setActionHandler('seekto', (details) => {
+        //     if (
+        //         details.fastSeek &&
+        //         details.seekTime !== undefined &&
+        //         audioRef.current &&
+        //         'fastSeek' in audioRef.current
+        //     ) {
+        //         // Only use fast seek if supported.
+        //         audioRef.current.fastSeek(details.seekTime ?? 0);
 
-                return;
-            }
+        //         return;
+        //     }
 
-            if (audioRef.current && details.seekTime !== undefined) {
-                audioRef.current.currentTime = details.seekTime;
-            }
-        });
+        //     if (audioRef.current && details.seekTime !== undefined) {
+        //         audioRef.current.currentTime = details.seekTime;
+        //     }
+        // });
     }, [audioRef, handleNextTrack, handlePrevTrack]);
 
     useEffect(() => {
