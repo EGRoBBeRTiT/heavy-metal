@@ -1,8 +1,6 @@
 import type { MutableRefObject } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
-
 export interface Song {
     src: string;
     title: string;
@@ -17,8 +15,8 @@ const DEFAULT_SKIP_SECONDS = 10;
 export const useAudioPlayer = (
     audioRef: MutableRefObject<HTMLAudioElement | null>,
 ) => {
-    const { isMobile, isTablet } = useScreenConfig();
-    const isDesktop = !isMobile && !isTablet;
+    // const { isMobile, isTablet } = useScreenConfig();
+    // const isDesktop = !isMobile && !isTablet;
     const [songsList, setSongsList] = useState<Song[]>([]);
     const [isPlaying, setIsPlaying] = useState(false);
     const [activeTrackIndex, setActiveTrackIndex] = useState(0);
@@ -108,8 +106,8 @@ export const useAudioPlayer = (
         //         handleSeekForward,
         //     );
         // } else {
-        navigator.mediaSession.setActionHandler('seekbackward', null);
-        navigator.mediaSession.setActionHandler('seekforward', null);
+        // navigator.mediaSession.setActionHandler('seekbackward', null);
+        // navigator.mediaSession.setActionHandler('seekforward', null);
         // }
 
         navigator.mediaSession.setActionHandler(
@@ -143,14 +141,7 @@ export const useAudioPlayer = (
                 audioRef.current.currentTime = details.seekTime;
             }
         });
-    }, [
-        audioRef,
-        handleNextTrack,
-        handlePrevTrack,
-        handleSeekBackward,
-        handleSeekForward,
-        isDesktop,
-    ]);
+    }, [audioRef, handleNextTrack, handlePrevTrack]);
 
     useEffect(() => {
         const listener = (e: KeyboardEvent) => {
