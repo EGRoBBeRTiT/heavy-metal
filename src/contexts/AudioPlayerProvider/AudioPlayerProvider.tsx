@@ -61,8 +61,6 @@ export const AudioPlayerProvider = ({ children }: AudioPlayerProviderProps) => {
                 }}
                 autoPlay={audioPlayerConfig.isPlaying}
                 onEnded={() => {
-                    navigator.mediaSession.playbackState = 'none';
-
                     audioPlayerConfig.handleNextTrack();
                     audioPlayerConfig.setIsPlaying(true);
                 }}

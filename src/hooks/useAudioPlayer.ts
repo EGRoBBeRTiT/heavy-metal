@@ -107,6 +107,9 @@ export const useAudioPlayer = (
                 'seekforward',
                 handleSeekForward,
             );
+        } else {
+            navigator.mediaSession.setActionHandler('seekbackward', null);
+            navigator.mediaSession.setActionHandler('seekforward', null);
         }
 
         navigator.mediaSession.setActionHandler(
