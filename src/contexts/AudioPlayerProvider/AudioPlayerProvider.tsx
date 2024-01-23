@@ -50,20 +50,27 @@ export const AudioPlayerProvider = ({ children }: AudioPlayerProviderProps) => {
                 aria-hidden
                 src={audioPlayerConfig.activeTrack?.src}
                 onPlay={() => {
-                    navigator.mediaSession.playbackState = 'playing';
+                    // console.log('PLAYING');
+
+                    // navigator.mediaSession.playbackState = 'playing';
 
                     audioPlayerConfig.setIsPlaying(true);
                 }}
                 onPause={() => {
-                    navigator.mediaSession.playbackState = 'paused';
+                    // console.log('PAUSED');
+
+                    // navigator.mediaSession.playbackState = 'paused';
 
                     audioPlayerConfig.setIsPlaying(false);
                 }}
-                autoPlay={audioPlayerConfig.isPlaying}
                 onEnded={() => {
+                    // console.log('ENDED');
+
                     audioPlayerConfig.handleNextTrack();
-                    audioPlayerConfig.setIsPlaying(true);
+
+                    // await audioRef.current?.play();
                 }}
+                autoPlay
             />
         </AudioPlayerContext.Provider>
     );

@@ -170,7 +170,7 @@ export const useAudioPlayer = (
         return () => {
             document.removeEventListener('keydown', listener);
         };
-    }, [audioRef, handleNextTrack, handlePrevTrack]);
+    }, [audioRef, handlePrevTrack]);
 
     return useMemo(
         () => ({
