@@ -36,7 +36,11 @@ export const useAudioPlayer = (
 
             return (prev + 1) % songsList.length;
         });
-    }, [songsList.length]);
+
+        setTimeout(() => {
+            void audioRef.current?.play();
+        }, 50);
+    }, [audioRef, songsList.length]);
 
     const handlePrevTrack = useCallback(() => {
         setActiveTrackIndex((prev) => {
@@ -50,7 +54,11 @@ export const useAudioPlayer = (
 
             return prev - 1;
         });
-    }, [songsList.length]);
+
+        setTimeout(() => {
+            void audioRef.current?.play();
+        }, 50);
+    }, [audioRef, songsList.length]);
 
     const handleSeekForward = useCallback(() => {
         if (audioRef.current) {
@@ -110,17 +118,17 @@ export const useAudioPlayer = (
         // navigator.mediaSession.setActionHandler('seekforward', null);
         // }
 
-        navigator.mediaSession.setActionHandler(
-            'previoustrack',
-            handlePrevTrack,
-        );
+        // navigator.mediaSession.setActionHandler(
+        //     'previoustrack',
+        //     handlePrevTrack,
+        // );
         navigator.mediaSession.setActionHandler('nexttrack', handleNextTrack);
         navigator.mediaSession.setActionHandler('play', () => {
             void audioRef.current?.play();
         });
-        navigator.mediaSession.setActionHandler('stop', () => {
-            void audioRef.current?.pause();
-        });
+        // navigator.mediaSession.setActionHandler('stop', () => {
+        //     void audioRef.current?.pause();
+        // });
         navigator.mediaSession.setActionHandler('pause', () => {
             void audioRef.current?.pause();
         });

@@ -70,7 +70,7 @@ export const AudioPlayerProvider = ({ children }: AudioPlayerProviderProps) => {
 
                     // await audioRef.current?.play();
                 }}
-                autoPlay
+                // autoPlay
             />
         </AudioPlayerContext.Provider>
     );
