@@ -39,7 +39,7 @@ export const useAudioPlayer = (
 
         setTimeout(() => {
             void audioRef.current?.play();
-        }, 50);
+        }, 20);
     }, [audioRef, songsList.length]);
 
     const handlePrevTrack = useCallback(() => {
@@ -57,7 +57,7 @@ export const useAudioPlayer = (
 
         setTimeout(() => {
             void audioRef.current?.play();
-        }, 50);
+        }, 20);
     }, [audioRef, songsList.length]);
 
     const handleSeekForward = useCallback(() => {

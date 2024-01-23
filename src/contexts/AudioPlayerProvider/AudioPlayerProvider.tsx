@@ -70,6 +70,14 @@ export const AudioPlayerProvider = ({ children }: AudioPlayerProviderProps) => {
 
                     // await audioRef.current?.play();
                 }}
+                onTimeUpdate={(e) => {
+                    if (
+                        e.currentTarget.duration - e.currentTarget.currentTime <
+                        0.2
+                    ) {
+                        audioPlayerConfig.handleNextTrack();
+                    }
+                }}
                 // autoPlay
             />
         </AudioPlayerContext.Provider>
