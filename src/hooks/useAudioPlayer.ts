@@ -98,19 +98,19 @@ export const useAudioPlayer = (
     }, [activeTrackIndex, isPlaying, songsList]);
 
     useEffect(() => {
-        if (isDesktop) {
-            navigator.mediaSession.setActionHandler(
-                'seekbackward',
-                handleSeekBackward,
-            );
-            navigator.mediaSession.setActionHandler(
-                'seekforward',
-                handleSeekForward,
-            );
-        } else {
-            navigator.mediaSession.setActionHandler('seekbackward', null);
-            navigator.mediaSession.setActionHandler('seekforward', null);
-        }
+        // if (isDesktop) {
+        //     navigator.mediaSession.setActionHandler(
+        //         'seekbackward',
+        //         handleSeekBackward,
+        //     );
+        //     navigator.mediaSession.setActionHandler(
+        //         'seekforward',
+        //         handleSeekForward,
+        //     );
+        // } else {
+        navigator.mediaSession.setActionHandler('seekbackward', null);
+        navigator.mediaSession.setActionHandler('seekforward', null);
+        // }
 
         navigator.mediaSession.setActionHandler(
             'previoustrack',
