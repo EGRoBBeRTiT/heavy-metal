@@ -1,6 +1,7 @@
+import type { AlbumType } from '@/shared/albums';
 import { Band } from '@/types/Albums.types';
 
-export const ALBUMS_WITH_IDS = [
+export const ALBUMS_WITH_IDS: AlbumType[] = [
     {
         id: '96044820-03f0-43fa-8db5-2c00cb47b0a3',
         band: Band.BLACK_SABBATH,
@@ -8810,7 +8811,7 @@ export const ALBUMS_WITH_IDS = [
         band: Band.ANTHRAX,
         imageSrc: '/albums/Anthrax_1987_Among-the-Living.jpg',
         album: 'Among the Living',
-        releasedAt: new Date('1987-03-16'),
+        releasedAt: new Date('1987-03-16').toString(),
         songs: [
             {
                 id: 'c0e9444a-2692-4725-9dd2-87a9ebfaf5ac',
