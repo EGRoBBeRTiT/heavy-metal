@@ -40,8 +40,8 @@
 }
 
 .play-pause-icon {
-    width: fit-content;
-    height: fit-content;
+    width: fit-content !important;
+    height: fit-content !important;
     margin-inline-start: var(--medium-padding);
 }
 

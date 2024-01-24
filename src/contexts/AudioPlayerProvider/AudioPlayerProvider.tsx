@@ -36,6 +36,8 @@ export interface AudioPlayerContextProps {
     handleChangeVolume: (volume?: number) => void;
     handleSetTrackIndex: (index: number) => void;
     handleUpdateSessionMetaData: () => void;
+    handlePlay: () => void;
+    handleStop: () => void;
 }
 
 const AudioPlayerContext = createContext({} as AudioPlayerContextProps);
@@ -52,7 +54,7 @@ export const AudioPlayerProvider = ({ children }: AudioPlayerProviderProps) => {
 
     const player = useAudioPlayer(audioRef);
 
-    const { handleTogglePlaying } = player;
+    const { handlePlay, handleStop, setIsPlaying } = player;
 
     useEffect(() => {
         if (dataLoaded) {
@@ -67,11 +69,13 @@ export const AudioPlayerProvider = ({ children }: AudioPlayerProviderProps) => {
                 audioRef.current.currentTime = +playedSeconds;
 
                 if (playingStatus === PlayingStatus.PLAYING) {
-                    handleTogglePlaying();
+                    // handlePlay();
+                    setIsPlaying(true);
+                    audioRef.current.autoplay = true;
                 }
             }
         }
-    }, [dataLoaded, handleTogglePlaying]);
+    }, [dataLoaded, handlePlay, handleStop, setIsPlaying]);
 
     return (
         <AudioPlayerContext.Provider value={player}>

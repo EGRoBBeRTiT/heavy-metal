@@ -276,6 +276,8 @@ export const useAudioPlayer = (
 
     return useMemo(
         () => ({
+            handleStop,
+            handlePlay,
             handleUpdateSessionMetaData,
             handleSetTrackIndex,
             isPlaying,
@@ -296,6 +298,8 @@ export const useAudioPlayer = (
             handleChangeVolume,
         }),
         [
+            handleStop,
+            handlePlay,
             handleUpdateSessionMetaData,
             handleSetTrackIndex,
             handleChangeVolume,
