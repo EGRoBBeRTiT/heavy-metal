@@ -25,6 +25,13 @@
     width: 10%;
 }
 
+.play-button {
+    position: absolute;
+    top: var(--medium-padding);
+    left: var(--medium-padding);
+    filter: opacity(0);
+}
+
 .album {
     position: relative;
     height: fit-content;
@@ -50,13 +57,21 @@
             height: auto;
         }
 
-        .bottom-block {
+        .bottom-block,
+        .play-button {
+            filter: opacity(1);
+        }
+    }
+
+    &.active {
+        .play-button {
             filter: opacity(1);
         }
     }
 
     @include tablet {
-        .bottom-block {
+        .bottom-block,
+        .play-button {
             filter: opacity(1);
         }
     }

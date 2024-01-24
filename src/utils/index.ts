@@ -1,0 +1,1 @@
+export { getSafeLocalStorage } from './getSafeLocalStorage';

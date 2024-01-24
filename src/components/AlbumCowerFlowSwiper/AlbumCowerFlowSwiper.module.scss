@@ -94,6 +94,10 @@
         font-size: 2rem;
         text-align: center;
     }
+
+    @include mobile {
+        padding-block-end: calc(60px + var(--bottom-block-padding));
+    }
 }
 
 .album-label {

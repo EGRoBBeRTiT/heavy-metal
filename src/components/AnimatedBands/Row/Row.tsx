@@ -2,7 +2,7 @@ import type { DetailedHTMLProps, HTMLAttributes } from 'react';
 import React from 'react';
 import cnBind from 'classnames/bind';
 
-import { Band } from '@/shared/albums';
+import { Band } from '@/types/Albums.types';
 
 import styles from './Row.module.scss';
 

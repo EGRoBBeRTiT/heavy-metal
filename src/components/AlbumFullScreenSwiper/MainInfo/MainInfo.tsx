@@ -23,7 +23,7 @@ export const MainInfo = ({ album, className, ...props }: MainInfoProps) => (
         className={cx('main-info', cloisterBlack.className, className)}
     >
         <span>{album.band}</span>
-        <span>{album.releasedAt.getFullYear()}</span>
+        <span>{new Date(album.releasedAt).getFullYear()}</span>
         <span>{album.album}</span>
         {album.link && (
             <a

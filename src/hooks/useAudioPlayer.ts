@@ -1,187 +1,264 @@
+/* eslint-disable no-console */
 import type { MutableRefObject } from 'react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-export interface Song {
-    src: string;
-    title: string;
-    artist: string;
-    album: string;
-    imageSrc: string;
-    year: string;
-}
+import { useSetMediaSessionHandlers } from '@/hooks/useSetMediaSessionHandlers';
+import { useSpaceListener } from '@/hooks/useSpaceListener';
+import type { Song } from '@/shared/albums';
+import { ALBUMS_MAP, SONGS } from '@/shared/albums';
+import { LocalStorageItem } from '@/types/LocalStorageItem.types';
+import { getSafeLocalStorage } from '@/utils';
+import { isMobileAgent } from '@/utils/isMobileAgent';
 
-const DEFAULT_SKIP_SECONDS = 10;
+// const DEFAULT_SKIP_SECONDS = 30;
 
 export const useAudioPlayer = (
     audioRef: MutableRefObject<HTMLAudioElement | null>,
 ) => {
-    // const { isMobile, isTablet } = useScreenConfig();
-    // const isDesktop = !isMobile && !isTablet;
-    const [songsList, setSongsList] = useState<Song[]>([]);
+    const timeoutTef = useRef<ReturnType<typeof setTimeout> | number>(
+        Number.NaN,
+    );
+    const [, setIsDesktop] = useState(false);
+
+    const initialTrackIndex = useMemo(() => {
+        const trackIdFromStorage = getSafeLocalStorage()?.getItem(
+            LocalStorageItem.PLAYING_TRACK,
+        );
+
+        return trackIdFromStorage
+            ? SONGS.findIndex((song) => song.id === trackIdFromStorage)
+            : 0;
+    }, []);
+
+    useEffect(() => {
+        if (!isMobileAgent()) {
+            setIsDesktop(true);
+        }
+    }, []);
+
+    const [duration, setDuration] = useState(0);
+    const [songsList, setSongsList] = useState<Song[]>(SONGS);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [activeTrackIndex, setActiveTrackIndex] = useState(0);
+    const [activeTrackIndex, setActiveTrackIndex] = useState(initialTrackIndex);
     const [activeTrack, setActiveTrack] = useState<Song | null>(null);
 
     useEffect(() => {
-        setTimeout(() => {
-            setActiveTrack(songsList[activeTrackIndex] || null);
-        });
-    }, [activeTrackIndex, songsList]);
+        if (songsList.length && SONGS.length) {
+            setSongsList(SONGS);
+        }
+    }, [songsList.length]);
+
+    const handleUpdateSessionMetaData = useCallback(() => {
+        clearTimeout(timeoutTef.current);
+
+        timeoutTef.current = setTimeout(() => {
+            const album = ALBUMS_MAP.get(activeTrack?.albumId ?? '');
+
+            navigator.mediaSession.metadata = new MediaMetadata({
+                title: activeTrack?.title,
+                artist: album?.band ?? '',
+                album: album?.album ?? '',
+                artwork: [
+                    {
+                        src: album?.imageSrc ?? '',
+                    },
+                ],
+            });
+        }, 500);
+    }, [activeTrack?.albumId, activeTrack?.title]);
+
+    const handleSetTrack = useCallback(
+        (index: number) => {
+            if (audioRef.current) {
+                audioRef.current.src = songsList[index].src;
+            }
+            setActiveTrack(songsList[index] || null);
+            localStorage.setItem(
+                LocalStorageItem.PLAYING_TRACK,
+                songsList[index].id,
+            );
+        },
+        [audioRef, songsList],
+    );
+
+    useEffect(() => {
+        handleSetTrack(initialTrackIndex);
+    }, [handleSetTrack, initialTrackIndex]);
 
     const handleNextTrack = useCallback(() => {
         setActiveTrackIndex((prev) => {
-            if (!songsList.length) {
-                return 0;
+            let index = 0;
+
+            if (songsList.length) {
+                index = (prev + 1) % songsList.length;
             }
 
-            return (prev + 1) % songsList.length;
-        });
+            handleSetTrack(index);
 
-        setTimeout(() => {
-            void audioRef.current?.play();
-        }, 20);
-    }, [audioRef, songsList.length]);
+            return index;
+        });
+    }, [handleSetTrack, songsList.length]);
 
     const handlePrevTrack = useCallback(() => {
         setActiveTrackIndex((prev) => {
-            if (!songsList.length) {
-                return 0;
+            let index = 0;
+
+            if (songsList.length) {
+                if (prev <= 0) {
+                    index = songsList.length - 1;
+                } else {
+                    index = prev - 1;
+                }
             }
 
-            if (prev <= 0) {
-                return songsList.length - 1;
-            }
+            handleSetTrack(index);
 
-            return prev - 1;
+            return index;
         });
-
-        setTimeout(() => {
-            void audioRef.current?.play();
-        }, 20);
-    }, [audioRef, songsList.length]);
+    }, [handleSetTrack, songsList.length]);
 
     const handleSeekForward = useCallback(() => {
         if (audioRef.current) {
-            audioRef.current.currentTime = Math.min(
-                (audioRef.current?.currentTime ?? 0) + DEFAULT_SKIP_SECONDS,
-                audioRef.current?.duration,
-            );
+            audioRef.current.currentTime = 0;
+            handleNextTrack();
+            // audioRef.current.currentTime = Math.min(
+            //     (audioRef.current?.currentTime ?? 0) + DEFAULT_SKIP_SECONDS,
+            //     audioRef.current?.duration,
+            // );
         }
-    }, [audioRef]);
+    }, [audioRef, handleNextTrack]);
 
     const handleSeekBackward = useCallback(() => {
         if (audioRef.current) {
-            audioRef.current.currentTime = Math.max(
-                (audioRef.current?.currentTime ?? 0) - DEFAULT_SKIP_SECONDS,
-                0,
-            );
+            audioRef.current.currentTime = 0;
+            handlePrevTrack();
+            // audioRef.current.currentTime = Math.max(
+            //     (audioRef.current?.currentTime ?? 0) - DEFAULT_SKIP_SECONDS,
+            //     0,
+            // );
+        }
+    }, [audioRef, handlePrevTrack]);
+
+    const handlePlay = useCallback(() => {
+        audioRef.current?.play().catch((error) => console.error(error));
+
+        if (audioRef.current) {
+            audioRef.current.autoplay = true;
+        }
+
+        if ('mediaSession' in navigator) {
+            // navigator.mediaSession.playbackState = 'playing';
         }
     }, [audioRef]);
 
-    const handleTogglePlaying = useCallback(() => {
-        if (isPlaying) {
-            audioRef.current?.pause();
-        } else {
-            void audioRef.current?.play();
-        }
-    }, [audioRef, isPlaying]);
+    const handleStop = useCallback(() => {
+        audioRef.current?.pause();
 
-    useEffect(() => {
-        if (!songsList[activeTrackIndex]) {
-            return;
+        if (audioRef.current) {
+            audioRef.current.autoplay = false;
+        }
+    }, [audioRef]);
+
+    const handlePause = useCallback(() => {
+        audioRef.current?.pause();
+
+        if (audioRef.current) {
+            audioRef.current.autoplay = false;
         }
 
-        if (isPlaying) {
-            if ('mediaSession' in navigator) {
-                navigator.mediaSession.metadata = new MediaMetadata({
-                    title: songsList[activeTrackIndex].title,
-                    artist: songsList[activeTrackIndex].artist,
-                    album: songsList[activeTrackIndex].album,
-                    artwork: [{ src: songsList[activeTrackIndex].imageSrc }],
-                });
+        if ('mediaSession' in navigator) {
+            // navigator.mediaSession.playbackState = 'paused';
+        }
+    }, [audioRef]);
+
+    const handleChangeCurrentTime = useCallback(
+        (time?: number) => {
+            if (audioRef.current && time !== undefined && time !== null) {
+                audioRef.current.currentTime = time;
             }
-        }
-    }, [activeTrackIndex, isPlaying, songsList]);
+        },
+        [audioRef],
+    );
 
-    useEffect(() => {
-        // if (isDesktop) {
-        //     navigator.mediaSession.setActionHandler(
-        //         'seekbackward',
-        //         handleSeekBackward,
-        //     );
-        //     navigator.mediaSession.setActionHandler(
-        //         'seekforward',
-        //         handleSeekForward,
-        //     );
-        // } else {
-        // navigator.mediaSession.setActionHandler('seekbackward', null);
-        // navigator.mediaSession.setActionHandler('seekforward', null);
-        // }
-
-        // navigator.mediaSession.setActionHandler(
-        //     'previoustrack',
-        //     handlePrevTrack,
-        // );
-        navigator.mediaSession.setActionHandler('nexttrack', handleNextTrack);
-        navigator.mediaSession.setActionHandler('play', () => {
-            void audioRef.current?.play();
-        });
-        // navigator.mediaSession.setActionHandler('stop', () => {
-        //     void audioRef.current?.pause();
-        // });
-        navigator.mediaSession.setActionHandler('pause', () => {
-            void audioRef.current?.pause();
-        });
-        // navigator.mediaSession.setActionHandler('seekto', (details) => {
-        //     if (
-        //         details.fastSeek &&
-        //         details.seekTime !== undefined &&
-        //         audioRef.current &&
-        //         'fastSeek' in audioRef.current
-        //     ) {
-        //         // Only use fast seek if supported.
-        //         audioRef.current.fastSeek(details.seekTime ?? 0);
-
-        //         return;
-        //     }
-
-        //     if (audioRef.current && details.seekTime !== undefined) {
-        //         audioRef.current.currentTime = details.seekTime;
-        //     }
-        // });
-    }, [audioRef, handleNextTrack, handlePrevTrack]);
-
-    useEffect(() => {
-        const listener = (e: KeyboardEvent) => {
-            if (e.code === 'Space') {
-                if (audioRef.current?.paused) {
-                    void audioRef.current.play();
+    const handleChangeVolume = useCallback(
+        (volume?: number) => {
+            if (audioRef.current && volume !== undefined && volume !== null) {
+                if (volume <= 0) {
+                    audioRef.current.muted = true;
+                    audioRef.current.volume = 0;
                 } else {
-                    audioRef.current?.pause();
+                    audioRef.current.muted = false;
+                    audioRef.current.volume = volume;
                 }
+            }
+        },
+        [audioRef],
+    );
 
-                // return;
+    const handleSeekTo = useCallback(
+        (details: MediaSessionActionDetails) => {
+            if (
+                details.fastSeek &&
+                details.seekTime !== undefined &&
+                audioRef.current &&
+                'fastSeek' in audioRef.current
+            ) {
+                audioRef.current.fastSeek(details.seekTime ?? 0);
+
+                return;
             }
 
-            // if (e.code === 'ArrowRight') {
-            //     handleSeekForward();
+            handleChangeCurrentTime(details.seekTime);
+        },
+        [audioRef, handleChangeCurrentTime],
+    );
 
-            //     return;
-            // }
+    useSetMediaSessionHandlers({
+        seekBackward: undefined,
+        seekForward: undefined,
+        previousTrack: handlePrevTrack,
+        nextTrack: handleNextTrack,
+        seekTo: handleSeekTo,
+        play: handlePlay,
+        stop: handleStop,
+        pause: handlePause,
+    });
 
-            // if (e.code === 'ArrowLeft') {
-            //     handleSeekBackward();
-            // }
-        };
-        document.addEventListener('keydown', listener);
+    const handleTogglePlaying = useCallback(() => {
+        if (audioRef.current?.paused) {
+            handlePlay();
+        } else {
+            handlePause();
+        }
+    }, [audioRef, handlePause, handlePlay]);
 
-        return () => {
-            document.removeEventListener('keydown', listener);
-        };
-    }, [audioRef, handlePrevTrack]);
+    useSpaceListener(handleTogglePlaying);
+
+    const handleSetTrackIndex = useCallback(
+        (index: number) => {
+            if (index >= 0 && index < songsList.length) {
+                setActiveTrackIndex(index);
+
+                if (activeTrackIndex === index) {
+                    handleTogglePlaying();
+                } else if (audioRef.current?.paused) {
+                    handlePlay();
+                }
+            }
+        },
+        [
+            activeTrackIndex,
+            audioRef,
+            handlePlay,
+            handleTogglePlaying,
+            songsList.length,
+        ],
+    );
 
     return useMemo(
         () => ({
+            handleUpdateSessionMetaData,
+            handleSetTrackIndex,
             isPlaying,
             activeTrackIndex,
             songsList,
@@ -193,17 +270,29 @@ export const useAudioPlayer = (
             setIsPlaying,
             handleTogglePlaying,
             activeTrack,
+            audioRef,
+            duration,
+            setDuration,
+            handleChangeCurrentTime,
+            handleChangeVolume,
         }),
         [
-            activeTrack,
+            handleUpdateSessionMetaData,
+            handleSetTrackIndex,
+            handleChangeVolume,
             isPlaying,
             activeTrackIndex,
             songsList,
-            handleNextTrack,
             handlePrevTrack,
-            handleSeekBackward,
+            handleNextTrack,
             handleSeekForward,
+            handleSeekBackward,
             handleTogglePlaying,
+            activeTrack,
+            audioRef,
+            duration,
+            setDuration,
+            handleChangeCurrentTime,
         ],
     );
 };

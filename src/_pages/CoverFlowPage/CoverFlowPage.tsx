@@ -3,9 +3,12 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import cnBind from 'classnames/bind';
-import { Modal, ModalContent, ModalBody } from '@nextui-org/react';
+import { Modal, ModalContent, ModalBody, Button } from '@nextui-org/react';
 
 import { AlbumCowerFlowSwiper } from '@/components/AlbumCowerFlowSwiper';
+import { useAudioPlayerView } from '@/contexts/AudioPlayerViewProvider';
+import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
+import { IcClose } from '@/icons';
 
 import styles from './CoverFlowPage.module.scss';
 
@@ -17,6 +20,26 @@ export interface CoverFlowPageProps {
 
 export const CoverFlowPage = ({ index }: CoverFlowPageProps) => {
     const router = useRouter();
+
+    const { isMobile } = useScreenConfig();
+
+    const { setView, setStyles } = useAudioPlayerView();
+
+    useEffect(() => {
+        if (isMobile) {
+            setStyles({ position: 'fixed' });
+
+            return () => {
+                setStyles(null);
+            };
+        }
+
+        setView('compact');
+
+        return () => {
+            setView('full');
+        };
+    }, [isMobile, setStyles, setView]);
 
     useEffect(() => {
         const listener = (event: KeyboardEvent) => {
@@ -44,10 +67,25 @@ export const CoverFlowPage = ({ index }: CoverFlowPageProps) => {
                 scrollBehavior="inside"
                 size="full"
                 className={cx('modal')}
+                isDismissable={false}
+                closeButton={false}
+                hideCloseButton
             >
                 <ModalContent>
-                    {() => (
+                    {(onClose) => (
                         <ModalBody className={cx('body')}>
+                            <Button
+                                size="lg"
+                                isIconOnly
+                                radius="full"
+                                variant="light"
+                                className={cx('close-button')}
+                                onClick={() => {
+                                    onClose();
+                                }}
+                            >
+                                <IcClose />
+                            </Button>
                             <AlbumCowerFlowSwiper
                                 initialSlide={Number(index)}
                             />

@@ -30,8 +30,8 @@ export const InteractivePage = () => (
                             <AlbumLazy
                                 {...album}
                                 key={index}
-                                href={appRoutes.fullscreen(index)}
-                                fullScreenHref={appRoutes.fullscreen(index)}
+                                href={appRoutes.fullscreen(album.id)}
+                                fullScreenHref={appRoutes.fullscreen(album.id)}
                                 coverFlowHref={appRoutes.coverflow(index)}
                             />
                         </Suspense>

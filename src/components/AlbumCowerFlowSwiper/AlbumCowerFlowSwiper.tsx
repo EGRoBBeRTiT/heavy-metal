@@ -52,7 +52,7 @@ export const AlbumCowerFlowSwiper = React.memo(
         }, []);
 
         useEnterListener(() => {
-            router.replace(appRoutes.fullscreen(activeIndex));
+            router.replace(appRoutes.fullscreen(ALBUMS[activeIndex].id));
         });
 
         useEffect(() => {
@@ -112,7 +112,7 @@ export const AlbumCowerFlowSwiper = React.memo(
                                         }
                                         onClick={() => {
                                             router.replace(
-                                                appRoutes.fullscreen(index),
+                                                appRoutes.fullscreen(album.id),
                                             );
                                         }}
                                         withReflect
@@ -127,7 +127,9 @@ export const AlbumCowerFlowSwiper = React.memo(
                         className={cx(cloisterBlack.className, 'bottom')}
                     >
                         <span>
-                            {ALBUMS[activeIndex].releasedAt.getFullYear()}
+                            {new Date(
+                                ALBUMS[activeIndex].releasedAt,
+                            ).getFullYear()}
                         </span>
                         <span className={cx('album-label')}>
                             {ALBUMS[activeIndex].album}

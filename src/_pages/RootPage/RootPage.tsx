@@ -55,6 +55,21 @@ export const RootPage = () => {
                                     Open Static View
                                 </Link>
                             </li>
+                            <li>
+                                <Link
+                                    href={appRoutes.static()}
+                                    className={cx('link')}
+                                    underline="always"
+                                    color="foreground"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+
+                                        router.push(appRoutes.player());
+                                    }}
+                                >
+                                    Open Player
+                                </Link>
+                            </li>
                         </ul>
                     </nav>
                 </div>

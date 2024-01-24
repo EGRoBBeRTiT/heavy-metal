@@ -38,3 +38,32 @@
 .list {
     height: fit-content;
 }
+
+.play-pause-icon {
+    width: fit-content;
+    height: fit-content;
+    margin-inline-start: var(--medium-padding);
+}
+
+.link {
+    .play-pause-icon {
+        transform: scale(0.6);
+        filter: opacity(0);
+        transition: all 200ms ease-in-out;
+    }
+
+    &.playing,
+    &:focus {
+        .play-pause-icon {
+            transform: scale(1);
+            filter: opacity(1);
+        }
+    }
+
+    @include hover {
+        .play-pause-icon {
+            transform: scale(1);
+            filter: opacity(1);
+        }
+    }
+}

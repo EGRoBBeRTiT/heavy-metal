@@ -1,0 +1,32 @@
+.track-info {
+    display: flex;
+    gap: var(--main-padding);
+    align-items: center;
+    font-size: 0.875rem;
+}
+
+.cover {
+    --cover-size: 50px;
+
+    min-width: var(--cover-size);
+    max-width: var(--cover-size);
+    min-height: var(--cover-size);
+    max-height: var(--cover-size);
+    object-fit: cover;
+    aspect-ratio: 1;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add-info {
+    color: hsl(var(--nextui-foreground-400));
+}
+
+.info {
+    &.mobile {
+        h1,
+        p {
+            @include cut-for-n-rows(1);
+        }
+    }
+}

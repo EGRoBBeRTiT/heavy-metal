@@ -2,12 +2,13 @@
 
 /* eslint-disable jsx-a11y/media-has-caption */
 
-import type { ReactNode } from 'react';
-import { createContext, useContext, useRef } from 'react';
+import type { MutableRefObject, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import cnBind from 'classnames/bind';
 
-import type { Song } from '@/hooks/useAudioPlayer';
 import { useAudioPlayer } from '@/hooks/useAudioPlayer';
+import type { Song } from '@/shared/albums';
+import { LocalStorageItem } from '@/types/LocalStorageItem.types';
 
 import styles from './AudioPlayerProvider.module.scss';
 
@@ -25,6 +26,13 @@ export interface AudioPlayerContextProps {
     activeTrackIndex: number;
     isPlaying: boolean;
     activeTrack: Song | null;
+    audioRef: MutableRefObject<HTMLAudioElement | null>;
+    duration: number;
+    setDuration?: (dur: number) => void;
+    handleChangeCurrentTime: (time?: number) => void;
+    handleChangeVolume: (volume?: number) => void;
+    handleSetTrackIndex: (index: number) => void;
+    handleUpdateSessionMetaData: () => void;
 }
 
 const AudioPlayerContext = createContext({} as AudioPlayerContextProps);
@@ -36,50 +44,56 @@ interface AudioPlayerProviderProps {
 }
 
 export const AudioPlayerProvider = ({ children }: AudioPlayerProviderProps) => {
+    const [dataLoaded, setDataLoaded] = useState(false);
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
-    const audioPlayerConfig = useAudioPlayer(audioRef);
+    const player = useAudioPlayer(audioRef);
+
+    useEffect(() => {
+        if (dataLoaded) {
+            const playedSeconds = localStorage.getItem(
+                LocalStorageItem.PLAYED_SECONDS,
+            );
+
+            if (playedSeconds && audioRef.current) {
+                audioRef.current.currentTime = +playedSeconds;
+            }
+        }
+    }, [dataLoaded]);
 
     return (
-        <AudioPlayerContext.Provider value={audioPlayerConfig}>
+        <AudioPlayerContext.Provider value={player}>
             {children}
             <audio
                 ref={audioRef}
                 className={cx('audio')}
                 hidden
                 aria-hidden
-                src={audioPlayerConfig.activeTrack?.src}
                 onPlay={() => {
-                    // console.log('PLAYING');
-
-                    // navigator.mediaSession.playbackState = 'playing';
-
-                    audioPlayerConfig.setIsPlaying(true);
+                    player.setIsPlaying(true);
                 }}
                 onPause={() => {
-                    // console.log('PAUSED');
-
-                    // navigator.mediaSession.playbackState = 'paused';
-
-                    audioPlayerConfig.setIsPlaying(false);
+                    player.setIsPlaying(false);
+                }}
+                preload="auto"
+                onLoadedMetadata={() => {
+                    player.setDuration(audioRef.current?.duration ?? 0);
+                }}
+                onLoadedData={() => {
+                    player.handleUpdateSessionMetaData();
+                    setDataLoaded(true);
                 }}
                 onEnded={() => {
-                    // console.log('ENDED');
-
-                    audioPlayerConfig.handleNextTrack();
-
-                    // await audioRef.current?.play();
+                    player.handleNextTrack();
                 }}
-                onTimeUpdate={(e) => {
-                    if (
-                        e.currentTarget.duration - e.currentTarget.currentTime <
-                        0.2
-                    ) {
-                        audioPlayerConfig.handleNextTrack();
-                    }
-                }}
-                // autoPlay
-            />
+
+                // loop
+            >
+                <p>
+                    Ваш браузер не поддерживает HTML5 аудио. Вот взамен
+                    <a href={player.activeTrack?.src}>ссылка на аудио</a>
+                </p>
+            </audio>
         </AudioPlayerContext.Provider>
     );
 };

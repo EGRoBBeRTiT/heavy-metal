@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import VanillaTilt from 'vanilla-tilt';
 import cnBind from 'classnames/bind';
 import { Button } from '@nextui-org/button';
@@ -6,8 +6,10 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Tooltip } from '@nextui-org/react';
 
-import type { AlbumType } from '@/shared/albums';
+import { SONGS, type AlbumType } from '@/shared/albums';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
+import { useAudioPlayerContext } from '@/contexts/AudioPlayerProvider/AudioPlayerProvider';
+import { PlayPauseIcon } from '@/components/PlayPauseIcon';
 
 import styles from './Album.module.scss';
 
@@ -28,10 +30,35 @@ export const Album = React.memo(
         href,
         fullScreenHref,
         coverFlowHref,
+        songs,
     }: AlbumProps) => {
         const router = useRouter();
         const { isMobile, isTablet } = useScreenConfig();
         const imageRef = useRef<HTMLDivElement | null>(null);
+
+        const { activeTrack, isPlaying, handleSetTrackIndex } =
+            useAudioPlayerContext();
+
+        const activeSong = useMemo(
+            () => songs?.find((song) => song.id === activeTrack?.id),
+            [activeTrack?.id, songs],
+        );
+
+        const songIndex = useMemo(() => {
+            if (activeSong) {
+                return SONGS.findIndex((value) => value.id === activeSong.id);
+            }
+
+            const song = songs?.find((song) => song.src);
+
+            if (song) {
+                return SONGS.findIndex((value) => value.id === song.id);
+            }
+
+            return Number.NaN;
+        }, [activeSong, songs]);
+
+        const canPlay = !Number.isNaN(songIndex);
 
         useEffect(() => {
             setTimeout(() => {
@@ -55,10 +82,12 @@ export const Album = React.memo(
                     }
                 }}
                 ref={imageRef}
-                className={cx('album')}
+                className={cx('album', { active: activeSong })}
             >
                 <Tooltip
-                    content={`${band}  ·  ${album}  ·  ${releasedAt.getFullYear()}`}
+                    content={`${band}  ·  ${album}  ·  ${new Date(
+                        releasedAt,
+                    ).getFullYear()}`}
                     offset={60}
                 >
                     <div className={cx('image-container')}>
@@ -72,6 +101,19 @@ export const Album = React.memo(
                         />
                     </div>
                 </Tooltip>
+                {canPlay && (
+                    <Button
+                        isIconOnly
+                        variant={activeSong ? 'solid' : 'flat'}
+                        className={cx('play-button')}
+                        onPress={() => {
+                            handleSetTrackIndex(songIndex);
+                        }}
+                        color={activeSong ? 'primary' : 'default'}
+                    >
+                        <PlayPauseIcon isPlaying={activeSong && isPlaying} />
+                    </Button>
+                )}
                 <div className={cx('bottom-block')}>
                     {link && (
                         <Tooltip content="Перейти в Apple Music">
@@ -95,7 +137,7 @@ export const Album = React.memo(
                         <Button
                             isIconOnly
                             className={cx('button', 'carousel-button')}
-                            onClick={() => {
+                            onPress={() => {
                                 if (coverFlowHref) {
                                     router.push(coverFlowHref);
                                 }
@@ -116,7 +158,7 @@ export const Album = React.memo(
                         <Button
                             isIconOnly
                             className={cx('button', 'carousel-button')}
-                            onClick={() => {
+                            onPress={() => {
                                 if (fullScreenHref) {
                                     router.push(fullScreenHref);
                                 }

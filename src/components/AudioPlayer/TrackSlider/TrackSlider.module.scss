@@ -1,0 +1,34 @@
+.slider-container {
+    position: relative;
+    width: 100%;
+
+    &.animate {
+        [data-slot='filler'] {
+            transition: width 1000ms linear;
+        }
+    }
+}
+
+.slider {
+    margin: 0;
+    padding: 0;
+
+    [data-slot='track'] {
+        margin: 0;
+        padding: 0;
+    }
+}
+
+.time {
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    color: hsl(var(--nextui-foreground-200));
+    font-size: 0.75rem;
+    margin-block-start: var(--small-padding);
+
+    &.compact {
+        color: hsl(var(--nextui-foreground-400));
+    }
+}

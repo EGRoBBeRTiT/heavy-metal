@@ -1,0 +1,24 @@
+.loud-slider {
+    width: 200px;
+    margin-inline-start: auto;
+
+    &.compact {
+        margin-inline-start: 0;
+        width: 100%;
+    }
+}
+
+.on,
+.off {
+    transform: scale(1);
+    filter: opacity(1);
+    transition:
+        transform 200ms ease-in-out,
+        filter 200ms ease-in-out;
+
+    &.hidden {
+        position: absolute;
+        transform: scale(0.3);
+        filter: opacity(0);
+    }
+}
