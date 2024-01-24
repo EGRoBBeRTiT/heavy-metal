@@ -6,7 +6,10 @@ import { useSetMediaSessionHandlers } from '@/hooks/useSetMediaSessionHandlers';
 import { useSpaceListener } from '@/hooks/useSpaceListener';
 import type { Song } from '@/shared/albums';
 import { ALBUMS_MAP, SONGS } from '@/shared/albums';
-import { LocalStorageItem } from '@/types/LocalStorageItem.types';
+import {
+    LocalStorageItem,
+    PlayingStatus,
+} from '@/types/LocalStorageItem.types';
 import { getSafeLocalStorage } from '@/utils';
 import { isMobileAgent } from '@/utils/isMobileAgent';
 
@@ -25,9 +28,19 @@ export const useAudioPlayer = (
             LocalStorageItem.PLAYING_TRACK,
         );
 
-        return trackIdFromStorage
-            ? SONGS.findIndex((song) => song.id === trackIdFromStorage)
-            : 0;
+        if (trackIdFromStorage) {
+            const foundIndex = SONGS.findIndex(
+                (song) => song.id === trackIdFromStorage,
+            );
+
+            if (foundIndex === -1) {
+                return 0;
+            }
+
+            return foundIndex;
+        }
+
+        return 0;
     }, []);
 
     useEffect(() => {
@@ -135,6 +148,11 @@ export const useAudioPlayer = (
         audioRef.current
             ?.play()
             .then(() => {
+                sessionStorage.setItem(
+                    LocalStorageItem.PLAYING_STATUS,
+                    PlayingStatus.PLAYING,
+                );
+                setIsPlaying(true);
                 navigator.mediaSession.playbackState = 'playing';
             })
             .catch((error) => console.error(error));
@@ -142,15 +160,16 @@ export const useAudioPlayer = (
         if (audioRef.current) {
             audioRef.current.autoplay = true;
         }
-
-        if ('mediaSession' in navigator) {
-            // navigator.mediaSession.playbackState = 'playing';
-        }
     }, [audioRef]);
 
     const handleStop = useCallback(() => {
         audioRef.current?.pause();
         navigator.mediaSession.playbackState = 'paused';
+        sessionStorage.setItem(
+            LocalStorageItem.PLAYING_STATUS,
+            PlayingStatus.STOPPED,
+        );
+        setIsPlaying(false);
 
         if (audioRef.current) {
             audioRef.current.autoplay = false;
@@ -160,6 +179,11 @@ export const useAudioPlayer = (
     const handlePause = useCallback(() => {
         audioRef.current?.pause();
         navigator.mediaSession.playbackState = 'paused';
+        sessionStorage.setItem(
+            LocalStorageItem.PLAYING_STATUS,
+            PlayingStatus.PAUSED,
+        );
+        setIsPlaying(false);
 
         if (audioRef.current) {
             audioRef.current.autoplay = false;

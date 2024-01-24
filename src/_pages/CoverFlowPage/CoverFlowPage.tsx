@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useMemo } from 'react';
+import { notFound, useRouter } from 'next/navigation';
 import cnBind from 'classnames/bind';
 import { Modal, ModalContent, ModalBody, Button } from '@nextui-org/react';
 
@@ -9,16 +9,17 @@ import { AlbumCowerFlowSwiper } from '@/components/AlbumCowerFlowSwiper';
 import { useAudioPlayerView } from '@/contexts/AudioPlayerViewProvider';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
 import { IcClose } from '@/icons';
+import { ALBUMS } from '@/shared/albums';
 
 import styles from './CoverFlowPage.module.scss';
 
 const cx = cnBind.bind(styles);
 
 export interface CoverFlowPageProps {
-    index?: string;
+    albumId?: string;
 }
 
-export const CoverFlowPage = ({ index }: CoverFlowPageProps) => {
+export const CoverFlowPage = ({ albumId }: CoverFlowPageProps) => {
     const router = useRouter();
 
     const { isMobile } = useScreenConfig();
@@ -55,6 +56,16 @@ export const CoverFlowPage = ({ index }: CoverFlowPageProps) => {
         };
     }, [router]);
 
+    const index = useMemo(() => {
+        const foundIndex = ALBUMS.findIndex((album) => album.id === albumId);
+
+        if (foundIndex === -1) {
+            notFound();
+        }
+
+        return foundIndex;
+    }, [albumId]);
+
     return (
         <main className={cx('main')}>
             <Modal
@@ -86,9 +97,7 @@ export const CoverFlowPage = ({ index }: CoverFlowPageProps) => {
                             >
                                 <IcClose />
                             </Button>
-                            <AlbumCowerFlowSwiper
-                                initialSlide={Number(index)}
-                            />
+                            <AlbumCowerFlowSwiper initialSlide={index} />
                         </ModalBody>
                     )}
                 </ModalContent>

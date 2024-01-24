@@ -1,7 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useRouter, notFound } from 'next/navigation';
 import cnBind from 'classnames/bind';
 import { Button } from '@nextui-org/button';
 
@@ -90,7 +90,15 @@ export const FullScreenPage = ({ albumId }: FullScreenPageProps) => {
         );
     }, []);
 
-    const index = ALBUMS.findIndex((album) => album.id === albumId);
+    const index = useMemo(() => {
+        const foundIndex = ALBUMS.findIndex((album) => album.id === albumId);
+
+        if (foundIndex === -1) {
+            notFound();
+        }
+
+        return foundIndex;
+    }, [albumId]);
 
     return (
         <div className={cx('page', { mounted })}>

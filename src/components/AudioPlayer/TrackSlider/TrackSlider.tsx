@@ -35,31 +35,25 @@ export const TrackSlider = ({
     const { view } = useAudioPlayerView();
 
     const handleSetTime = useCallback((time?: number) => {
+        localStorage.setItem(
+            LocalStorageItem.PLAYED_SECONDS,
+            `${Math.floor(time ?? 0)}`,
+        );
+
         setCurrentTime(time ?? 0);
     }, []);
 
     const throttledTimeChange = useMemo(
         () =>
             throttle(() => {
-                if (canChangeValue) {
-                    setTimeout(() => {
-                        localStorage.setItem(
-                            LocalStorageItem.PLAYED_SECONDS,
-                            `${Math.floor(audioRef.current?.currentTime ?? 0)}`,
-                        );
-                        handleSetTime(audioRef.current?.currentTime);
-                        setSliderValue(audioRef.current?.currentTime ?? 0);
-                    });
-
-                    return;
-                }
-
                 setTimeout(() => {
-                    localStorage.setItem(
-                        LocalStorageItem.PLAYED_SECONDS,
-                        `${Math.floor(audioRef.current?.currentTime ?? 0)}`,
-                    );
-                    handleSetTime(audioRef.current?.currentTime);
+                    if (audioRef.current?.readyState === 4) {
+                        handleSetTime(audioRef.current?.currentTime);
+
+                        if (canChangeValue) {
+                            setSliderValue(audioRef.current?.currentTime ?? 0);
+                        }
+                    }
                 });
             }, 1000),
         [audioRef, canChangeValue, handleSetTime],

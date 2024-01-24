@@ -1,7 +1,7 @@
-// import SONG from './song.json';
-
 import { ALBUMS_WITH_IDS } from '@/shared/albumsWithIds';
 import type { Band } from '@/types/Albums.types';
+
+// import SONG from './song.json';
 
 // export const getAlbum = () => {
 //     const { albumName } = Object.values(SONG.resources.songs)[0].attributes;
@@ -10,14 +10,20 @@ import type { Band } from '@/types/Albums.types';
 //         (album) => album.attributes.name === albumName,
 //     )?.attributes.releaseDate;
 
+//     const albumId = crypto.randomUUID();
+
 //     return {
+//         id: albumId,
 //         band: Object.values(SONG.resources.songs)[0].attributes.artistName,
 //         imageSrc: '',
 //         album: albumName,
 //         releasedAt: `new Date("${releaseDate ?? ''}")`,
-//         songs: Object.values(SONG.resources.songs).map(
-//             (song) => song.attributes.name,
-//         ),
+//         songs: Object.values(SONG.resources.songs).map((song) => ({
+//             id: crypto.randomUUID(),
+//             title: song.attributes.name,
+//             albumId,
+//             src: '',
+//         })),
 //         link: '',
 //     };
 // };

@@ -46,7 +46,7 @@ export const AlbumCowerFlowSwiper = React.memo(
             window.history.replaceState(
                 null,
                 '',
-                appRoutes.coverflow(swiper.activeIndex),
+                appRoutes.coverflow(ALBUMS[swiper.activeIndex].id),
             );
             setActiveIndex(swiper.activeIndex);
         }, []);

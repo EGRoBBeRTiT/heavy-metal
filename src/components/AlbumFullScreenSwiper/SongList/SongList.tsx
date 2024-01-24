@@ -31,7 +31,7 @@ export const SongList = ({ album, className, ...props }: SongListProps) => {
                         const isActive = activeTrack?.id === song.id;
 
                         return (
-                            <li key={index}>
+                            <li key={song.id}>
                                 <Link
                                     className={cx('link', {
                                         playing: isActive,

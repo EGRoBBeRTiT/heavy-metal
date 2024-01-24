@@ -29,10 +29,10 @@ export const InteractivePage = () => (
                         <Suspense key={index} fallback={<AlbumSkeleton />}>
                             <AlbumLazy
                                 {...album}
-                                key={index}
+                                key={album.id}
                                 href={appRoutes.fullscreen(album.id)}
                                 fullScreenHref={appRoutes.fullscreen(album.id)}
-                                coverFlowHref={appRoutes.coverflow(index)}
+                                coverFlowHref={appRoutes.coverflow(album.id)}
                             />
                         </Suspense>
                     ))}

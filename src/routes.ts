@@ -8,7 +8,8 @@ class AppRoutes {
     fullscreen = (albumId: string) =>
         `/interactive/fullscreen/${albumId}` as const;
 
-    coverflow = (index: number) => `/interactive/coverflow/${index}` as const;
+    coverflow = (albumId: string) =>
+        `/interactive/coverflow/${albumId}` as const;
 
     player = () => 'player' as const;
 }

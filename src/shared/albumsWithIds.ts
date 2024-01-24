@@ -8805,4 +8805,68 @@ export const ALBUMS_WITH_IDS = [
         imageSrc: '/albums/Manowar_2023_Laut-Und-Hart-Stark-Und-Schnell.png',
         releasedAt: '2023-02-10T00:00:00.000Z',
     },
+    {
+        id: 'ecc292c8-edfa-422f-8506-e5f97f65add5',
+        band: Band.ANTHRAX,
+        imageSrc: '/albums/Anthrax_1987_Among-the-Living.jpg',
+        album: 'Among the Living',
+        releasedAt: new Date('1987-03-16'),
+        songs: [
+            {
+                id: 'c0e9444a-2692-4725-9dd2-87a9ebfaf5ac',
+                title: 'Among the Living',
+                albumId: 'ecc292c8-edfa-422f-8506-e5f97f65add5',
+                src: 'https://rocknation.su/upload/mp3/Anthrax/1987%20-%20Among%20The%20Living/01.%20Among%20The%20Living.mp3',
+            },
+            {
+                id: '04a4aa82-6e5f-4976-97eb-b8d762bf0f30',
+                title: 'Caught In a Mosh',
+                albumId: 'ecc292c8-edfa-422f-8506-e5f97f65add5',
+                src: 'https://rocknation.su/upload/mp3/Anthrax/1987%20-%20Among%20The%20Living/02.%20Caught%20In%20A%20Mosh.mp3',
+            },
+            {
+                id: '99ba5333-aec5-4b79-a4b5-565cc15866d6',
+                title: 'I Am the Law',
+                albumId: 'ecc292c8-edfa-422f-8506-e5f97f65add5',
+                src: 'https://rocknation.su/upload/mp3/Anthrax/1987%20-%20Among%20The%20Living/03.%20I%20Am%20The%20Law.mp3',
+            },
+            {
+                id: 'bd0b8436-fa1b-428a-bcec-3738a43d4f99',
+                title: 'Efilnikufesin (N.F.L.)',
+                albumId: 'ecc292c8-edfa-422f-8506-e5f97f65add5',
+                src: 'https://rocknation.su/upload/mp3/Anthrax/1987%20-%20Among%20The%20Living/04.%20Efilnikufesin%20%28N.F.L.%29.mp3',
+            },
+            {
+                id: 'dfaf7964-7d91-4a66-85b0-2cc7e60e0666',
+                title: 'A Skeleton In the Closet',
+                albumId: 'ecc292c8-edfa-422f-8506-e5f97f65add5',
+                src: 'https://rocknation.su/upload/mp3/Anthrax/1987%20-%20Among%20The%20Living/05.%20A%20Skeleton%20In%20The%20Closet.mp3',
+            },
+            {
+                id: '380301ee-9ea9-4f3d-b583-513cbeb4124b',
+                title: 'Indians',
+                albumId: 'ecc292c8-edfa-422f-8506-e5f97f65add5',
+                src: 'https://rocknation.su/upload/mp3/Anthrax/1987%20-%20Among%20The%20Living/06.%20Indians.mp3',
+            },
+            {
+                id: '2a3ce2f0-cc23-4dc9-afa5-dfb92911046f',
+                title: 'One World',
+                albumId: 'ecc292c8-edfa-422f-8506-e5f97f65add5',
+                src: 'https://rocknation.su/upload/mp3/Anthrax/1987%20-%20Among%20The%20Living/07.%20One%20World.mp3',
+            },
+            {
+                id: 'bb54e7b0-a262-46b0-9f6d-e3f856d59e6d',
+                title: 'A.D.I. / Horror of It All',
+                albumId: 'ecc292c8-edfa-422f-8506-e5f97f65add5',
+                src: 'https://rocknation.su/upload/mp3/Anthrax/1987%20-%20Among%20The%20Living/08.%20A.D.I._Horror%20Of%20It%20All.mp3',
+            },
+            {
+                id: '764c722e-2057-452a-8126-61fe9a470756',
+                title: 'Imitation of Life',
+                albumId: 'ecc292c8-edfa-422f-8506-e5f97f65add5',
+                src: 'https://rocknation.su/upload/mp3/Anthrax/1987%20-%20Among%20The%20Living/09.%20Imitation%20Of%20Life.mp3',
+            },
+        ],
+        link: 'https://music.apple.com/ru/album/among-the-living/1440824574',
+    },
 ];

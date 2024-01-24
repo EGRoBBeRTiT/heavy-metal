@@ -8,7 +8,10 @@ import cnBind from 'classnames/bind';
 
 import { useAudioPlayer } from '@/hooks/useAudioPlayer';
 import type { Song } from '@/shared/albums';
-import { LocalStorageItem } from '@/types/LocalStorageItem.types';
+import {
+    LocalStorageItem,
+    PlayingStatus,
+} from '@/types/LocalStorageItem.types';
 
 import styles from './AudioPlayerProvider.module.scss';
 
@@ -49,17 +52,26 @@ export const AudioPlayerProvider = ({ children }: AudioPlayerProviderProps) => {
 
     const player = useAudioPlayer(audioRef);
 
+    const { handleTogglePlaying } = player;
+
     useEffect(() => {
         if (dataLoaded) {
             const playedSeconds = localStorage.getItem(
                 LocalStorageItem.PLAYED_SECONDS,
             );
+            const playingStatus = sessionStorage.getItem(
+                LocalStorageItem.PLAYING_STATUS,
+            );
 
             if (playedSeconds && audioRef.current) {
                 audioRef.current.currentTime = +playedSeconds;
+
+                if (playingStatus === PlayingStatus.PLAYING) {
+                    handleTogglePlaying();
+                }
             }
         }
-    }, [dataLoaded]);
+    }, [dataLoaded, handleTogglePlaying]);
 
     return (
         <AudioPlayerContext.Provider value={player}>
@@ -69,25 +81,17 @@ export const AudioPlayerProvider = ({ children }: AudioPlayerProviderProps) => {
                 className={cx('audio')}
                 hidden
                 aria-hidden
-                onPlay={() => {
-                    player.setIsPlaying(true);
-                }}
-                onPause={() => {
-                    player.setIsPlaying(false);
-                }}
                 preload="auto"
                 onLoadedMetadata={() => {
                     player.setDuration(audioRef.current?.duration ?? 0);
                 }}
                 onLoadedData={() => {
-                    player.handleUpdateSessionMetaData();
                     setDataLoaded(true);
+                    player.handleUpdateSessionMetaData();
                 }}
                 onEnded={() => {
                     player.handleNextTrack();
                 }}
-
-                // loop
             >
                 <p>
                     Ваш браузер не поддерживает HTML5 аудио. Вот взамен
