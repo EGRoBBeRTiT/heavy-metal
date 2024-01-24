@@ -64,7 +64,7 @@ export const useAudioPlayer = (
                     },
                 ],
             });
-        }, 500);
+        }, 700);
     }, [activeTrack?.albumId, activeTrack?.title]);
 
     const handleSetTrack = useCallback(
@@ -82,40 +82,32 @@ export const useAudioPlayer = (
     );
 
     useEffect(() => {
-        handleSetTrack(initialTrackIndex);
-    }, [handleSetTrack, initialTrackIndex]);
+        handleSetTrack(activeTrackIndex);
+    }, [activeTrackIndex, handleSetTrack]);
 
     const handleNextTrack = useCallback(() => {
         setActiveTrackIndex((prev) => {
-            let index = 0;
-
-            if (songsList.length) {
-                index = (prev + 1) % songsList.length;
+            if (!songsList.length) {
+                return 0;
             }
 
-            handleSetTrack(index);
-
-            return index;
+            return (prev + 1) % songsList.length;
         });
-    }, [handleSetTrack, songsList.length]);
+    }, [songsList.length]);
 
     const handlePrevTrack = useCallback(() => {
         setActiveTrackIndex((prev) => {
-            let index = 0;
-
-            if (songsList.length) {
-                if (prev <= 0) {
-                    index = songsList.length - 1;
-                } else {
-                    index = prev - 1;
-                }
+            if (!songsList.length) {
+                return 0;
             }
 
-            handleSetTrack(index);
+            if (prev <= 0) {
+                return songsList.length - 1;
+            }
 
-            return index;
+            return prev - 1;
         });
-    }, [handleSetTrack, songsList.length]);
+    }, [songsList.length]);
 
     const handleSeekForward = useCallback(() => {
         if (audioRef.current) {
