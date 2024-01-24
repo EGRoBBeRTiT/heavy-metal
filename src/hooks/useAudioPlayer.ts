@@ -132,7 +132,12 @@ export const useAudioPlayer = (
     }, [audioRef, handlePrevTrack]);
 
     const handlePlay = useCallback(() => {
-        audioRef.current?.play().catch((error) => console.error(error));
+        audioRef.current
+            ?.play()
+            .then(() => {
+                navigator.mediaSession.playbackState = 'playing';
+            })
+            .catch((error) => console.error(error));
 
         if (audioRef.current) {
             audioRef.current.autoplay = true;
@@ -145,6 +150,7 @@ export const useAudioPlayer = (
 
     const handleStop = useCallback(() => {
         audioRef.current?.pause();
+        navigator.mediaSession.playbackState = 'paused';
 
         if (audioRef.current) {
             audioRef.current.autoplay = false;
@@ -153,13 +159,10 @@ export const useAudioPlayer = (
 
     const handlePause = useCallback(() => {
         audioRef.current?.pause();
+        navigator.mediaSession.playbackState = 'paused';
 
         if (audioRef.current) {
             audioRef.current.autoplay = false;
-        }
-
-        if ('mediaSession' in navigator) {
-            // navigator.mediaSession.playbackState = 'paused';
         }
     }, [audioRef]);
 
