@@ -6,10 +6,7 @@ import { useSetMediaSessionHandlers } from '@/hooks/useSetMediaSessionHandlers';
 import { useSpaceListener } from '@/hooks/useSpaceListener';
 import type { Song } from '@/shared/albums';
 import { ALBUMS_MAP, SONGS } from '@/shared/albums';
-import {
-    LocalStorageItem,
-    PlayingStatus,
-} from '@/types/LocalStorageItem.types';
+import { LocalStorageItem } from '@/types/LocalStorageItem.types';
 import { getSafeLocalStorage } from '@/utils';
 import { isMobileAgent } from '@/utils/isMobileAgent';
 
@@ -148,10 +145,6 @@ export const useAudioPlayer = (
         audioRef.current
             ?.play()
             .then(() => {
-                sessionStorage.setItem(
-                    LocalStorageItem.PLAYING_STATUS,
-                    PlayingStatus.PLAYING,
-                );
                 setIsPlaying(true);
                 navigator.mediaSession.playbackState = 'playing';
             })
@@ -165,10 +158,7 @@ export const useAudioPlayer = (
     const handleStop = useCallback(() => {
         audioRef.current?.pause();
         navigator.mediaSession.playbackState = 'paused';
-        sessionStorage.setItem(
-            LocalStorageItem.PLAYING_STATUS,
-            PlayingStatus.STOPPED,
-        );
+
         setIsPlaying(false);
 
         if (audioRef.current) {
@@ -179,10 +169,6 @@ export const useAudioPlayer = (
     const handlePause = useCallback(() => {
         audioRef.current?.pause();
         navigator.mediaSession.playbackState = 'paused';
-        sessionStorage.setItem(
-            LocalStorageItem.PLAYING_STATUS,
-            PlayingStatus.PAUSED,
-        );
         setIsPlaying(false);
 
         if (audioRef.current) {

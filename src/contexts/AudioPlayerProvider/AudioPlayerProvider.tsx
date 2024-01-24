@@ -8,10 +8,7 @@ import cnBind from 'classnames/bind';
 
 import { useAudioPlayer } from '@/hooks/useAudioPlayer';
 import type { Song } from '@/shared/albums';
-import {
-    LocalStorageItem,
-    PlayingStatus,
-} from '@/types/LocalStorageItem.types';
+import { LocalStorageItem } from '@/types/LocalStorageItem.types';
 
 import styles from './AudioPlayerProvider.module.scss';
 
@@ -61,18 +58,9 @@ export const AudioPlayerProvider = ({ children }: AudioPlayerProviderProps) => {
             const playedSeconds = localStorage.getItem(
                 LocalStorageItem.PLAYED_SECONDS,
             );
-            const playingStatus = sessionStorage.getItem(
-                LocalStorageItem.PLAYING_STATUS,
-            );
 
             if (playedSeconds && audioRef.current) {
                 audioRef.current.currentTime = +playedSeconds;
-
-                if (playingStatus === PlayingStatus.PLAYING) {
-                    // handlePlay();
-                    setIsPlaying(true);
-                    audioRef.current.autoplay = true;
-                }
             }
         }
     }, [dataLoaded, handlePlay, handleStop, setIsPlaying]);
