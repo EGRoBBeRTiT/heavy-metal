@@ -3,9 +3,10 @@ import cnBind from 'classnames/bind';
 import type { DetailedHTMLProps, HTMLAttributes } from 'react';
 import { Link, ScrollShadow } from '@nextui-org/react';
 
-import { SONGS, type AlbumType } from '@/shared/albums';
+import { type AlbumType } from '@/shared/albums';
 import { useAudioPlayerContext } from '@/contexts/AudioPlayerProvider/AudioPlayerProvider';
 import { PlayPauseIcon } from '@/components/PlayPauseIcon';
+import { useAlbums } from '@/contexts/StoreProvider';
 
 import styles from './SongList.module.scss';
 
@@ -22,6 +23,7 @@ export interface SongListProps
 export const SongList = ({ album, className, ...props }: SongListProps) => {
     const { handleSetTrackIndex, activeTrack, isPlaying } =
         useAudioPlayerContext();
+    const { songs } = useAlbums();
 
     return (
         <ScrollShadow {...props} className={cx('scroll-container', className)}>
@@ -41,7 +43,7 @@ export const SongList = ({ album, className, ...props }: SongListProps) => {
                                     onClick={(e) => {
                                         e.preventDefault();
 
-                                        const index = SONGS.findIndex(
+                                        const index = songs.findIndex(
                                             (value) => value.id === song.id,
                                         );
 

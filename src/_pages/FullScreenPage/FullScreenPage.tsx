@@ -8,9 +8,9 @@ import { Button } from '@nextui-org/button';
 import { AlbumFullScreenSwiper } from '@/components/AlbumFullScreenSwiper';
 import { IcClose } from '@/icons';
 import { appRoutes } from '@/routes';
-import { ALBUMS } from '@/shared/albums';
 import { useAudioPlayerView } from '@/contexts/AudioPlayerViewProvider';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
+import { useAlbums } from '@/contexts/StoreProvider';
 
 import { useFullScreen } from './FullScreenPage.hooks';
 import styles from './FullScreenPage.module.scss';
@@ -22,6 +22,7 @@ export interface FullScreenPageProps {
 }
 
 export const FullScreenPage = ({ albumId }: FullScreenPageProps) => {
+    const { albums } = useAlbums();
     const router = useRouter();
     const [mounted, setMounted] = useState(false);
     const [isFullScreenAccessed, setIsFullScreenAccessed] = useState(false);
@@ -82,23 +83,26 @@ export const FullScreenPage = ({ albumId }: FullScreenPageProps) => {
 
     useFullScreen(divRef, handleSuccess, handleError, handlePushBack);
 
-    const handleActiveIndexChange = useCallback((index: number) => {
-        window.history.replaceState(
-            null,
-            '',
-            appRoutes.fullscreen(ALBUMS[index].id),
-        );
-    }, []);
+    const handleActiveIndexChange = useCallback(
+        (index: number) => {
+            window.history.replaceState(
+                null,
+                '',
+                appRoutes.fullscreen(albums[index].id),
+            );
+        },
+        [albums],
+    );
 
     const index = useMemo(() => {
-        const foundIndex = ALBUMS.findIndex((album) => album.id === albumId);
+        const foundIndex = albums.findIndex((album) => album.id === albumId);
 
         if (foundIndex === -1) {
             notFound();
         }
 
         return foundIndex;
-    }, [albumId]);
+    }, [albumId, albums]);
 
     return (
         <div className={cx('page', { mounted })}>

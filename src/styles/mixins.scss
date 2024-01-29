@@ -10,8 +10,8 @@
 
 @mixin centered-flexbox {
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
 }
 
 @mixin mobile {
@@ -51,4 +51,11 @@
             @content;
         }
     }
+}
+
+/* stylelint-disable-next-line length-zero-no-unit */
+@mixin max-height($cut-height: 0px) {
+    height: calc(100dvh - #{$cut-height});
+    min-height: calc(100svh - #{$cut-height});
+    max-height: calc(100vh - #{$cut-height});
 }

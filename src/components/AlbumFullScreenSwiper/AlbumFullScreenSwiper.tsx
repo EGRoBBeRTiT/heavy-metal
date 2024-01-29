@@ -16,13 +16,13 @@ import {
 import cnBind from 'classnames/bind';
 import { Spinner } from '@nextui-org/react';
 
-import { ALBUMS } from '@/shared/albums';
 import { MainInfo } from '@/components/AlbumFullScreenSwiper/MainInfo';
 import { SongList } from '@/components/AlbumFullScreenSwiper/SongList';
 import { ImageSlideLazy } from '@/components/AlbumFullScreenSwiper/ImageSlide';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import { LazyImage } from '@/components/LazyImage';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
+import { useAlbums } from '@/contexts/StoreProvider';
 
 import 'swiper/css';
 
@@ -67,6 +67,8 @@ export const AlbumFullScreenSwiper = React.memo(
             { onActiveIndexChange, initialSlide = 0, className, ...props },
             ref,
         ) => {
+            const { albums } = useAlbums();
+
             const { isMobile, isTablet } = useScreenConfig();
             const [zoomed, setZoomed] = useState(false);
             const [activeIndex, setActiveIndex] = useState(initialSlide);
@@ -99,7 +101,7 @@ export const AlbumFullScreenSwiper = React.memo(
                             }}
                             {...SWIPER_CONFIG}
                         >
-                            {ALBUMS.map(({ imageSrc, album }, index) => (
+                            {albums.map(({ imageSrc, album }, index) => (
                                 <SwiperSlide key={index}>
                                     <Suspense
                                         key={index}
@@ -139,16 +141,16 @@ export const AlbumFullScreenSwiper = React.memo(
                         </Swiper>
                     </div>
                     <MainInfo
-                        album={ALBUMS[activeIndex]}
+                        album={albums[activeIndex]}
                         className={cx('info', {
                             hidden: zoomed,
                         })}
                         style={styles}
                     />
-                    {ALBUMS[activeIndex].songs &&
-                        ALBUMS[activeIndex].songs?.length && (
+                    {albums[activeIndex].songs &&
+                        albums[activeIndex].songs?.length && (
                             <SongList
-                                album={ALBUMS[activeIndex]}
+                                album={albums[activeIndex]}
                                 className={cx('info', {
                                     hidden: zoomed,
                                 })}

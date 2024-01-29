@@ -5,16 +5,17 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSetMediaSessionHandlers } from '@/hooks/useSetMediaSessionHandlers';
 import { useSpaceListener } from '@/hooks/useSpaceListener';
 import type { Song } from '@/shared/albums';
-import { ALBUMS_MAP, SONGS } from '@/shared/albums';
 import { LocalStorageItem } from '@/types/LocalStorageItem.types';
 import { getSafeLocalStorage } from '@/utils';
 import { isMobileAgent } from '@/utils/isMobileAgent';
+import { useAlbums } from '@/contexts/StoreProvider';
 
 // const DEFAULT_SKIP_SECONDS = 30;
 
 export const useAudioPlayer = (
     audioRef: MutableRefObject<HTMLAudioElement | null>,
 ) => {
+    const { albumsMap, songs } = useAlbums();
     const timeoutTef = useRef<ReturnType<typeof setTimeout> | number>(
         Number.NaN,
     );
@@ -26,7 +27,7 @@ export const useAudioPlayer = (
         );
 
         if (trackIdFromStorage) {
-            const foundIndex = SONGS.findIndex(
+            const foundIndex = songs.findIndex(
                 (song) => song.id === trackIdFromStorage,
             );
 
@@ -38,7 +39,7 @@ export const useAudioPlayer = (
         }
 
         return 0;
-    }, []);
+    }, [songs]);
 
     useEffect(() => {
         if (!isMobileAgent()) {
@@ -47,22 +48,22 @@ export const useAudioPlayer = (
     }, []);
 
     const [duration, setDuration] = useState(0);
-    const [songsList, setSongsList] = useState<Song[]>(SONGS);
+    const [songsList, setSongsList] = useState<Song[]>(songs);
     const [isPlaying, setIsPlaying] = useState(false);
     const [activeTrackIndex, setActiveTrackIndex] = useState(initialTrackIndex);
     const [activeTrack, setActiveTrack] = useState<Song | null>(null);
 
     useEffect(() => {
-        if (songsList.length && SONGS.length) {
-            setSongsList(SONGS);
+        if (songsList.length && songs.length) {
+            setSongsList(songs);
         }
-    }, [songsList.length]);
+    }, [songs, songsList.length]);
 
     const handleUpdateSessionMetaData = useCallback(() => {
         clearTimeout(timeoutTef.current);
 
         timeoutTef.current = setTimeout(() => {
-            const album = ALBUMS_MAP.get(activeTrack?.albumId ?? '');
+            const album = albumsMap.get(activeTrack?.albumId ?? '');
 
             navigator.mediaSession.metadata = new MediaMetadata({
                 title: activeTrack?.title,
@@ -75,17 +76,17 @@ export const useAudioPlayer = (
                 ],
             });
         }, 700);
-    }, [activeTrack?.albumId, activeTrack?.title]);
+    }, [activeTrack?.albumId, activeTrack?.title, albumsMap]);
 
     const handleSetTrack = useCallback(
         (index: number) => {
             if (audioRef.current) {
-                audioRef.current.src = songsList[index].src;
+                audioRef.current.src = songsList[index]?.src;
             }
             setActiveTrack(songsList[index] || null);
             localStorage.setItem(
                 LocalStorageItem.PLAYING_TRACK,
-                songsList[index].id,
+                songsList[index]?.id,
             );
         },
         [audioRef, songsList],

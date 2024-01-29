@@ -6,10 +6,10 @@ import cnBind from 'classnames/bind';
 import React, { Suspense, useEffect, useState } from 'react';
 import { Image } from '@nextui-org/react';
 
-import { ALBUMS } from '@/shared/albums';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
 import { LazyImage } from '@/components/LazyImage';
 import { AlbumSkeleton } from '@/components/Album';
+import { useAlbums } from '@/contexts/StoreProvider';
 
 import styles from './AlbumList.module.scss';
 
@@ -38,6 +38,7 @@ export const AlbumList = React.memo(
         mobileWidth = 100,
         withNextImage,
     }: AlbumListProps) => {
+        const { albums } = useAlbums();
         const [isDesktop, setIsDesktop] = useState(true);
 
         const { isMobile } = useScreenConfig();
@@ -52,7 +53,7 @@ export const AlbumList = React.memo(
 
         return (
             <div className={cx('list', className)}>
-                {ALBUMS.map((album, index) => (
+                {albums.map((album, index) => (
                     <article
                         key={index}
                         className={cx('image-container')}

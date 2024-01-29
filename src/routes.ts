@@ -11,7 +11,11 @@ class AppRoutes {
     coverflow = (albumId: string) =>
         `/interactive/coverflow/${albumId}` as const;
 
-    player = () => 'player' as const;
+    player = () => '/player' as const;
+
+    login = () => '/login' as const;
+
+    register = () => '/register' as const;
 }
 
 export const appRoutes = new AppRoutes();

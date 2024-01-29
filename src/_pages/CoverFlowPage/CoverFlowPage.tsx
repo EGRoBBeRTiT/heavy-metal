@@ -9,7 +9,7 @@ import { AlbumCowerFlowSwiper } from '@/components/AlbumCowerFlowSwiper';
 import { useAudioPlayerView } from '@/contexts/AudioPlayerViewProvider';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
 import { IcClose } from '@/icons';
-import { ALBUMS } from '@/shared/albums';
+import { useAlbums } from '@/contexts/StoreProvider';
 
 import styles from './CoverFlowPage.module.scss';
 
@@ -21,6 +21,7 @@ export interface CoverFlowPageProps {
 
 export const CoverFlowPage = ({ albumId }: CoverFlowPageProps) => {
     const router = useRouter();
+    const { albums } = useAlbums();
 
     const { isMobile } = useScreenConfig();
 
@@ -57,14 +58,14 @@ export const CoverFlowPage = ({ albumId }: CoverFlowPageProps) => {
     }, [router]);
 
     const index = useMemo(() => {
-        const foundIndex = ALBUMS.findIndex((album) => album.id === albumId);
+        const foundIndex = albums.findIndex((album) => album.id === albumId);
 
         if (foundIndex === -1) {
             notFound();
         }
 
         return foundIndex;
-    }, [albumId]);
+    }, [albumId, albums]);
 
     return (
         <main className={cx('main')}>

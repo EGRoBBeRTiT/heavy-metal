@@ -4,9 +4,9 @@ import { useMemo, type DetailedHTMLProps, type HTMLAttributes } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { useAudioPlayerContext } from '@/contexts/AudioPlayerProvider/AudioPlayerProvider';
-import { ALBUMS_MAP } from '@/shared/albums';
 import { useAudioPlayerView } from '@/contexts/AudioPlayerViewProvider';
 import { appRoutes } from '@/routes';
+import { useAlbums } from '@/contexts/StoreProvider';
 
 import styles from './TrackInfo.module.scss';
 
@@ -18,6 +18,7 @@ export type TrackInfoProps = Omit<
 >;
 
 export const TrackInfo = ({ className, ...props }: TrackInfoProps) => {
+    const { albumsMap } = useAlbums();
     const router = useRouter();
     const { activeTrack } = useAudioPlayerContext();
 
@@ -25,8 +26,8 @@ export const TrackInfo = ({ className, ...props }: TrackInfoProps) => {
 
     const album = useMemo(
         () =>
-            activeTrack?.albumId ? ALBUMS_MAP.get(activeTrack?.albumId) : null,
-        [activeTrack?.albumId],
+            activeTrack?.albumId ? albumsMap.get(activeTrack?.albumId) : null,
+        [activeTrack?.albumId, albumsMap],
     );
 
     return (

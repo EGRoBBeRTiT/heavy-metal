@@ -1,4 +1,3 @@
-import { ALBUMS_WITH_IDS } from '@/shared/albumsWithIds';
 import type { Band } from '@/types/Albums.types';
 
 // import SONG from './song.json';
@@ -46,34 +45,3 @@ export interface AlbumType {
     link?: string;
     id: string;
 }
-
-export const ALBUMS: AlbumType[] = [...ALBUMS_WITH_IDS].sort(
-    (a, b) =>
-        new Date(a.releasedAt).getTime() - new Date(b.releasedAt).getTime(),
-);
-
-const generateAlbumsMap = () => {
-    const map = new Map<string, AlbumType>();
-
-    ALBUMS_WITH_IDS.forEach((album) => {
-        map.set(album.id, album);
-    });
-
-    return map;
-};
-
-export const ALBUMS_MAP = generateAlbumsMap();
-
-const generateSongList = () => {
-    const songs: Song[] = [];
-
-    ALBUMS_WITH_IDS.forEach((album) => {
-        album.songs?.forEach((song) => {
-            songs.push(song);
-        });
-    });
-
-    return songs.filter((song) => song.src);
-};
-
-export const SONGS = generateSongList();

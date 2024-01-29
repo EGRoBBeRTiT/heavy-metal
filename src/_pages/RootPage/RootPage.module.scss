@@ -1,31 +1,25 @@
-.main,
-.header {
+.main {
     position: relative;
     z-index: 3;
+    display: flex;
+    flex-basis: auto;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
     font-size: 4rem;
+
+    ul {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    @include centered-flexbox;
+    @include max-height(calc(var(--header-height) + var(--player-height)));
 
     @include mobile {
         font-size: 2rem;
     }
-}
-
-.main {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100dvh;
-    min-height: 100svh;
-    max-height: 100vh;
-}
-
-.header {
-    display: flex;
-    flex-basis: 60px;
-    justify-content: center;
-    text-align: center;
-    background-color: hsl(0deg 0% 0% / 42.5%);
-    backdrop-filter: blur(10px);
 }
 
 .link {
@@ -54,21 +48,6 @@ div.animated-bands {
     }
 }
 
-.content {
-    display: flex;
-    flex-basis: auto;
-    flex-direction: column;
-    height: 100%;
-
-    ul {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    @include centered-flexbox;
-}
-
 .hidden {
     position: absolute;
     top: 0;
@@ -77,4 +56,14 @@ div.animated-bands {
     margin: 0;
     padding: 0;
     visibility: hidden;
+}
+
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    overflow: hidden;
+
+    @include max-height;
 }

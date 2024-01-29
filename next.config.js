@@ -1,9 +1,12 @@
 /** @type {import('next').NextConfig} */
+const path = require('path');
 
-const nextConfig = {
-    sassOptions: {
-        additionalData: `@import "@/styles/variables"; @import "@/styles/mixins";`,
-    },
+module.exports = (phase, { defaultConfig }) => {
+    if ('sassOptions' in defaultConfig) {
+        defaultConfig['sassOptions'] = {
+            includePaths: [path.join(__dirname, 'src/styles')],
+            additionalData: `@import "@/styles/variables.scss"; @import "@/styles/mixins.scss";`,
+        };
+    }
+    return defaultConfig;
 };
-
-module.exports = nextConfig;

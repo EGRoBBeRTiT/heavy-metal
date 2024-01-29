@@ -4,9 +4,15 @@ import type React from 'react';
 import '@/styles/tailwind.css';
 import '@/styles/globalicons.css';
 import '@/styles/globals.scss';
+
 import { Providers } from '@/app/providers';
 import { roboto } from '@/styles/fonts';
 import { AudioPlayer } from '@/components/AudioPlayer';
+import { Header } from '@/components/Header';
+import { auth, signOut } from '@/auth';
+import { getUser } from '@/api/getUser';
+import { UserType } from '@/types/User.types';
+import { getAlbums } from '@/api/getAlbums';
 
 export const metadata: Metadata = {
     title: "The Best Rock 'n' Roll Albums",
@@ -34,15 +40,43 @@ export const metadata: Metadata = {
     manifest: '/manifest.json',
 };
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => (
-    <html lang="en-US" className="dark">
-        <body className={roboto.className}>
-            <Providers>
-                {children}
-                <AudioPlayer />
-            </Providers>
-        </body>
-    </html>
-);
+const getData = async () => {
+    const session = await auth();
+
+    if (session && session.user && session.user.email) {
+        const user = await getUser(session.user.email);
+
+        if (!user) {
+            await signOut();
+        }
+
+        return {
+            email: user?.email,
+            type: user?.type,
+            firstName: user?.firstName,
+            lastName: user?.lastName,
+        };
+    }
+
+    return null;
+};
+
+const RootLayout = async ({ children }: { children: React.ReactNode }) => {
+    const profile = await getData();
+
+    const albums = await getAlbums();
+
+    return (
+        <html lang="en-US" className="dark">
+            <body className={roboto.className}>
+                <Providers profile={profile} albums={albums}>
+                    <Header />
+                    {children}
+                    {profile?.type === UserType.ADMIN && <AudioPlayer />}
+                </Providers>
+            </body>
+        </html>
+    );
+};
 
 export default RootLayout;

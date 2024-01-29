@@ -1,7 +1,13 @@
+@import './variables';
+@import './mixins';
+
 :root {
     --main-padding: 16px;
     --medium-padding: 8px;
     --small-padding: 4px;
+    /* stylelint-disable-next-line length-zero-no-unit */
+    --player-height: 0px;
+    --header-height: 97px;
 
     font-size: 16px;
     -webkit-font-smoothing: antialiased;

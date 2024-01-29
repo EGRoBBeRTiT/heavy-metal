@@ -15,13 +15,13 @@ import { EffectCoverflow, Keyboard, Mousewheel } from 'swiper/modules';
 import cnBind from 'classnames/bind';
 import { useRouter } from 'next/navigation';
 
-import { ALBUMS } from '@/shared/albums';
 import { cloisterBlack } from '@/styles/fonts';
 import { appRoutes } from '@/routes';
 import { useEnterListener } from '@/hooks/useEnterListener';
 import { AlbumSkeleton } from '@/components/Album';
 import { LazyImage } from '@/components/LazyImage';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
+import { useAlbums } from '@/contexts/StoreProvider';
 
 import 'swiper/css';
 
@@ -36,23 +36,27 @@ export interface AlbumCowerFlowSwiperProps {
 
 export const AlbumCowerFlowSwiper = React.memo(
     ({ initialSlide = 0, className }: AlbumCowerFlowSwiperProps) => {
+        const { albums } = useAlbums();
         const { isMobile, isTablet } = useScreenConfig();
         const [swiperStyle, setSwiperStyle] = useState<CSSProperties>({});
         const bottomRef = useRef<HTMLDivElement | null>(null);
         const router = useRouter();
         const [activeIndex, setActiveIndex] = useState(initialSlide ?? 0);
 
-        const handleActiveIndexChange = useCallback((swiper: SwiperProps) => {
-            window.history.replaceState(
-                null,
-                '',
-                appRoutes.coverflow(ALBUMS[swiper.activeIndex].id),
-            );
-            setActiveIndex(swiper.activeIndex);
-        }, []);
+        const handleActiveIndexChange = useCallback(
+            (swiper: SwiperProps) => {
+                window.history.replaceState(
+                    null,
+                    '',
+                    appRoutes.coverflow(albums[swiper.activeIndex].id),
+                );
+                setActiveIndex(swiper.activeIndex);
+            },
+            [albums],
+        );
 
         useEnterListener(() => {
-            router.replace(appRoutes.fullscreen(ALBUMS[activeIndex].id));
+            router.replace(appRoutes.fullscreen(albums[activeIndex].id));
         });
 
         useEffect(() => {
@@ -66,7 +70,7 @@ export const AlbumCowerFlowSwiper = React.memo(
         return (
             <div className={cx('content-container')}>
                 <header className={cx(cloisterBlack.className, 'header')}>
-                    <h1>{ALBUMS[activeIndex].band}</h1>
+                    <h1>{albums[activeIndex].band}</h1>
                 </header>
                 <div className={cx('body')}>
                     <Swiper
@@ -92,7 +96,7 @@ export const AlbumCowerFlowSwiper = React.memo(
                         initialSlide={initialSlide}
                         onActiveIndexChange={handleActiveIndexChange}
                     >
-                        {ALBUMS.map((album, index) => (
+                        {albums.map((album, index) => (
                             <SwiperSlide key={index}>
                                 <Suspense
                                     fallback={
@@ -128,17 +132,17 @@ export const AlbumCowerFlowSwiper = React.memo(
                     >
                         <span>
                             {new Date(
-                                ALBUMS[activeIndex].releasedAt,
+                                albums[activeIndex].releasedAt,
                             ).getFullYear()}
                         </span>
                         <span className={cx('album-label')}>
-                            {ALBUMS[activeIndex].album}
-                            {ALBUMS[activeIndex].link && (
+                            {albums[activeIndex].album}
+                            {albums[activeIndex].link && (
                                 <a
                                     className={cx('link')}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    href={ALBUMS[activeIndex].link}
+                                    href={albums[activeIndex].link}
                                 >
                                     <Image
                                         src="/apple-music.png"

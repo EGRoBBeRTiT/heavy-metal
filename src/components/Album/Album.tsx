@@ -6,10 +6,11 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Tooltip } from '@nextui-org/react';
 
-import { SONGS, type AlbumType } from '@/shared/albums';
+import { type AlbumType } from '@/shared/albums';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
 import { useAudioPlayerContext } from '@/contexts/AudioPlayerProvider/AudioPlayerProvider';
 import { PlayPauseIcon } from '@/components/PlayPauseIcon';
+import { useAlbums } from '@/contexts/StoreProvider';
 
 import styles from './Album.module.scss';
 
@@ -30,8 +31,9 @@ export const Album = React.memo(
         href,
         fullScreenHref,
         coverFlowHref,
-        songs,
+        songs: songsInitial,
     }: AlbumProps) => {
+        const { songs } = useAlbums();
         const router = useRouter();
         const { isMobile, isTablet } = useScreenConfig();
         const imageRef = useRef<HTMLDivElement | null>(null);
@@ -40,23 +42,23 @@ export const Album = React.memo(
             useAudioPlayerContext();
 
         const activeSong = useMemo(
-            () => songs?.find((song) => song.id === activeTrack?.id),
-            [activeTrack?.id, songs],
+            () => songsInitial?.find((song) => song.id === activeTrack?.id),
+            [activeTrack?.id, songsInitial],
         );
 
         const songIndex = useMemo(() => {
             if (activeSong) {
-                return SONGS.findIndex((value) => value.id === activeSong.id);
+                return songs.findIndex((value) => value.id === activeSong.id);
             }
 
-            const song = songs?.find((song) => song.src);
+            const song = songsInitial?.find((song) => song.src);
 
             if (song) {
-                return SONGS.findIndex((value) => value.id === song.id);
+                return songs.findIndex((value) => value.id === song.id);
             }
 
             return Number.NaN;
-        }, [activeSong, songs]);
+        }, [activeSong, songsInitial, songs]);
 
         const canPlay = !Number.isNaN(songIndex);
 
