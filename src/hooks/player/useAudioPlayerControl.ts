@@ -64,7 +64,7 @@ export const useAudioPlayerControl = () => {
             }
 
             if (audioRef.current.paused) {
-                setPlaybackState('playing');
+                // setPlaybackState('playing');
 
                 await audioRef.current.play();
                 updateMetadata(trackList[index.current]);
@@ -72,7 +72,7 @@ export const useAudioPlayerControl = () => {
         } catch (error) {
             console.error(error);
             setIsPlaying(false);
-            setPlaybackState('paused');
+            // setPlaybackState('paused');
         }
     }, [trackList, updateMetadata]);
 
