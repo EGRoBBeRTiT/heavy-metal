@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-export const useSpaceListener = (handler: () => void) => {
+export const useSpaceListener = (handler: () => void | Promise<void>) => {
     const handlerRef = useRef(handler);
 
     useEffect(() => {
@@ -12,7 +12,7 @@ export const useSpaceListener = (handler: () => void) => {
             if (event.code === 'Space') {
                 event.preventDefault();
 
-                handlerRef.current();
+                void handlerRef.current();
             }
         };
         document.addEventListener('keydown', listener);

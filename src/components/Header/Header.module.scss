@@ -21,7 +21,7 @@
         margin-inline: auto;
     }
 
-    @include mobile {
+    @include tablet {
         font-size: 2rem;
     }
 }

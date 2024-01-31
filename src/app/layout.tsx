@@ -7,12 +7,11 @@ import '@/styles/globals.scss';
 
 import { Providers } from '@/app/providers';
 import { roboto } from '@/styles/fonts';
-import { AudioPlayer } from '@/components/AudioPlayer';
 import { Header } from '@/components/Header';
 import { auth, signOut } from '@/auth';
 import { getUser } from '@/api/getUser';
-import { UserType } from '@/types/User.types';
 import { getAlbums } from '@/api/getAlbums';
+import { isAdminOrStaff } from '@/utils/isAdminOrStaff';
 
 export const metadata: Metadata = {
     title: "The Best Rock 'n' Roll Albums",
@@ -69,10 +68,13 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
     return (
         <html lang="en-US" className="dark">
             <body className={roboto.className}>
-                <Providers profile={profile} albums={albums}>
+                <Providers
+                    profile={profile}
+                    albums={albums}
+                    withPlayer={isAdminOrStaff(profile)}
+                >
                     <Header />
                     {children}
-                    {profile?.type === UserType.ADMIN && <AudioPlayer />}
                 </Providers>
             </body>
         </html>

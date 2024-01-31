@@ -1,1 +1,3 @@
-export { AudioPlayer } from './AudioPlayer';
+import React from 'react';
+
+export const LazyAudioPlayer = React.lazy(() => import('./AudioPlayer'));

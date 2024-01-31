@@ -3,26 +3,26 @@
 import { NextUIProvider } from '@nextui-org/react';
 
 import { ScreenConfigProvider } from '@/contexts/ScreenConfigProvider';
-import { AudioPlayerProvider } from '@/contexts/AudioPlayerProvider';
-import { AudioPlayerViewProvider } from '@/contexts/AudioPlayerViewProvider';
 import type { StoreProviderProps } from '@/contexts/StoreProvider';
 import { StoreProvider } from '@/contexts/StoreProvider';
+import { AudioPlayerProvider } from '@/providers/AudioPlayerProvider';
 
 export const Providers = ({
     children,
     profile,
     albums,
+    withPlayer,
 }: {
     children: React.ReactNode;
-} & StoreProviderProps) => (
+} & StoreProviderProps & { withPlayer: boolean }) => (
     <NextUIProvider>
         <StoreProvider profile={profile} albums={albums}>
             <ScreenConfigProvider>
-                <AudioPlayerProvider>
-                    <AudioPlayerViewProvider>
-                        {children}
-                    </AudioPlayerViewProvider>
-                </AudioPlayerProvider>
+                {withPlayer ? (
+                    <AudioPlayerProvider>{children}</AudioPlayerProvider>
+                ) : (
+                    children
+                )}
             </ScreenConfigProvider>
         </StoreProvider>
     </NextUIProvider>

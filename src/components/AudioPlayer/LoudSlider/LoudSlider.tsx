@@ -5,10 +5,11 @@ import {
     type DetailedHTMLProps,
     type HTMLAttributes,
     useEffect,
+    // useEffect,
 } from 'react';
 
-import { useAudioPlayerContext } from '@/contexts/AudioPlayerProvider/AudioPlayerProvider';
 import { useAudioPlayerView } from '@/contexts/AudioPlayerViewProvider';
+import { useAudioPlayer } from '@/hooks/context/useAudioPlayer';
 
 import styles from './LoudSlider.module.scss';
 
@@ -21,29 +22,25 @@ export type LoudSliderProps = Omit<
 
 export const LoudSlider = ({ className, ...props }: LoudSliderProps) => {
     const [value, setValue] = useState(100);
-    const [muted, setMuted] = useState(false);
-    const { handleChangeVolume, audioRef } = useAudioPlayerContext();
+    const [isMuted, setIsMuted] = useState(false);
+    const { handleChangeVolume, audioRef } = useAudioPlayer();
 
     const { view } = useAudioPlayerView();
 
     useEffect(() => {
-        if (audioRef.current) {
-            audioRef.current.onvolumechange = () => {
-                setValue((audioRef.current?.volume ?? 0) * 100);
+        audioRef.current.onvolumechange = () => {
+            setValue(audioRef.current.volume * 100);
 
-                if (audioRef.current && audioRef.current.volume <= 0) {
-                    audioRef.current.muted = true;
-                    setMuted(true);
+            if (audioRef.current.volume <= 0) {
+                audioRef.current.muted = true;
+                setIsMuted(true);
 
-                    return;
-                }
+                return;
+            }
 
-                if (audioRef.current) {
-                    audioRef.current.muted = false;
-                    setMuted(false);
-                }
-            };
-        }
+            audioRef.current.muted = false;
+            setIsMuted(false);
+        };
     }, [audioRef]);
 
     if (view === 'mobile') {
@@ -60,39 +57,33 @@ export const LoudSlider = ({ className, ...props }: LoudSliderProps) => {
                 aria-labelledby="loud-track"
                 size="sm"
                 hideThumb={view === 'compact'}
-                defaultValue={audioRef.current?.volume ?? 100}
+                defaultValue={100}
                 startContent={
                     <Button
                         isIconOnly
                         radius="full"
                         variant="light"
                         onPress={() => {
-                            if (audioRef.current && !audioRef.current.muted) {
-                                audioRef.current.muted = true;
-                                audioRef.current.volume = 0;
-                                setMuted(true);
-
-                                return;
-                            }
-
-                            if (audioRef.current && audioRef.current.muted) {
-                                audioRef.current.muted = false;
-                                audioRef.current.volume = 1;
-                                setMuted(false);
+                            if (isMuted) {
+                                setIsMuted(false);
+                                handleChangeVolume(1);
+                            } else {
+                                setIsMuted(true);
+                                handleChangeVolume(0);
                             }
                         }}
-                        className={cx('button', { muted })}
+                        className={cx('button', { muted: isMuted })}
                     >
                         <span
                             className={cx('material-symbols-outlined', 'on', {
-                                hidden: muted,
+                                hidden: isMuted,
                             })}
                         >
                             volume_up
                         </span>
                         <span
                             className={cx('material-symbols-outlined', 'off', {
-                                hidden: !muted,
+                                hidden: !isMuted,
                             })}
                         >
                             volume_off

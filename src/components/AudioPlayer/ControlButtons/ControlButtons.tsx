@@ -2,9 +2,9 @@ import cnBind from 'classnames/bind';
 import { Button } from '@nextui-org/button';
 import { useState, type DetailedHTMLProps, type HTMLAttributes } from 'react';
 
-import { useAudioPlayerContext } from '@/contexts/AudioPlayerProvider/AudioPlayerProvider';
 import { PlayPauseIcon } from '@/components/PlayPauseIcon';
 import { useAudioPlayerView } from '@/contexts/AudioPlayerViewProvider';
+import { useAudioPlayer } from '@/hooks/context/useAudioPlayer';
 
 import styles from './ControlButtons.module.scss';
 
@@ -21,7 +21,7 @@ export const ControlButtons = ({
 }: ControlButtonsProps) => {
     const [clickedSkip, setClickedSkip] = useState<'prev' | 'next' | ''>('');
     const { handlePrevTrack, handleTogglePlaying, isPlaying, handleNextTrack } =
-        useAudioPlayerContext();
+        useAudioPlayer();
 
     const { view } = useAudioPlayerView();
 
@@ -32,7 +32,7 @@ export const ControlButtons = ({
             <Button
                 onPress={() => {
                     setClickedSkip('prev');
-                    handlePrevTrack();
+                    void handlePrevTrack();
                 }}
                 isIconOnly
                 variant="light"
@@ -62,7 +62,7 @@ export const ControlButtons = ({
             </Button>
             <Button
                 onPress={() => {
-                    handleTogglePlaying();
+                    void handleTogglePlaying();
                 }}
                 isIconOnly
                 role="switch"
@@ -76,7 +76,7 @@ export const ControlButtons = ({
             <Button
                 onPress={() => {
                     setClickedSkip('next');
-                    handleNextTrack();
+                    void handleNextTrack();
                 }}
                 type="button"
                 role="button"

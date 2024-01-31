@@ -4,9 +4,9 @@ import type { DetailedHTMLProps, HTMLAttributes } from 'react';
 import { Link, ScrollShadow } from '@nextui-org/react';
 
 import { type AlbumType } from '@/shared/albums';
-import { useAudioPlayerContext } from '@/contexts/AudioPlayerProvider/AudioPlayerProvider';
 import { PlayPauseIcon } from '@/components/PlayPauseIcon';
 import { useAlbums } from '@/contexts/StoreProvider';
+import { useAudioPlayer } from '@/hooks/context/useAudioPlayer';
 
 import styles from './SongList.module.scss';
 
@@ -21,8 +21,7 @@ export interface SongListProps
 }
 
 export const SongList = ({ album, className, ...props }: SongListProps) => {
-    const { handleSetTrackIndex, activeTrack, isPlaying } =
-        useAudioPlayerContext();
+    const { handleSetTrack, activeTrack, isPlaying } = useAudioPlayer();
     const { songs } = useAlbums();
 
     return (
@@ -47,7 +46,7 @@ export const SongList = ({ album, className, ...props }: SongListProps) => {
                                             (value) => value.id === song.id,
                                         );
 
-                                        handleSetTrackIndex(index);
+                                        void handleSetTrack(index);
                                     }}
                                     isDisabled={!song.src}
                                     color={isActive ? 'primary' : 'foreground'}

@@ -21,49 +21,40 @@ const getWindowConfig = (): WindowConfig => {
         innerWidth = window.innerWidth;
     }
 
+    const config = {
+        isMobile: false,
+        isTablet: false,
+        isNotebook: false,
+        isDesktop: false,
+        isLargeMonitor: false,
+    };
+
     switch (true) {
         case innerWidth >= SCREEN_DESKTOP_MAX:
-            return {
-                isMobile: false,
-                isTablet: false,
-                isNotebook: false,
-                isDesktop: true,
-                isLargeMonitor: true,
-            };
+            config.isDesktop = true;
+            config.isLargeMonitor = true;
+
+            break;
+
         case innerWidth > SCREEN_TABLET_MAX:
-            return {
-                isMobile: false,
-                isTablet: false,
-                isNotebook: true,
-                isDesktop: true,
-                isLargeMonitor: false,
-            };
+            config.isNotebook = true;
+            config.isDesktop = true;
+
+            break;
         case innerWidth > SCREEN_MOBILE_MAX:
-            return {
-                isMobile: false,
-                isTablet: true,
-                isNotebook: false,
-                isDesktop: false,
-                isLargeMonitor: false,
-            };
+            config.isTablet = true;
+
+            break;
         case innerWidth <= SCREEN_MOBILE_MAX:
-            return {
-                isMobile: true,
-                isTablet: false,
-                isNotebook: false,
-                isDesktop: false,
-                isLargeMonitor: false,
-            };
+            config.isMobile = true;
+
+            break;
 
         default:
-            return {
-                isMobile: false,
-                isTablet: false,
-                isNotebook: false,
-                isDesktop: false,
-                isLargeMonitor: false,
-            };
+            break;
     }
+
+    return config;
 };
 
 export const useWindowDimensions = () => {

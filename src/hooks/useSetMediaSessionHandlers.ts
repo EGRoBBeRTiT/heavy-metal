@@ -1,15 +1,27 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+
+export type MediaSessionActionType =
+    | ((details: MediaSessionActionDetails) => void | Promise<void>)
+    | null;
 
 export interface MediaSessionHandlers {
-    play?: ((details: MediaSessionActionDetails) => void) | null;
-    stop?: ((details: MediaSessionActionDetails) => void) | null;
-    pause?: ((details: MediaSessionActionDetails) => void) | null;
-    seekTo?: ((details: MediaSessionActionDetails) => void) | null;
-    seekBackward?: ((details: MediaSessionActionDetails) => void) | null;
-    seekForward?: ((details: MediaSessionActionDetails) => void) | null;
-    previousTrack?: ((details: MediaSessionActionDetails) => void) | null;
-    nextTrack?: ((details: MediaSessionActionDetails) => void) | null;
+    play?: MediaSessionActionType;
+    stop?: MediaSessionActionType;
+    pause?: MediaSessionActionType;
+    seekTo?: MediaSessionActionType;
+    seekBackward?: MediaSessionActionType;
+    seekForward?: MediaSessionActionType;
+    previousTrack?: MediaSessionActionType;
+    nextTrack?: MediaSessionActionType;
 }
+
+const setActionHandler = (
+    action: MediaSessionAction,
+    handler: MediaSessionActionHandler | null,
+) =>
+    'mediaSession' in navigator
+        ? navigator.mediaSession.setActionHandler(action, handler)
+        : void undefined;
 
 export const useSetMediaSessionHandlers = ({
     play,
@@ -21,57 +33,93 @@ export const useSetMediaSessionHandlers = ({
     previousTrack,
     nextTrack,
 }: MediaSessionHandlers) => {
-    useEffect(() => {
-        if ('mediaSession' in navigator && play !== undefined) {
-            navigator.mediaSession.setActionHandler('play', play);
-        }
-    }, [play]);
+    const playRef = useRef(play);
+    playRef.current = play;
+
+    const stopRef = useRef(stop);
+    stopRef.current = stop;
+
+    const pauseRef = useRef(pause);
+    pauseRef.current = pause;
+
+    const seekToRef = useRef(seekTo);
+    seekToRef.current = seekTo;
+
+    const seekBackwardRef = useRef(seekBackward);
+    seekBackwardRef.current = seekBackward;
+
+    const seekForwardRef = useRef(seekForward);
+    seekForwardRef.current = seekForward;
+
+    const previousTrackRef = useRef(previousTrack);
+    previousTrackRef.current = previousTrack;
+
+    const nextTrackRef = useRef(nextTrack);
+    nextTrackRef.current = nextTrack;
 
     useEffect(() => {
-        if ('mediaSession' in navigator && stop !== undefined) {
-            navigator.mediaSession.setActionHandler('stop', stop);
+        if (playRef.current === null) {
+            setActionHandler('play', null);
+        } else if (playRef.current !== undefined) {
+            setActionHandler('play', (details) => {
+                void playRef.current?.(details);
+            });
         }
-    }, [stop]);
 
-    useEffect(() => {
-        if ('mediaSession' in navigator && pause !== undefined) {
-            navigator.mediaSession.setActionHandler('pause', pause);
+        if (stopRef.current === null) {
+            setActionHandler('stop', null);
+        } else if (stopRef.current !== undefined) {
+            setActionHandler('stop', (details) => {
+                void stopRef.current?.(details);
+            });
         }
-    }, [pause]);
 
-    useEffect(() => {
-        if ('mediaSession' in navigator && seekTo !== undefined) {
-            navigator.mediaSession.setActionHandler('seekto', seekTo);
+        if (pauseRef.current === null) {
+            setActionHandler('pause', null);
+        } else if (pauseRef.current !== undefined) {
+            setActionHandler('pause', (details) => {
+                void pauseRef.current?.(details);
+            });
         }
-    }, [seekTo]);
 
-    useEffect(() => {
-        if ('mediaSession' in navigator && seekBackward !== undefined) {
-            navigator.mediaSession.setActionHandler(
-                'seekbackward',
-                seekBackward,
-            );
+        if (seekToRef.current === null) {
+            setActionHandler('seekto', null);
+        } else if (seekToRef.current !== undefined) {
+            setActionHandler('seekto', (details) => {
+                void seekToRef.current?.(details);
+            });
         }
-    }, [seekBackward]);
 
-    useEffect(() => {
-        if ('mediaSession' in navigator && seekForward !== undefined) {
-            navigator.mediaSession.setActionHandler('seekforward', seekForward);
+        if (seekBackwardRef.current === null) {
+            setActionHandler('seekbackward', null);
+        } else if (seekBackwardRef.current !== undefined) {
+            setActionHandler('seekbackward', (details) => {
+                void seekBackwardRef.current?.(details);
+            });
         }
-    }, [seekForward]);
 
-    useEffect(() => {
-        if ('mediaSession' in navigator && previousTrack !== undefined) {
-            navigator.mediaSession.setActionHandler(
-                'previoustrack',
-                previousTrack,
-            );
+        if (seekForwardRef.current === null) {
+            setActionHandler('seekforward', null);
+        } else if (seekForwardRef.current !== undefined) {
+            setActionHandler('seekforward', (details) => {
+                void seekForwardRef.current?.(details);
+            });
         }
-    }, [previousTrack]);
 
-    useEffect(() => {
-        if ('mediaSession' in navigator && nextTrack !== undefined) {
-            navigator.mediaSession.setActionHandler('nexttrack', nextTrack);
+        if (previousTrackRef.current === null) {
+            setActionHandler('previoustrack', null);
+        } else if (previousTrackRef.current !== undefined) {
+            setActionHandler('previoustrack', (details) => {
+                void previousTrackRef.current?.(details);
+            });
         }
-    }, [nextTrack]);
+
+        if (nextTrackRef.current === null) {
+            setActionHandler('nexttrack', null);
+        } else if (nextTrackRef.current !== undefined) {
+            setActionHandler('nexttrack', (details) => {
+                void nextTrackRef.current?.(details);
+            });
+        }
+    }, []);
 };

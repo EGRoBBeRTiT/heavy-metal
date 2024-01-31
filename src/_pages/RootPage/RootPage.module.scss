@@ -17,7 +17,7 @@
     @include centered-flexbox;
     @include max-height(calc(var(--header-height) + var(--player-height)));
 
-    @include mobile {
+    @include tablet {
         font-size: 2rem;
     }
 }
@@ -28,7 +28,7 @@
     text-align: center;
     text-shadow: 0 0 20px #00aaff;
 
-    @include mobile {
+    @include tablet {
         font-size: 2rem;
         line-height: 4rem;
     }

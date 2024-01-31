@@ -8,9 +8,9 @@ import { Tooltip } from '@nextui-org/react';
 
 import { type AlbumType } from '@/shared/albums';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
-import { useAudioPlayerContext } from '@/contexts/AudioPlayerProvider/AudioPlayerProvider';
 import { PlayPauseIcon } from '@/components/PlayPauseIcon';
 import { useAlbums } from '@/contexts/StoreProvider';
+import { useAudioPlayer } from '@/hooks/context/useAudioPlayer';
 
 import styles from './Album.module.scss';
 
@@ -31,19 +31,18 @@ export const Album = React.memo(
         href,
         fullScreenHref,
         coverFlowHref,
-        songs: songsInitial,
+        songs: albumSongs,
     }: AlbumProps) => {
         const { songs } = useAlbums();
         const router = useRouter();
         const { isMobile, isTablet } = useScreenConfig();
         const imageRef = useRef<HTMLDivElement | null>(null);
 
-        const { activeTrack, isPlaying, handleSetTrackIndex } =
-            useAudioPlayerContext();
+        const { activeTrack, isPlaying, handleSetTrack } = useAudioPlayer();
 
         const activeSong = useMemo(
-            () => songsInitial?.find((song) => song.id === activeTrack?.id),
-            [activeTrack?.id, songsInitial],
+            () => albumSongs?.find((song) => song.id === activeTrack?.id),
+            [activeTrack?.id, albumSongs],
         );
 
         const songIndex = useMemo(() => {
@@ -51,14 +50,14 @@ export const Album = React.memo(
                 return songs.findIndex((value) => value.id === activeSong.id);
             }
 
-            const song = songsInitial?.find((song) => song.src);
+            const song = albumSongs?.find((song) => song.src);
 
             if (song) {
                 return songs.findIndex((value) => value.id === song.id);
             }
 
             return Number.NaN;
-        }, [activeSong, songsInitial, songs]);
+        }, [activeSong, albumSongs, songs]);
 
         const canPlay = !Number.isNaN(songIndex);
 
@@ -109,7 +108,7 @@ export const Album = React.memo(
                         variant={activeSong ? 'solid' : 'flat'}
                         className={cx('play-button')}
                         onPress={() => {
-                            handleSetTrackIndex(songIndex);
+                            void handleSetTrack(songIndex);
                         }}
                         color={activeSong ? 'primary' : 'default'}
                     >

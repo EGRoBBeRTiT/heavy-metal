@@ -1,7 +1,7 @@
 'use client';
 
 import cnBind from 'classnames/bind';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { LoudSlider } from '@/components/AudioPlayer/LoudSlider';
 import { useAudioPlayerView } from '@/contexts/AudioPlayerViewProvider';
@@ -14,11 +14,11 @@ import { TrackInfo } from './TrackInfo';
 
 const cx = cnBind.bind(styles);
 
-export const AudioPlayer = () => {
+const AudioPlayer = React.memo(() => {
     const plyerRef = useRef<HTMLElement>(null);
     const [hovered, setHovered] = useState(false);
 
-    const { isMobile } = useScreenConfig();
+    const { isMobile, isTablet } = useScreenConfig();
 
     const { view, setView, styles, setStyles } = useAudioPlayerView();
 
@@ -28,10 +28,10 @@ export const AudioPlayer = () => {
             `${(plyerRef.current?.offsetHeight ?? 0) + 2}px`,
         );
 
-        if (isMobile) {
+        if (isMobile || isTablet) {
             setView('mobile');
         }
-    }, [isMobile, setStyles, setView]);
+    }, [isMobile, isTablet, setStyles, setView]);
 
     return (
         <aside
@@ -53,4 +53,8 @@ export const AudioPlayer = () => {
             </div>
         </aside>
     );
-};
+});
+
+AudioPlayer.displayName = 'Memo (AudioPlayer)';
+
+export default AudioPlayer;

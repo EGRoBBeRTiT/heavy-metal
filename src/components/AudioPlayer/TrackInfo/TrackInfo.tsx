@@ -3,10 +3,10 @@ import Image from 'next/image';
 import { useMemo, type DetailedHTMLProps, type HTMLAttributes } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { useAudioPlayerContext } from '@/contexts/AudioPlayerProvider/AudioPlayerProvider';
 import { useAudioPlayerView } from '@/contexts/AudioPlayerViewProvider';
 import { appRoutes } from '@/routes';
 import { useAlbums } from '@/contexts/StoreProvider';
+import { useAudioPlayer } from '@/hooks/context/useAudioPlayer';
 
 import styles from './TrackInfo.module.scss';
 
@@ -20,7 +20,7 @@ export type TrackInfoProps = Omit<
 export const TrackInfo = ({ className, ...props }: TrackInfoProps) => {
     const { albumsMap } = useAlbums();
     const router = useRouter();
-    const { activeTrack } = useAudioPlayerContext();
+    const { activeTrack } = useAudioPlayer();
 
     const { view } = useAudioPlayerView();
 

@@ -5,9 +5,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import cnBind from 'classnames/bind';
 import throttle from 'lodash.throttle';
 
-import { useAudioPlayerContext } from '@/contexts/AudioPlayerProvider/AudioPlayerProvider';
 import { useAudioPlayerView } from '@/contexts/AudioPlayerViewProvider';
 import { LocalStorageItem } from '@/types/LocalStorageItem.types';
+import { useAudioPlayer } from '@/hooks/context/useAudioPlayer';
 
 import { convertNumberToTimeString } from './TrackSlider.utils';
 import styles from './TrackSlider.module.scss';
@@ -29,8 +29,8 @@ export const TrackSlider = ({
     const [canChangeValue, setCanChangeValue] = useState(true);
     const [currentTime, setCurrentTime] = useState(0);
     const [sliderValue, setSliderValue] = useState(0);
-    const { duration, handleChangeCurrentTime, audioRef } =
-        useAudioPlayerContext();
+    const { duration, handleChangeCurrentTime, setTimeChange } =
+        useAudioPlayer();
 
     const { view } = useAudioPlayerView();
 
@@ -40,36 +40,41 @@ export const TrackSlider = ({
             `${Math.floor(time ?? 0)}`,
         );
 
-        setCurrentTime(time ?? 0);
+        setCurrentTime(time || 0);
     }, []);
 
     const throttledTimeChange = useMemo(
         () =>
-            throttle(() => {
-                setTimeout(() => {
-                    if (audioRef.current?.readyState === 4) {
-                        handleSetTime(audioRef.current?.currentTime);
+            throttle((time: number) => {
+                if (time > currentTime) {
+                    handleSetTime(time || 0);
 
-                        if (canChangeValue) {
-                            setSliderValue(audioRef.current?.currentTime ?? 0);
-                        }
+                    if (canChangeValue) {
+                        setSliderValue(time || 0);
                     }
-                });
+                }
             }, 1000),
-        [audioRef, canChangeValue, handleSetTime],
+        [canChangeValue, currentTime, handleSetTime],
     );
 
     useEffect(() => {
-        if (audioRef.current) {
-            audioRef.current.ontimeupdate = throttledTimeChange;
-        }
-    }, [audioRef, throttledTimeChange]);
+        setTimeChange(() => (time: number) => {
+            setTimeout(() => {
+                if (time < 0.5) {
+                    handleSetTime(0);
+                    setSliderValue(0);
+                } else {
+                    throttledTimeChange(time);
+                }
+            });
+        });
+    }, [handleSetTime, setTimeChange, throttledTimeChange]);
 
     return (
         <div
             {...props}
             className={cx('slider-container', className, {
-                animate: canChangeValue && currentTime > 0,
+                animate: canChangeValue && currentTime >= 0.5,
             })}
         >
             <Slider
@@ -87,12 +92,12 @@ export const TrackSlider = ({
                 onChange={(time) => {
                     setCanChangeValue(false);
 
-                    if (typeof time === 'number') {
+                    if (typeof time === 'number' && time) {
                         setSliderValue(time);
                     }
                 }}
                 onChangeEnd={(value) => {
-                    if (typeof value === 'number') {
+                    if (typeof value === 'number' && value) {
                         handleChangeCurrentTime(value);
                     }
 
