@@ -51,7 +51,7 @@ export const LoudSlider = ({ className, ...props }: LoudSliderProps) => {
         <div {...props} className={cx('loud-slider', className, view)}>
             <Slider
                 color="foreground"
-                maxValue={200}
+                maxValue={100}
                 minValue={0}
                 value={value}
                 aria-labelledby="loud-track"

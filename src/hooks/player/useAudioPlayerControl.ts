@@ -18,11 +18,6 @@ const getNewAudio = (src?: string): HTMLAudioElement =>
         ? new Audio(src ?? '')
         : ({} as HTMLAudioElement);
 
-const getNewAudioContext = (): AudioContext =>
-    typeof AudioContext !== 'undefined'
-        ? new AudioContext()
-        : ({} as AudioContext);
-
 const getSafeIndex = (index: number, maxIndex: number) =>
     Math.max(0, Math.min(index || 0, maxIndex));
 
@@ -46,50 +41,10 @@ export const useAudioPlayerControl = () => {
     const audioRef = useRef<HTMLAudioElement>(
         getNewAudio(songs[initialTrackIndex].src),
     );
-    const audioContext = useRef(getNewAudioContext());
-    const gainNode = useRef<GainNode>({} as GainNode);
     const index = useRef(initialTrackIndex);
-
-    const handleSetListeners = useCallback(() => {
-        audioRef.current.preload = 'auto';
-        audioRef.current.crossOrigin = 'anonymous';
-        audioContext.current = new AudioContext();
-        const track = audioContext.current.createMediaElementSource(
-            audioRef.current,
-        );
-        gainNode.current = audioContext.current.createGain();
-        track
-            .connect(gainNode.current)
-            .connect(audioContext.current.destination);
-
-        audioRef.current.onplay = () => {
-            setIsPlaying(true);
-            setPlaybackState('playing');
-        };
-
-        audioRef.current.onpause = () => {
-            setIsPlaying(false);
-            setPlaybackState('paused');
-        };
-
-        audioRef.current.onloadedmetadata = () => {
-            updatePositionState(audioRef.current);
-            setIsAudioLoaded(true);
-            setDuration(audioRef.current.duration || 0);
-        };
-
-        audioRef.current.ontimeupdate = () => {
-            updatePositionState(audioRef.current);
-            timeChange?.(audioRef.current.currentTime);
-        };
-    }, [timeChange]);
 
     const handlePlay = useCallback(async () => {
         setActiveTrack(trackList[index.current]);
-
-        if (audioContext.current.state === 'suspended') {
-            await audioContext.current.resume().catch(console.error);
-        }
 
         if (audioRef.current.src !== trackList[index.current].src) {
             localStorage.setItem(
@@ -97,15 +52,8 @@ export const useAudioPlayerControl = () => {
                 trackList[index.current].id,
             );
 
-            const newAudio = new Audio(trackList[index.current].src);
-            newAudio.preload = 'auto';
             audioRef.current.pause();
-            audioRef.current = newAudio;
-            handleSetListeners();
-            audioRef.current.onended = () => {
-                index.current = (index.current + 1) % trackList.length;
-                void handlePlay();
-            };
+            audioRef.current.src = trackList[index.current].src;
 
             await audioRef.current.play().catch(console.error);
 
@@ -114,10 +62,8 @@ export const useAudioPlayerControl = () => {
             return;
         }
 
-        handleSetListeners();
-
         await audioRef.current.play().catch(console.error);
-    }, [handleSetListeners, trackList, updateMetadata]);
+    }, [trackList, updateMetadata]);
 
     const handlePause = useCallback(() => {
         audioRef.current.pause();
@@ -151,6 +97,33 @@ export const useAudioPlayerControl = () => {
         void handlePlay();
     }, [handlePlay, trackList.length]);
 
+    const handleSetListeners = useCallback(() => {
+        audioRef.current.preload = 'auto';
+
+        audioRef.current.onplay = () => {
+            setIsPlaying(true);
+            setPlaybackState('playing');
+        };
+
+        audioRef.current.onpause = () => {
+            setIsPlaying(false);
+            setPlaybackState('paused');
+        };
+
+        audioRef.current.onloadedmetadata = () => {
+            updatePositionState(audioRef.current);
+            setIsAudioLoaded(true);
+            setDuration(audioRef.current.duration || 0);
+        };
+
+        audioRef.current.ontimeupdate = () => {
+            updatePositionState(audioRef.current);
+            timeChange?.(audioRef.current.currentTime);
+        };
+
+        audioRef.current.onended = handleNextTrack;
+    }, [handleNextTrack, timeChange]);
+
     const handleChangeCurrentTime = useCallback((time?: number) => {
         if (time !== undefined && time !== null) {
             const safeTime = getSafeIndex(time, audioRef.current.duration);
@@ -174,7 +147,7 @@ export const useAudioPlayerControl = () => {
 
     const handleChangeVolume = useCallback((volume?: number) => {
         if (volume !== undefined && volume !== null) {
-            gainNode.current.gain.value = getSafeIndex(volume, 2);
+            audioRef.current.volume = getSafeIndex(volume, 1);
             audioRef.current.muted = volume <= 0;
         }
     }, []);
@@ -208,11 +181,9 @@ export const useAudioPlayerControl = () => {
         [handleChangeCurrentTime],
     );
 
-    // useEffect(() => {
-    //     console.log('Set Listeners');
-
-    //     handleSetListeners();
-    // }, []);
+    useEffect(() => {
+        handleSetListeners();
+    }, [handleSetListeners]);
 
     useEffect(() => {
         audioRef.current.onended = handleNextTrack;
