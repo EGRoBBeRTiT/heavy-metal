@@ -3,8 +3,8 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "dev": "next dev",
-        "build": "next build",
+        "dev": "concurrently --kill-others \"next dev\" \"npm run proxy\"",
+        "build": "concurrently --kill-others \"next build\" \"npm run proxy\"",
         "start": "next start",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
         "lint:fix": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
@@ -13,7 +13,8 @@
         "prettier": "prettier --write \"src/**/*.+(js|jsx|ts|tsx|json|css|scss|less|sass)\"",
         "format": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix && stylelint 'src/**/*.{css,scss,less,sass}' --fix && prettier --write \"src/**/*.+(js|jsx|ts|tsx|json|css|scss|less|sass)\"",
         "commit": "git-cz",
-        "precommit": "lint-staged -c .lintstagedrc && tsc && next build"
+        "precommit": "lint-staged -c .lintstagedrc && tsc && next build",
+        "proxy": "lcp --proxyUrl https://ds2.cdn9.deliciouspumpkin.com"
     },
     "dependencies": {
         "@nextui-org/button": "^2.0.26",
@@ -21,7 +22,9 @@
         "@nextui-org/system": "^2.0.15",
         "@nextui-org/theme": "^2.1.17",
         "bcrypt": "^5.1.1",
+        "concurrently": "^8.2.2",
         "framer-motion": "^10.17.11",
+        "local-cors-proxy": "^1.1.0",
         "lodash.throttle": "^4.1.1",
         "mongodb": "^6.3.0",
         "next": "14.0.4",

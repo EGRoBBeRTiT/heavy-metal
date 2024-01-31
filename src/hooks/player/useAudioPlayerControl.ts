@@ -18,6 +18,32 @@ const getNewAudio = (src?: string): HTMLAudioElement =>
         ? new Audio(src ?? '')
         : ({} as HTMLAudioElement);
 
+let context: AudioContext | null = null;
+
+const getNewAudioContext = (audio: HTMLAudioElement): AudioContext => {
+    if (typeof AudioContext === 'undefined') {
+        return {} as AudioContext;
+    }
+
+    if (context) {
+        return context;
+    }
+
+    void fetch(audio.src, { mode: 'no-cors' }).then((data) => {
+        console.log(data);
+    });
+
+    context = new AudioContext();
+
+    const source = context.createMediaElementSource(audio);
+
+    console.log('Connect');
+
+    source.connect(context.destination);
+
+    return context;
+};
+
 const getSafeIndex = (index: number, maxIndex: number) =>
     Math.max(0, Math.min(index || 0, maxIndex));
 
@@ -42,6 +68,10 @@ export const useAudioPlayerControl = () => {
         getNewAudio(songs[initialTrackIndex].src),
     );
     const index = useRef(initialTrackIndex);
+
+    const audioContext = useRef(getNewAudioContext(audioRef.current));
+
+    console.debug(audioContext.current);
 
     const handlePlay = useCallback(async () => {
         setActiveTrack(trackList[index.current]);
@@ -111,6 +141,7 @@ export const useAudioPlayerControl = () => {
 
     const handleSetListeners = useCallback(() => {
         audioRef.current.preload = 'auto';
+        audioRef.current.crossOrigin = 'anonymous';
 
         audioRef.current.onplay = () => {
             setIsPlaying(true);
