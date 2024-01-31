@@ -18,6 +18,11 @@ const getNewAudio = (src?: string): HTMLAudioElement =>
         ? new Audio(src ?? '')
         : ({} as HTMLAudioElement);
 
+const getNewAudioContext = (): AudioContext =>
+    typeof AudioContext !== 'undefined'
+        ? new AudioContext()
+        : ({} as AudioContext);
+
 const getSafeIndex = (index: number, maxIndex: number) =>
     Math.max(0, Math.min(index || 0, maxIndex));
 
@@ -41,10 +46,21 @@ export const useAudioPlayerControl = () => {
     const audioRef = useRef<HTMLAudioElement>(
         getNewAudio(songs[initialTrackIndex].src),
     );
+    const audioContext = useRef(getNewAudioContext());
+    const gainNode = useRef<GainNode>({} as GainNode);
     const index = useRef(initialTrackIndex);
 
     const handleSetListeners = useCallback(() => {
         audioRef.current.preload = 'auto';
+        audioRef.current.crossOrigin = 'anonymous';
+        audioContext.current = new AudioContext();
+        const track = audioContext.current.createMediaElementSource(
+            audioRef.current,
+        );
+        gainNode.current = audioContext.current.createGain();
+        track
+            .connect(gainNode.current)
+            .connect(audioContext.current.destination);
 
         audioRef.current.onplay = () => {
             setIsPlaying(true);
@@ -71,6 +87,10 @@ export const useAudioPlayerControl = () => {
     const handlePlay = useCallback(async () => {
         setActiveTrack(trackList[index.current]);
 
+        if (audioContext.current.state === 'suspended') {
+            await audioContext.current.resume().catch(console.error);
+        }
+
         if (audioRef.current.src !== trackList[index.current].src) {
             localStorage.setItem(
                 LocalStorageItem.PLAYING_TRACK,
@@ -93,6 +113,8 @@ export const useAudioPlayerControl = () => {
 
             return;
         }
+
+        handleSetListeners();
 
         await audioRef.current.play().catch(console.error);
     }, [handleSetListeners, trackList, updateMetadata]);
@@ -152,7 +174,7 @@ export const useAudioPlayerControl = () => {
 
     const handleChangeVolume = useCallback((volume?: number) => {
         if (volume !== undefined && volume !== null) {
-            audioRef.current.volume = getSafeIndex(volume, 1);
+            gainNode.current.gain.value = getSafeIndex(volume, 2);
             audioRef.current.muted = volume <= 0;
         }
     }, []);
@@ -186,9 +208,11 @@ export const useAudioPlayerControl = () => {
         [handleChangeCurrentTime],
     );
 
-    useEffect(() => {
-        handleSetListeners();
-    }, [handleSetListeners]);
+    // useEffect(() => {
+    //     console.log('Set Listeners');
+
+    //     handleSetListeners();
+    // }, []);
 
     useEffect(() => {
         audioRef.current.onended = handleNextTrack;
