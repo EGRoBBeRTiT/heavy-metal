@@ -52,8 +52,9 @@ export const useAudioPlayerControl = () => {
                 trackList[index.current].id,
             );
 
-            audioRef.current.pause();
+            // audioRef.current.pause();
             audioRef.current.src = trackList[index.current].src;
+            audioRef.current.currentTime = 0;
 
             await audioRef.current.play().catch(console.error);
 
@@ -101,11 +102,15 @@ export const useAudioPlayerControl = () => {
         audioRef.current.preload = 'auto';
 
         audioRef.current.onplay = () => {
+            console.log('Play');
+
             setIsPlaying(true);
             setPlaybackState('playing');
         };
 
         audioRef.current.onpause = () => {
+            console.log('Pause');
+
             setIsPlaying(false);
             setPlaybackState('paused');
         };
@@ -121,7 +126,11 @@ export const useAudioPlayerControl = () => {
             timeChange?.(audioRef.current.currentTime);
         };
 
-        audioRef.current.onended = handleNextTrack;
+        audioRef.current.onended = () => {
+            console.log('Ended');
+
+            handleNextTrack();
+        };
     }, [handleNextTrack, timeChange]);
 
     const handleChangeCurrentTime = useCallback((time?: number) => {
