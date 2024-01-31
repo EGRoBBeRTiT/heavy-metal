@@ -46,29 +46,40 @@ export const useAudioPlayerControl = () => {
     const handlePlay = useCallback(async () => {
         setActiveTrack(trackList[index.current]);
 
-        if (audioRef.current.src !== trackList[index.current].src) {
-            localStorage.setItem(
-                LocalStorageItem.PLAYING_TRACK,
-                trackList[index.current].id,
-            );
+        try {
+            if (audioRef.current.src !== trackList[index.current].src) {
+                localStorage.setItem(
+                    LocalStorageItem.PLAYING_TRACK,
+                    trackList[index.current].id,
+                );
 
-            // audioRef.current.pause();
-            audioRef.current.src = trackList[index.current].src;
-            audioRef.current.currentTime = 0;
+                audioRef.current.src = trackList[index.current].src;
+                audioRef.current.currentTime = 0;
 
-            await audioRef.current.play().catch(console.error);
+                await audioRef.current.play();
 
-            updateMetadata(trackList[index.current]);
+                updateMetadata(trackList[index.current]);
 
-            return;
+                return;
+            }
+
+            if (audioRef.current.paused) {
+                setPlaybackState('playing');
+
+                await audioRef.current.play();
+                updateMetadata(trackList[index.current]);
+            }
+        } catch (error) {
+            console.error(error);
+            setIsPlaying(false);
+            setPlaybackState('paused');
         }
-
-        await audioRef.current.play().catch(console.error);
     }, [trackList, updateMetadata]);
 
     const handlePause = useCallback(() => {
         audioRef.current.pause();
         setIsPlaying(false);
+        setPlaybackState('paused');
     }, []);
 
     const handleStop = useCallback(() => {
@@ -102,17 +113,11 @@ export const useAudioPlayerControl = () => {
         audioRef.current.preload = 'auto';
 
         audioRef.current.onplay = () => {
-            console.log('Play');
-
             setIsPlaying(true);
-            setPlaybackState('playing');
         };
 
         audioRef.current.onpause = () => {
-            console.log('Pause');
-
             setIsPlaying(false);
-            setPlaybackState('paused');
         };
 
         audioRef.current.onloadedmetadata = () => {
@@ -127,8 +132,6 @@ export const useAudioPlayerControl = () => {
         };
 
         audioRef.current.onended = () => {
-            console.log('Ended');
-
             handleNextTrack();
         };
     }, [handleNextTrack, timeChange]);
