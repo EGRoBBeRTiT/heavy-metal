@@ -8,6 +8,8 @@ import { appRoutes } from '@/routes';
 import { cloisterBlack } from '@/styles/fonts';
 import { AnimatedAlbumList } from '@/components/AnimatedAlbumList';
 import { AnimatedBands } from '@/components/AnimatedBands';
+import { useProfile } from '@/contexts/StoreProvider';
+import { isAdminOrStaff } from '@/utils/isAdminOrStaff';
 
 import styles from './RootPage.module.scss';
 
@@ -15,6 +17,10 @@ const cx = cnBind.bind(styles);
 
 export const RootPage = () => {
     const router = useRouter();
+
+    const profile = useProfile();
+
+    const showPlayerLink = isAdminOrStaff(profile);
 
     return (
         <>
@@ -54,21 +60,23 @@ export const RootPage = () => {
                                 Open Static View
                             </Link>
                         </li>
-                        <li>
-                            <Link
-                                href={appRoutes.player()}
-                                className={cx('link')}
-                                underline="always"
-                                color="foreground"
-                                onClick={(e) => {
-                                    e.preventDefault();
+                        {showPlayerLink && (
+                            <li>
+                                <Link
+                                    href={appRoutes.player()}
+                                    className={cx('link')}
+                                    underline="always"
+                                    color="foreground"
+                                    onClick={(e) => {
+                                        e.preventDefault();
 
-                                    router.push(appRoutes.player());
-                                }}
-                            >
-                                Open Player
-                            </Link>
-                        </li>
+                                        router.push(appRoutes.player());
+                                    }}
+                                >
+                                    Open Player
+                                </Link>
+                            </li>
+                        )}
                     </ul>
                 </nav>
             </div>

@@ -64,15 +64,12 @@ export const useAudioPlayerControl = () => {
             }
 
             if (audioRef.current.paused) {
-                // setPlaybackState('playing');
-
                 await audioRef.current.play();
                 updateMetadata(trackList[index.current]);
             }
         } catch (error) {
             console.error(error);
             setIsPlaying(false);
-            // setPlaybackState('paused');
         }
     }, [trackList, updateMetadata]);
 
@@ -111,7 +108,6 @@ export const useAudioPlayerControl = () => {
 
     const handleSetListeners = useCallback(() => {
         audioRef.current.preload = 'auto';
-        audioRef.current.crossOrigin = 'anonymous';
 
         audioRef.current.onplay = () => {
             setIsPlaying(true);

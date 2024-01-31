@@ -20,8 +20,9 @@ import { useGoBack } from '@/hooks/useGoBack';
 import { appRoutes } from '@/routes';
 import { signOut } from '@/auth';
 import { useProfile } from '@/contexts/StoreProvider';
-import { UserType } from '@/types/User.types';
 import { getStringHash } from '@/utils';
+import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
+import { isAdminOrStaff } from '@/utils/isAdminOrStaff';
 
 import styles from './Header.module.scss';
 
@@ -38,6 +39,8 @@ const AVATAR_COLORS: AvatarProps['color'][] = [
 export const Header = () => {
     const profile = useProfile();
 
+    const { isMobile, isTablet } = useScreenConfig();
+
     const nameForAvatar = profile
         ? `${profile.firstName?.[0] ?? ''}${profile.lastName?.[0] ?? ''}`
         : '';
@@ -50,8 +53,7 @@ export const Header = () => {
           ]
         : 'default';
 
-    const isPrimary =
-        profile?.type === UserType.ADMIN || profile?.type === UserType.STAFF;
+    const isPrimary = isAdminOrStaff(profile);
 
     const [popoverOpened, setPopoverOpened] = useState(false);
     const pathname = usePathname();
@@ -73,10 +75,7 @@ export const Header = () => {
     }, [pathname]);
 
     return (
-        <header
-            ref={headerRef}
-            className={cx('header', cloisterBlack.className)}
-        >
+        <header ref={headerRef} className={cx('header')}>
             {showBackButton && (
                 <Tooltip content="Назад">
                     <Button
@@ -84,6 +83,7 @@ export const Header = () => {
                         variant="light"
                         size="lg"
                         className={cx('back-button')}
+                        isIconOnly={isMobile || isTablet}
                     >
                         <span className="material-symbols-outlined" aria-hidden>
                             keyboard_backspace
@@ -91,7 +91,9 @@ export const Header = () => {
                     </Button>
                 </Tooltip>
             )}
-            <h1>My favorite Rock &apos;N&apos; Roll Albums</h1>
+            <h1 className={cx('title', cloisterBlack.className)}>
+                The Best Rock &apos;n&apos; Roll Albums
+            </h1>
             <Popover
                 showArrow
                 placement="top-end"

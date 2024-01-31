@@ -13,9 +13,10 @@ class AppRoutes {
 
     player = () => '/player' as const;
 
-    login = () => '/login' as const;
+    login = (search?: string) => `/login${search ? `?${search}` : ''}` as const;
 
-    register = () => '/register' as const;
+    register = (search?: string) =>
+        `/register${search ? `?${search}` : ''}` as const;
 }
 
 export const appRoutes = new AppRoutes();

@@ -7,7 +7,7 @@
     flex-basis: 60px;
     justify-content: center;
     align-items: center;
-    font-size: 4rem;
+    padding: var(--main-padding);
     text-align: center;
     background-color: hsl(0deg 0% 0% / 42.5%);
     border-bottom: 1px solid hsl(var(--nextui-foreground-200));
@@ -15,21 +15,35 @@
         rgb(50 50 93 / 25%) 0 6px 12px -2px,
         rgb(0 0 0 / 30%) 0 3px 7px -3px;
     backdrop-filter: blur(10px);
-    padding-inline: var(--main-padding);
-
-    h1 {
-        margin-inline: auto;
-    }
-
-    @include tablet {
-        font-size: 2rem;
-    }
 }
 
-.back-button {
+button.back-button {
+    z-index: 2;
     margin-inline-end: auto;
 }
 
 .avatar {
+    z-index: 2;
+
+    --avatar-size: 40px;
+
+    min-width: var(var(--avatar-size));
+    min-height: var(--avatar-size);
     cursor: pointer;
+    margin-inline-start: auto;
+
+    @include tablet {
+        --avatar-size: 32px;
+    }
+}
+
+.title {
+    position: absolute;
+    z-index: 1;
+    font-size: 2rem;
+    padding-inline: 48px;
+
+    @include tablet {
+        font-size: 1.5rem;
+    }
 }

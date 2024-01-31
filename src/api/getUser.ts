@@ -1,15 +1,13 @@
 /* eslint-disable no-console */
-import clientPromise from '@/lib/mongodb';
+import { DATA_BASE, clientDb } from '@/api/config';
 import type { User } from '@/types/User.types';
 
 export const getUser = async (email: string): Promise<User | null> => {
     try {
-        const client = await clientPromise;
-
-        const db = client.db('heavy-metal');
+        const db = await clientDb();
 
         const user = await db
-            .collection<User>('users')
+            .collection<User>(DATA_BASE.COLLECTION.USERS)
             .find({ email })
             .toArray();
 

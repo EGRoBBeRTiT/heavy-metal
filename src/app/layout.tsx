@@ -8,10 +8,9 @@ import '@/styles/globals.scss';
 import { Providers } from '@/app/providers';
 import { roboto } from '@/styles/fonts';
 import { Header } from '@/components/Header';
-import { auth, signOut } from '@/auth';
-import { getUser } from '@/api/getUser';
 import { getAlbums } from '@/api/getAlbums';
 import { isAdminOrStaff } from '@/utils/isAdminOrStaff';
+import { getLoggedProfile } from '@/api/getLoggedProfile';
 
 export const metadata: Metadata = {
     title: "The Best Rock 'n' Roll Albums",
@@ -39,29 +38,8 @@ export const metadata: Metadata = {
     manifest: '/manifest.json',
 };
 
-const getData = async () => {
-    const session = await auth();
-
-    if (session && session.user && session.user.email) {
-        const user = await getUser(session.user.email);
-
-        if (!user) {
-            await signOut();
-        }
-
-        return {
-            email: user?.email,
-            type: user?.type,
-            firstName: user?.firstName,
-            lastName: user?.lastName,
-        };
-    }
-
-    return null;
-};
-
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
-    const profile = await getData();
+    const profile = await getLoggedProfile();
 
     const albums = await getAlbums();
 

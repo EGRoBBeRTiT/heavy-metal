@@ -33,7 +33,8 @@
         "react-vanilla-tilt": "^1.0.0",
         "swiper": "^11.0.5",
         "vanilla-tilt": "^1.8.1",
-        "zod": "^3.22.4"
+        "zod": "^3.22.4",
+        "zod-form-data": "^2.0.2"
     },
     "devDependencies": {
         "@total-typescript/ts-reset": "^0.5.1",

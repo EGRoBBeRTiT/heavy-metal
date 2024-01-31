@@ -5,21 +5,20 @@
 
 import { cache } from 'react';
 
-import clientPromise from '@/lib/mongodb';
 import type { AlbumType, Song } from '@/shared/albums';
 import { auth } from '@/auth';
 import { getUser } from '@/api/getUser';
 import { isAdminOrStaff } from '@/utils/isAdminOrStaff';
+import { DATA_BASE, clientDb } from '@/api/config';
 
 export const getAlbums = cache(async () => {
     try {
-        const client = await clientPromise;
-
-        const db = client.db('heavy-metal');
+        const db = await clientDb();
 
         const albums = await db
-            .collection<AlbumType>('albums')
+            .collection<AlbumType>(DATA_BASE.COLLECTION.ALBUMS)
             .find({})
+            .sort({ releasedAt: 1 })
             .toArray();
 
         const session = await auth();
