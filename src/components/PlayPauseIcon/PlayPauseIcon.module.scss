@@ -11,6 +11,10 @@
         transform: scale(0.3);
         filter: opacity(0);
     }
+
+    @include mobile {
+        font-size: 28px;
+    }
 }
 
 .container {

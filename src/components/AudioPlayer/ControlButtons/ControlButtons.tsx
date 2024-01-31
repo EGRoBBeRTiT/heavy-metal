@@ -3,7 +3,6 @@ import { Button } from '@nextui-org/button';
 import { useState, type DetailedHTMLProps, type HTMLAttributes } from 'react';
 
 import { PlayPauseIcon } from '@/components/PlayPauseIcon';
-import { useAudioPlayerView } from '@/contexts/AudioPlayerViewProvider';
 import { useAudioPlayer } from '@/hooks/context/useAudioPlayer';
 
 import styles from './ControlButtons.module.scss';
@@ -23,10 +22,6 @@ export const ControlButtons = ({
     const { handlePrevTrack, handleTogglePlaying, isPlaying, handleNextTrack } =
         useAudioPlayer();
 
-    const { view } = useAudioPlayerView();
-
-    const buttonSize = view === 'mobile' ? 'sm' : 'lg';
-
     return (
         <div {...props} className={cx('control-buttons', className)}>
             <Button
@@ -37,7 +32,7 @@ export const ControlButtons = ({
                 isIconOnly
                 variant="light"
                 radius="full"
-                size={buttonSize}
+                size="lg"
                 className={cx('button', 'prev')}
             >
                 <span
@@ -69,7 +64,7 @@ export const ControlButtons = ({
                 aria-checked={isPlaying}
                 variant="light"
                 radius="full"
-                size={buttonSize}
+                size="lg"
             >
                 <PlayPauseIcon isPlaying={isPlaying} />
             </Button>
@@ -84,7 +79,7 @@ export const ControlButtons = ({
                 isIconOnly
                 variant="light"
                 radius="full"
-                size={buttonSize}
+                size="lg"
                 className={cx('button')}
             >
                 <span

@@ -4,6 +4,10 @@
     @include mobile {
         order: 3;
     }
+
+    @include mobile {
+        gap: var(--medium-padding);
+    }
 }
 
 .next-last,
@@ -15,6 +19,10 @@
 
     &.transition {
         transition: all 300ms ease-in-out;
+    }
+
+    @include mobile {
+        font-size: 28px;
     }
 }
 
