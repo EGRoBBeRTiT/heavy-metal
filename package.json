@@ -3,8 +3,8 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "dev": "concurrently --kill-others \"next dev\" \"npm run proxy\"",
-        "build": "concurrently --kill-others \"next build\" \"npm run proxy\"",
+        "dev": "next dev",
+        "build": "next build",
         "start": "next start",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
         "lint:fix": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
@@ -22,7 +22,6 @@
         "@nextui-org/system": "^2.0.15",
         "@nextui-org/theme": "^2.1.17",
         "bcrypt": "^5.1.1",
-        "concurrently": "^8.2.2",
         "framer-motion": "^10.17.11",
         "local-cors-proxy": "^1.1.0",
         "lodash.throttle": "^4.1.1",
