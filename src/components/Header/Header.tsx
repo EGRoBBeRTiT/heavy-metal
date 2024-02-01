@@ -108,10 +108,12 @@ export const Header = () => {
                         size="md"
                         isBordered={isPrimary}
                         isFocusable
+                        aria-controls="avatar-popover"
                     />
                 </PopoverTrigger>
                 <PopoverContent>
                     <Listbox
+                        id="avatar-popover"
                         aria-label="Actions"
                         onAction={() => setPopoverOpened(false)}
                     >

@@ -163,11 +163,19 @@ export const useAudioPlayerControl = () => {
 
     const handleSetTrack = useCallback(
         async (trackIndex: number) => {
+            const safeIndex = getSafeIndex(trackIndex, trackList.length);
+
+            if (index.current === safeIndex) {
+                await handleTogglePlaying();
+
+                return;
+            }
+
             index.current = getSafeIndex(trackIndex, trackList.length);
 
             await handlePlay();
         },
-        [handlePlay, trackList.length],
+        [handlePlay, handleTogglePlaying, trackList.length],
     );
 
     const handleSeekTo = useCallback(

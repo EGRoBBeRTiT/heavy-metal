@@ -34,6 +34,8 @@ export const ControlButtons = ({
                 radius="full"
                 size="lg"
                 className={cx('button', 'prev')}
+                aria-label="Previous track"
+                title="Предыдущий трек"
             >
                 <span
                     aria-hidden
@@ -65,6 +67,8 @@ export const ControlButtons = ({
                 variant="light"
                 radius="full"
                 size="lg"
+                aria-label="Play/Pause"
+                title={isPlaying ? 'Остановить' : 'Играть'}
             >
                 <PlayPauseIcon isPlaying={isPlaying} />
             </Button>
@@ -81,6 +85,8 @@ export const ControlButtons = ({
                 radius="full"
                 size="lg"
                 className={cx('button')}
+                aria-label="Next track"
+                title="Следующий трек"
             >
                 <span
                     className={cx('material-symbols-outlined', 'next-first', {
