@@ -2,7 +2,7 @@
     position: sticky;
     bottom: 0;
     left: 0;
-    z-index: 90;
+    z-index: var(--header-z-index);
     display: flex;
     flex-direction: column;
     gap: var(--medium-padding);

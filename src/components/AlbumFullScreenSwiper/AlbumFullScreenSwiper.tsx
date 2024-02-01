@@ -12,6 +12,7 @@ import {
     Pagination,
     Zoom,
     Scrollbar,
+    Virtual,
 } from 'swiper/modules';
 import cnBind from 'classnames/bind';
 import { Spinner } from '@nextui-org/react';
@@ -19,10 +20,9 @@ import { Spinner } from '@nextui-org/react';
 import { MainInfo } from '@/components/AlbumFullScreenSwiper/MainInfo';
 import { SongList } from '@/components/AlbumFullScreenSwiper/SongList';
 import { useWindowSize } from '@/hooks/useWindowSize';
-import { LazyImage } from '@/components/LazyImage';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
 import { useAlbums } from '@/contexts/StoreProvider';
-
+import { LazyImage } from '@/components/LazyImage';
 import 'swiper/css';
 
 import styles from './AlbumFullScreenSwiper.module.scss';
@@ -47,7 +47,7 @@ const SWIPER_CONFIG: SwiperProps = {
         dynamicBullets: true,
         clickable: true,
     },
-    modules: [Keyboard, Pagination, Zoom, Scrollbar, Mousewheel],
+    modules: [Keyboard, Pagination, Zoom, Scrollbar, Mousewheel, Virtual],
     mousewheel: true,
     centeredSlides: true,
     zoom: true,
@@ -57,6 +57,7 @@ const SWIPER_CONFIG: SwiperProps = {
     scrollbar: {
         hide: true,
     },
+    virtual: true,
 };
 
 export const AlbumFullScreenSwiper = React.memo(
@@ -99,17 +100,17 @@ export const AlbumFullScreenSwiper = React.memo(
                             }}
                             {...SWIPER_CONFIG}
                         >
-                            {albums.map(({ imageSrc, album }, index) => (
-                                <SwiperSlide key={index}>
-                                    <Suspense
-                                        key={index}
-                                        fallback={<Spinner />}
+                            {albums.map(({ imageSrc, album, id }, index) => (
+                                <SwiperSlide key={id} virtualIndex={index}>
+                                    <div
+                                        className={cx(
+                                            'image-container',
+                                            'swiper-zoom-container',
+                                        )}
                                     >
-                                        <div
-                                            className={cx(
-                                                'image-container',
-                                                'swiper-zoom-container',
-                                            )}
+                                        <Suspense
+                                            key={index}
+                                            fallback={<Spinner />}
                                         >
                                             <LazyImage
                                                 loading="lazy"
@@ -123,8 +124,8 @@ export const AlbumFullScreenSwiper = React.memo(
                                                 }
                                                 fill
                                             />
-                                        </div>
-                                    </Suspense>
+                                        </Suspense>
+                                    </div>
                                     <div className="swiper-lazy-preloader swiper-lazy-preloader-white" />
                                 </SwiperSlide>
                             ))}

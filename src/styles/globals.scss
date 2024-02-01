@@ -2,6 +2,11 @@
 @import './mixins';
 
 :root {
+    /* z-indexes */
+    --header-z-index: 10;
+
+    /* -- */
+
     --main-padding: 16px;
     --medium-padding: 8px;
     --small-padding: 4px;
