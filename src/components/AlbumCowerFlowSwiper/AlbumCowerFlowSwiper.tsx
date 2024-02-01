@@ -92,12 +92,12 @@ export const AlbumCowerFlowSwiper = React.memo(
                         keyboard={{
                             enabled: true,
                         }}
-                        lazyPreloadPrevNext={4}
+                        lazyPreloadPrevNext={0}
                         initialSlide={initialSlide}
                         onActiveIndexChange={handleActiveIndexChange}
                     >
                         {albums.map((album, index) => (
-                            <SwiperSlide key={index}>
+                            <SwiperSlide key={album.id}>
                                 <Suspense
                                     fallback={
                                         <AlbumSkeleton
@@ -107,7 +107,12 @@ export const AlbumCowerFlowSwiper = React.memo(
                                 >
                                     <LazyImage
                                         id={`image-${index}`}
-                                        className={cx('class-10')}
+                                        loading="lazy"
+                                        decoding="async"
+                                        className={cx(
+                                            'class-10',
+                                            'swiper-lazy',
+                                        )}
                                         src={album.imageSrc}
                                         alt={album.album}
                                         width={isMobile || isTablet ? 300 : 750}
@@ -120,9 +125,9 @@ export const AlbumCowerFlowSwiper = React.memo(
                                             );
                                         }}
                                         withReflect
-                                        priority={activeIndex === index}
                                     />
                                 </Suspense>
+                                <div className="swiper-lazy-preloader swiper-lazy-preloader-white" />
                             </SwiperSlide>
                         ))}
                     </Swiper>

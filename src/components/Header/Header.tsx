@@ -109,6 +109,7 @@ export const Header = () => {
                         isBordered={isPrimary}
                         isFocusable
                         aria-controls="avatar-popover"
+                        role="button"
                     />
                 </PopoverTrigger>
                 <PopoverContent>

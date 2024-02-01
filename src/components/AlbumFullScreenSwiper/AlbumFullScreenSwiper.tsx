@@ -18,7 +18,6 @@ import { Spinner } from '@nextui-org/react';
 
 import { MainInfo } from '@/components/AlbumFullScreenSwiper/MainInfo';
 import { SongList } from '@/components/AlbumFullScreenSwiper/SongList';
-import { ImageSlideLazy } from '@/components/AlbumFullScreenSwiper/ImageSlide';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import { LazyImage } from '@/components/LazyImage';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
@@ -58,7 +57,6 @@ const SWIPER_CONFIG: SwiperProps = {
     scrollbar: {
         hide: true,
     },
-    lazyPreloadPrevNext: 1,
 };
 
 export const AlbumFullScreenSwiper = React.memo(
@@ -107,35 +105,27 @@ export const AlbumFullScreenSwiper = React.memo(
                                         key={index}
                                         fallback={<Spinner />}
                                     >
-                                        {isMobile || isTablet ? (
-                                            <div
-                                                className={cx(
-                                                    'image-container',
-                                                    'swiper-zoom-container',
-                                                )}
-                                            >
-                                                <LazyImage
-                                                    src={imageSrc}
-                                                    alt={album}
-                                                    width={800}
-                                                    height={800}
-                                                    quality={100}
-                                                    priority={
-                                                        activeIndex === index
-                                                    }
-                                                />
-                                            </div>
-                                        ) : (
-                                            <ImageSlideLazy
+                                        <div
+                                            className={cx(
+                                                'image-container',
+                                                'swiper-zoom-container',
+                                            )}
+                                        >
+                                            <LazyImage
+                                                loading="lazy"
+                                                decoding="async"
                                                 src={imageSrc}
                                                 alt={album}
-                                                className={cx(
-                                                    'image-container',
-                                                    'swiper-zoom-container',
-                                                )}
+                                                quality={100}
+                                                className={cx('swiper-lazy')}
+                                                unoptimized={
+                                                    !isMobile && !isTablet
+                                                }
+                                                fill
                                             />
-                                        )}
+                                        </div>
                                     </Suspense>
+                                    <div className="swiper-lazy-preloader swiper-lazy-preloader-white" />
                                 </SwiperSlide>
                             ))}
                         </Swiper>

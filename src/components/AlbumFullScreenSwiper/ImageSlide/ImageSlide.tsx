@@ -10,7 +10,7 @@ export type ImageSlideProps = Omit<ImageProps, 'ref' | 'children'>;
 
 export const ImageSlide = ({ className, alt, ...props }: ImageSlideProps) => (
     <div className={cx('image-container', className)}>
-        <Image alt={alt} {...props} />
+        <Image {...props} alt={alt} className="swiper-lazy" />
     </div>
 );
 
