@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 'use client';
 
 import type { CSSProperties, ReactNode } from 'react';
@@ -14,6 +16,13 @@ export interface AudioPlayerViewProps {
 
 const AudioPlayerViewContext = createContext({
     view: 'full',
+    setStyles: (styles) => {
+        void undefined;
+    },
+    styles: null,
+    setView: (view) => {
+        void undefined;
+    },
 } as AudioPlayerViewProps);
 
 export const useAudioPlayerView = () => useContext(AudioPlayerViewContext);
