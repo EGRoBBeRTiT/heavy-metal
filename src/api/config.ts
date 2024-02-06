@@ -1,7 +1,7 @@
 import clientPromise from '@/lib/mongodb';
 
 class DataBase {
-    public NAME = 'heavy-metal' as const;
+    public NAME = 'heavy-metal-cluster' as const;
 
     public COLLECTION = {
         ALBUMS: 'albums' as const,

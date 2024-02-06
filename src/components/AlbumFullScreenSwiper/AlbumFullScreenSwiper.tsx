@@ -5,7 +5,7 @@
 import type { SwiperProps } from 'swiper/react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { CSSProperties } from 'react';
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
 import {
     Keyboard,
     Mousewheel,
@@ -66,6 +66,7 @@ export const AlbumFullScreenSwiper = React.memo(
             { onActiveIndexChange, initialSlide = 0, className, ...props },
             ref,
         ) => {
+            const imageRef = useRef<HTMLImageElement | null>(null);
             const { albums } = useAlbums();
 
             const { isMobile, isTablet } = useScreenConfig();
@@ -74,13 +75,19 @@ export const AlbumFullScreenSwiper = React.memo(
 
             const [styles, setStyle] = useState<CSSProperties>({});
 
-            const { width, height } = useWindowSize();
+            const { width } = useWindowSize();
 
             useEffect(() => {
-                if (width && height) {
-                    setStyle({ width: `${Math.abs(width - height) / 2}px` });
+                if (width) {
+                    setStyle({
+                        width: `${
+                            Math.abs(
+                                width - (imageRef.current?.offsetWidth || 0),
+                            ) / 2
+                        }px`,
+                    });
                 }
-            }, [height, width]);
+            }, [activeIndex, width]);
 
             return (
                 <div
@@ -113,12 +120,16 @@ export const AlbumFullScreenSwiper = React.memo(
                                             fallback={<Spinner />}
                                         >
                                             <LazyImage
+                                                ref={imageRef}
                                                 loading="lazy"
                                                 decoding="async"
                                                 src={imageSrc}
                                                 alt={album}
                                                 quality={100}
-                                                className={cx('swiper-lazy')}
+                                                className={cx(
+                                                    'image',
+                                                    'swiper-lazy',
+                                                )}
                                                 unoptimized={
                                                     !isMobile && !isTablet
                                                 }

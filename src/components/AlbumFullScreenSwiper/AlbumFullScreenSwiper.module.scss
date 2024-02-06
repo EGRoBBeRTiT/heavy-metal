@@ -51,3 +51,8 @@
 
     @include centered-flexbox;
 }
+
+.image {
+    width: auto !important;
+    margin-inline: auto !important;
+}
