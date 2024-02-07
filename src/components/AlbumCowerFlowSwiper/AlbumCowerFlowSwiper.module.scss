@@ -118,3 +118,16 @@
     padding: 0;
     overflow-x: hidden;
 }
+
+.slide {
+    &.hidden {
+        contain: content;
+    }
+}
+
+.image {
+    &.hidden {
+        position: absolute;
+        display: none !important;
+    }
+}

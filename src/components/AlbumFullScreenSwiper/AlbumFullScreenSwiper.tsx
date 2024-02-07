@@ -5,7 +5,7 @@
 import type { SwiperProps } from 'swiper/react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { CSSProperties } from 'react';
-import React, { Suspense, useEffect, useRef, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import {
     Keyboard,
     Mousewheel,
@@ -66,7 +66,6 @@ export const AlbumFullScreenSwiper = React.memo(
             { onActiveIndexChange, initialSlide = 0, className, ...props },
             ref,
         ) => {
-            const imageRef = useRef<HTMLImageElement | null>(null);
             const { albums } = useAlbums();
 
             const { isMobile, isTablet } = useScreenConfig();
@@ -75,19 +74,15 @@ export const AlbumFullScreenSwiper = React.memo(
 
             const [styles, setStyle] = useState<CSSProperties>({});
 
-            const { width } = useWindowSize();
+            const { width, height } = useWindowSize();
 
             useEffect(() => {
                 if (width) {
                     setStyle({
-                        width: `${
-                            Math.abs(
-                                width - (imageRef.current?.offsetWidth || 0),
-                            ) / 2
-                        }px`,
+                        width: `${Math.abs(width - height) / 2}px`,
                     });
                 }
-            }, [activeIndex, width]);
+            }, [height, width]);
 
             return (
                 <div
@@ -120,7 +115,6 @@ export const AlbumFullScreenSwiper = React.memo(
                                             fallback={<Spinner />}
                                         >
                                             <LazyImage
-                                                ref={imageRef}
                                                 loading="lazy"
                                                 decoding="async"
                                                 src={imageSrc}

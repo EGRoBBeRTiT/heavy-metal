@@ -23,14 +23,13 @@ const LazyImage = React.forwardRef<HTMLImageElement, LazyImageProps>(
                 alt={alt}
                 id={id}
             />
-            {withReflect && (
-                <div
-                    className={cx('reflect')}
-                    style={{
-                        backgroundImage: `-moz-element(#${id ?? ''})`,
-                    }}
-                />
-            )}
+            <div
+                className={cx('reflect', { hidden: !withReflect })}
+                style={{
+                    backgroundImage: `-moz-element(#${id ?? ''})`,
+                }}
+                hidden={!withReflect}
+            />
         </>
     ),
 );

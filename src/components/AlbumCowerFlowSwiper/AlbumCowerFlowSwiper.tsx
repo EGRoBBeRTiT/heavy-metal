@@ -96,40 +96,59 @@ export const AlbumCowerFlowSwiper = React.memo(
                         initialSlide={initialSlide}
                         onActiveIndexChange={handleActiveIndexChange}
                     >
-                        {albums.map((album, index) => (
-                            <SwiperSlide key={album.id}>
-                                <Suspense
-                                    fallback={
-                                        <AlbumSkeleton
-                                            className={cx('skeleton')}
-                                        />
-                                    }
+                        {albums.map((album, index) => {
+                            const canShow = Math.abs(activeIndex - index) < 5;
+
+                            return (
+                                <SwiperSlide
+                                    key={album.id}
+                                    className={cx('slide', {
+                                        hidden: !canShow,
+                                    })}
                                 >
-                                    <LazyImage
-                                        id={`image-${index}`}
-                                        loading="lazy"
-                                        decoding="async"
-                                        className={cx(
-                                            'class-10',
-                                            'swiper-lazy',
-                                        )}
-                                        src={album.imageSrc}
-                                        alt={album.album}
-                                        width={isMobile || isTablet ? 300 : 750}
-                                        height={
-                                            isMobile || isTablet ? 300 : 750
+                                    <Suspense
+                                        fallback={
+                                            <AlbumSkeleton
+                                                className={cx('skeleton')}
+                                            />
                                         }
-                                        onClick={() => {
-                                            router.replace(
-                                                appRoutes.fullscreen(album.id),
-                                            );
-                                        }}
-                                        withReflect
+                                    >
+                                        <LazyImage
+                                            id={`image-${index}`}
+                                            loading="lazy"
+                                            decoding="async"
+                                            className={cx(
+                                                'class-10',
+                                                'swiper-lazy',
+                                                'image',
+                                                { hidden: !canShow },
+                                            )}
+                                            hidden={!canShow}
+                                            src={album.imageSrc}
+                                            alt={album.album}
+                                            width={
+                                                isMobile || isTablet ? 300 : 750
+                                            }
+                                            height={
+                                                isMobile || isTablet ? 300 : 750
+                                            }
+                                            onClick={() => {
+                                                router.replace(
+                                                    appRoutes.fullscreen(
+                                                        album.id,
+                                                    ),
+                                                );
+                                            }}
+                                            withReflect={canShow}
+                                        />
+                                    </Suspense>
+                                    <div
+                                        className="swiper-lazy-preloader swiper-lazy-preloader-white"
+                                        hidden={!canShow}
                                     />
-                                </Suspense>
-                                <div className="swiper-lazy-preloader swiper-lazy-preloader-white" />
-                            </SwiperSlide>
-                        ))}
+                                </SwiperSlide>
+                            );
+                        })}
                     </Swiper>
                     <div
                         ref={bottomRef}
