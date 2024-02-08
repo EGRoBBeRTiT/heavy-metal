@@ -2,12 +2,13 @@
 
 import { useFormState, useFormStatus } from 'react-dom';
 import { Button } from '@nextui-org/button';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { Input, Link } from '@nextui-org/react';
 import cnBind from 'classnames/bind';
 
 import { authenticate } from '@/api/authenticate';
 import { appRoutes } from '@/routes';
+import { useHistory } from '@/hooks/context/useHistory';
 
 import styles from './LoginForm.module.scss';
 
@@ -31,7 +32,8 @@ const LoginButton = () => {
 
 export const LoginForm = () => {
     const searchParams = useSearchParams();
-    const router = useRouter();
+    const { replace } = useHistory();
+
     const [errorMessage, dispatch] = useFormState(authenticate, undefined);
 
     return (
@@ -72,9 +74,7 @@ export const LoginForm = () => {
                     onClick={(e) => {
                         e.preventDefault();
 
-                        router.replace(
-                            appRoutes.register(searchParams.toString()),
-                        );
+                        replace(appRoutes.register(searchParams.toString()));
                     }}
                 >
                     Зарегистрироваться

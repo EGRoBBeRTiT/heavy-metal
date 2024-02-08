@@ -26,28 +26,31 @@ export const HistoryProvider = ({ children }: { children: ReactNode }) => {
     const pathname = usePathname();
     const historyRef = useRef<string[]>(getHistoryFromSession());
 
+    const routerRef = useRef(router);
+    routerRef.current = router;
+
     const value = useMemo<HistoryContextProps>(
         () => ({
             back: () => {
                 if (historyRef.current.length > 1) {
-                    router.back();
+                    routerRef.current.back();
                 } else {
-                    router.replace(appRoutes.root());
+                    routerRef.current.replace(appRoutes.root());
                 }
             },
             push: (path: string, options?: NavigateOptions) => {
-                router.push(path, options);
+                routerRef.current.push(path, options);
             },
             replace: (path: string, options?: NavigateOptions) => {
                 historyRef.current[historyRef.current.length - 1] = path;
 
-                router.replace(path, options);
+                routerRef.current.replace(path, options);
             },
             forward: () => {
-                router.forward();
+                routerRef.current.forward();
             },
         }),
-        [router],
+        [],
     );
 
     useEffect(() => {

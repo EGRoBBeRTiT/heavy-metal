@@ -5,10 +5,11 @@ import { Button } from '@nextui-org/button';
 import { Input, Link } from '@nextui-org/react';
 import { useState } from 'react';
 import cnBind from 'classnames/bind';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 import { register } from '@/api/register';
 import { appRoutes } from '@/routes';
+import { useHistory } from '@/hooks/context/useHistory';
 
 import styles from './RegisterForm.module.scss';
 
@@ -31,7 +32,7 @@ const RegisterButton = ({ disabled }: { disabled?: boolean }) => {
 };
 
 export const RegisterForm = () => {
-    const router = useRouter();
+    const { replace } = useHistory();
     const searchParams = useSearchParams();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -137,9 +138,7 @@ export const RegisterForm = () => {
                     onClick={(e) => {
                         e.preventDefault();
 
-                        router.replace(
-                            appRoutes.login(searchParams.toString()),
-                        );
+                        replace(appRoutes.login(searchParams.toString()));
                     }}
                 >
                     Войти

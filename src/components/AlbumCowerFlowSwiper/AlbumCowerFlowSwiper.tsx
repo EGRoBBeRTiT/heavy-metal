@@ -13,7 +13,6 @@ import React, {
 } from 'react';
 import { EffectCoverflow, Keyboard, Mousewheel } from 'swiper/modules';
 import cnBind from 'classnames/bind';
-import { useRouter } from 'next/navigation';
 
 import { cloisterBlack } from '@/styles/fonts';
 import { appRoutes } from '@/routes';
@@ -22,6 +21,7 @@ import { AlbumSkeleton } from '@/components/Album';
 import { LazyImage } from '@/components/LazyImage';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
 import { useAlbums } from '@/contexts/StoreProvider';
+import { useHistory } from '@/hooks/context/useHistory';
 
 import 'swiper/css';
 
@@ -40,7 +40,7 @@ export const AlbumCowerFlowSwiper = React.memo(
         const { isMobile, isTablet } = useScreenConfig();
         const [swiperStyle, setSwiperStyle] = useState<CSSProperties>({});
         const bottomRef = useRef<HTMLDivElement | null>(null);
-        const router = useRouter();
+        const { replace } = useHistory();
         const [activeIndex, setActiveIndex] = useState(initialSlide ?? 0);
 
         const handleActiveIndexChange = useCallback(
@@ -56,7 +56,7 @@ export const AlbumCowerFlowSwiper = React.memo(
         );
 
         useEnterListener(() => {
-            router.replace(appRoutes.fullscreen(albums[activeIndex].id));
+            replace(appRoutes.fullscreen(albums[activeIndex].id));
         });
 
         useEffect(() => {
@@ -133,7 +133,7 @@ export const AlbumCowerFlowSwiper = React.memo(
                                                 isMobile || isTablet ? 300 : 750
                                             }
                                             onClick={() => {
-                                                router.replace(
+                                                replace(
                                                     appRoutes.fullscreen(
                                                         album.id,
                                                     ),
