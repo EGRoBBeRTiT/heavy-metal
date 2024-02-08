@@ -1,8 +1,10 @@
 /* eslint-disable no-console */
+import { cache } from 'react';
+
 import { DATA_BASE, clientDb } from '@/api/config';
 import type { User } from '@/types/User.types';
 
-export const getUser = async (email: string): Promise<User | null> => {
+export const getUser = cache(async (email: string): Promise<User | null> => {
     try {
         const db = await clientDb();
 
@@ -20,4 +22,4 @@ export const getUser = async (email: string): Promise<User | null> => {
         console.error('Failed to fetch user:', error);
         throw new Error('Failed to fetch user.');
     }
-};
+});
