@@ -41,13 +41,17 @@ export const useAudioPlayerControl = () => {
     const audioRef = useRef<HTMLAudioElement>(
         getNewAudio(songs[initialTrackIndex].src),
     );
+
     const index = useRef(initialTrackIndex);
 
     const handlePlay = useCallback(async () => {
         setActiveTrack(trackList[index.current]);
 
         try {
-            if (audioRef.current.src !== trackList[index.current].src) {
+            if (
+                audioRef.current.src.trim() !==
+                trackList[index.current].src.trim()
+            ) {
                 localStorage.setItem(
                     LocalStorageItem.PLAYING_TRACK,
                     trackList[index.current].id,

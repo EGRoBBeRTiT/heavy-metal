@@ -2,10 +2,12 @@
 
 import cnBind from 'classnames/bind';
 import React, { useEffect, useRef, useState } from 'react';
+import { Button } from '@nextui-org/button';
 
 import { LoudSlider } from '@/components/AudioPlayer/LoudSlider';
 import { useAudioPlayerView } from '@/contexts/AudioPlayerViewProvider';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
+import { useAudioPlayer } from '@/hooks/context/useAudioPlayer';
 
 import { TrackSlider } from './TrackSlider';
 import { ControlButtons } from './ControlButtons';
@@ -17,6 +19,7 @@ const cx = cnBind.bind(styles);
 const AudioPlayer = React.memo(() => {
     const plyerRef = useRef<HTMLElement>(null);
     const [hovered, setHovered] = useState(false);
+    const { activeTrack } = useAudioPlayer();
 
     const { isMobile, isTablet } = useScreenConfig();
 
@@ -49,6 +52,20 @@ const AudioPlayer = React.memo(() => {
             <div className={cx('bottom', view)}>
                 <ControlButtons className={cx('control-buttons')} />
                 <TrackInfo className={cx('info')} />
+                <a
+                    href={activeTrack?.src}
+                    download={activeTrack?.src}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Скачать"
+                    aria-label="Скачать трек"
+                >
+                    <Button isIconOnly variant="light" radius="full" size="lg">
+                        <span className="material-symbols-outlined">
+                            download
+                        </span>
+                    </Button>
+                </a>
                 <LoudSlider />
             </div>
         </aside>
