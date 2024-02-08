@@ -16,13 +16,13 @@ import {
 } from '@nextui-org/react';
 
 import { cloisterBlack } from '@/styles/fonts';
-import { useGoBack } from '@/hooks/useGoBack';
 import { appRoutes } from '@/routes';
 import { signOut } from '@/auth';
 import { useProfile } from '@/contexts/StoreProvider';
 import { getStringHash } from '@/utils';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
 import { isAdminOrStaff } from '@/utils/isAdminOrStaff';
+import { useHistory } from '@/hooks/context/useHistory';
 
 import styles from './Header.module.scss';
 
@@ -60,7 +60,7 @@ export const Header = () => {
     const router = useRouter();
 
     const [showBackButton, setShowBackButton] = useState(false);
-    const [goBack] = useGoBack();
+    const { back } = useHistory();
     const headerRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
@@ -79,7 +79,7 @@ export const Header = () => {
             {showBackButton && (
                 <Tooltip content="Назад">
                     <Button
-                        onClick={() => goBack()}
+                        onClick={back}
                         variant="light"
                         size="lg"
                         className={cx('back-button')}

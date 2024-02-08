@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useRouter, notFound } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import cnBind from 'classnames/bind';
 import { Button } from '@nextui-org/button';
 
@@ -11,6 +11,8 @@ import { appRoutes } from '@/routes';
 import { useAudioPlayerView } from '@/contexts/AudioPlayerViewProvider';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
 import { useAlbums } from '@/contexts/StoreProvider';
+import { useHistory } from '@/hooks/context/useHistory';
+import { useEscapeListener } from '@/hooks/useEscapeListener';
 
 import { useFullScreen } from './FullScreenPage.hooks';
 import styles from './FullScreenPage.module.scss';
@@ -23,7 +25,7 @@ export interface FullScreenPageProps {
 
 export const FullScreenPage = ({ albumId }: FullScreenPageProps) => {
     const { albums } = useAlbums();
-    const router = useRouter();
+    const { back } = useHistory();
     const [mounted, setMounted] = useState(false);
     const [isFullScreenAccessed, setIsFullScreenAccessed] = useState(false);
 
@@ -54,25 +56,7 @@ export const FullScreenPage = ({ albumId }: FullScreenPageProps) => {
 
     const divRef = useRef<HTMLDivElement | null>(null);
 
-    const handlePushBack = useCallback(() => {
-        router.back();
-    }, [router]);
-
-    useEffect(() => {
-        const listener = (event: KeyboardEvent) => {
-            if (event.code === 'Escape') {
-                handlePushBack();
-            }
-        };
-
-        if (!isFullScreenAccessed) {
-            document.addEventListener('keydown', listener);
-
-            return () => {
-                document.removeEventListener('keydown', listener);
-            };
-        }
-    }, [handlePushBack, isFullScreenAccessed]);
+    useEscapeListener(back, !isFullScreenAccessed);
 
     const handleSuccess = useCallback(() => {
         setIsFullScreenAccessed(true);
@@ -81,7 +65,7 @@ export const FullScreenPage = ({ albumId }: FullScreenPageProps) => {
         setIsFullScreenAccessed(false);
     }, []);
 
-    useFullScreen(divRef, handleSuccess, handleError, handlePushBack);
+    useFullScreen(divRef, handleSuccess, handleError, back);
 
     const handleActiveIndexChange = useCallback(
         (index: number) => {
@@ -115,7 +99,7 @@ export const FullScreenPage = ({ albumId }: FullScreenPageProps) => {
                 <Button
                     isIconOnly
                     className={cx('close-button')}
-                    onPress={handlePushBack}
+                    onPress={back}
                     size="lg"
                 >
                     <IcClose />

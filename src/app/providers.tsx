@@ -6,6 +6,7 @@ import { ScreenConfigProvider } from '@/contexts/ScreenConfigProvider';
 import type { StoreProviderProps } from '@/contexts/StoreProvider';
 import { StoreProvider } from '@/contexts/StoreProvider';
 import { AudioPlayerProvider } from '@/providers/AudioPlayerProvider';
+import { HistoryProvider } from '@/providers/HistoryProvider';
 
 export const Providers = ({
     children,
@@ -17,13 +18,15 @@ export const Providers = ({
 } & StoreProviderProps & { withPlayer: boolean }) => (
     <NextUIProvider>
         <StoreProvider profile={profile} albums={albums}>
-            <ScreenConfigProvider>
-                {withPlayer ? (
-                    <AudioPlayerProvider>{children}</AudioPlayerProvider>
-                ) : (
-                    children
-                )}
-            </ScreenConfigProvider>
+            <HistoryProvider>
+                <ScreenConfigProvider>
+                    {withPlayer ? (
+                        <AudioPlayerProvider>{children}</AudioPlayerProvider>
+                    ) : (
+                        children
+                    )}
+                </ScreenConfigProvider>
+            </HistoryProvider>
         </StoreProvider>
     </NextUIProvider>
 );

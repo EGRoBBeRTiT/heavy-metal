@@ -3,18 +3,18 @@
 import { Modal, ModalBody, ModalContent } from '@nextui-org/react';
 
 import { LoginForm } from '@/components/LoginForm';
-import { useGoBack } from '@/hooks/useGoBack';
 import { RegisterForm } from '@/components/RegisterForm';
+import { useHistory } from '@/hooks/context/useHistory';
 
 export interface LoginPageProps {
     isRegister?: boolean;
 }
 
 export const LoginPage = ({ isRegister }: LoginPageProps) => {
-    const [goBack] = useGoBack();
+    const { back } = useHistory();
 
     return (
-        <Modal defaultOpen onClose={() => goBack()}>
+        <Modal defaultOpen onClose={back}>
             <ModalContent>
                 <ModalBody>
                     {isRegister ? <RegisterForm /> : <LoginForm />}

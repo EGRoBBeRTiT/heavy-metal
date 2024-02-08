@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo } from 'react';
-import { notFound, useRouter } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import cnBind from 'classnames/bind';
 import { Modal, ModalContent, ModalBody, Button } from '@nextui-org/react';
 
@@ -10,6 +10,8 @@ import { useAudioPlayerView } from '@/contexts/AudioPlayerViewProvider';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
 import { IcClose } from '@/icons';
 import { useAlbums } from '@/contexts/StoreProvider';
+import { useHistory } from '@/hooks/context/useHistory';
+import { useEscapeListener } from '@/hooks/useEscapeListener';
 
 import styles from './CoverFlowPage.module.scss';
 
@@ -20,7 +22,7 @@ export interface CoverFlowPageProps {
 }
 
 export const CoverFlowPage = ({ albumId }: CoverFlowPageProps) => {
-    const router = useRouter();
+    const { back } = useHistory();
     const { albums } = useAlbums();
 
     const { isMobile } = useScreenConfig();
@@ -43,19 +45,7 @@ export const CoverFlowPage = ({ albumId }: CoverFlowPageProps) => {
         };
     }, [isMobile, setStyles, setView]);
 
-    useEffect(() => {
-        const listener = (event: KeyboardEvent) => {
-            if (event.code === 'Escape') {
-                router.back();
-            }
-        };
-
-        document.addEventListener('keydown', listener);
-
-        return () => {
-            document.removeEventListener('keydown', listener);
-        };
-    }, [router]);
+    useEscapeListener(back);
 
     const index = useMemo(() => {
         const foundIndex = albums.findIndex((album) => album.id === albumId);
@@ -72,9 +62,7 @@ export const CoverFlowPage = ({ albumId }: CoverFlowPageProps) => {
             <Modal
                 isOpen
                 defaultOpen
-                onOpenChange={() => {
-                    router.back();
-                }}
+                onOpenChange={back}
                 placement="center"
                 scrollBehavior="inside"
                 size="full"
