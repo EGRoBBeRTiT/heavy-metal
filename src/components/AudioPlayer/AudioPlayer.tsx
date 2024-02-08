@@ -2,12 +2,13 @@
 
 import cnBind from 'classnames/bind';
 import React, { useEffect, useRef, useState } from 'react';
-import { Button } from '@nextui-org/button';
 
 import { LoudSlider } from '@/components/AudioPlayer/LoudSlider';
 import { useAudioPlayerView } from '@/contexts/AudioPlayerViewProvider';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
 import { useAudioPlayer } from '@/hooks/context/useAudioPlayer';
+import { DownloadButton } from '@/components/DownloadButton';
+import { ListButton } from '@/components/ListButton';
 
 import { TrackSlider } from './TrackSlider';
 import { ControlButtons } from './ControlButtons';
@@ -23,18 +24,20 @@ const AudioPlayer = React.memo(() => {
 
     const { isMobile, isTablet } = useScreenConfig();
 
-    const { view, setView, styles, setStyles } = useAudioPlayerView();
+    const { view, setView, styles } = useAudioPlayerView();
 
     useEffect(() => {
         document.documentElement.style.setProperty(
             '--player-height',
             `${(plyerRef.current?.offsetHeight ?? 0) + 2}px`,
         );
+    }, [view]);
 
+    useEffect(() => {
         if (isMobile || isTablet) {
             setView('mobile');
         }
-    }, [isMobile, isTablet, setStyles, setView]);
+    }, [isMobile, isTablet, setView]);
 
     return (
         <aside
@@ -52,21 +55,13 @@ const AudioPlayer = React.memo(() => {
             <div className={cx('bottom', view)}>
                 <ControlButtons className={cx('control-buttons')} />
                 <TrackInfo className={cx('info')} />
-                <a
-                    href={activeTrack?.src}
-                    download={activeTrack?.src}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="Скачать"
-                    aria-label="Скачать трек"
-                >
-                    <Button isIconOnly variant="light" radius="full" size="lg">
-                        <span className="material-symbols-outlined">
-                            download
-                        </span>
-                    </Button>
-                </a>
-                <LoudSlider />
+                {view !== 'mobile' && (
+                    <div className={cx('end')}>
+                        <ListButton className={cx('button')} />
+                        <DownloadButton href={activeTrack?.src} />
+                        <LoudSlider />
+                    </div>
+                )}
             </div>
         </aside>
     );

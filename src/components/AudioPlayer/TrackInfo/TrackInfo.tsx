@@ -2,6 +2,7 @@ import cnBind from 'classnames/bind';
 import Image from 'next/image';
 import { useMemo, type DetailedHTMLProps, type HTMLAttributes } from 'react';
 import { useRouter } from 'next/navigation';
+import { Tooltip } from '@nextui-org/react';
 
 import { useAudioPlayerView } from '@/contexts/AudioPlayerViewProvider';
 import { appRoutes } from '@/routes';
@@ -33,22 +34,24 @@ export const TrackInfo = ({ className, ...props }: TrackInfoProps) => {
     return (
         <div {...props} className={cx('track-info', className)}>
             {album?.imageSrc && (
-                <Image
-                    className={cx('cover')}
-                    src={album.imageSrc}
-                    alt="Accept - Lady Lou"
-                    width={50}
-                    height={50}
-                    quality={70}
-                    role="img"
-                    onClick={() => {
-                        if (activeTrack?.id) {
-                            router.push(
-                                appRoutes.fullscreen(activeTrack.albumId),
-                            );
-                        }
-                    }}
-                />
+                <Tooltip content="Открыть альбом">
+                    <Image
+                        className={cx('cover')}
+                        src={album.imageSrc}
+                        alt={`${album.band} ${album.album}`}
+                        width={50}
+                        height={50}
+                        quality={70}
+                        role="img"
+                        onClick={() => {
+                            if (activeTrack?.id) {
+                                router.push(
+                                    appRoutes.fullscreen(activeTrack.albumId),
+                                );
+                            }
+                        }}
+                    />
+                </Tooltip>
             )}
             {activeTrack && (
                 <div className={cx('info', view)}>

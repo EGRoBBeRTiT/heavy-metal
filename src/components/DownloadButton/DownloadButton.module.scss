@@ -1,0 +1,8 @@
+.button {
+    filter: opacity(0.5);
+    transition: filter 200ms ease-in-out;
+
+    @include hover {
+        filter: opacity(1);
+    }
+}

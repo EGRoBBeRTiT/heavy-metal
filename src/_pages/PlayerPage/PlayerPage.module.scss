@@ -1,0 +1,14 @@
+.section {
+    display: flex;
+    justify-content: center;
+    padding-block: var(--main-padding);
+
+    @include desktop {
+        padding: var(--main-padding);
+    }
+}
+
+.list {
+    width: 100%;
+    max-width: 800px;
+}

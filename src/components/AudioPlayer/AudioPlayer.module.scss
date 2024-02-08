@@ -2,7 +2,7 @@
     position: sticky;
     bottom: 0;
     left: 0;
-    z-index: var(--header-z-index);
+    z-index: var(--player-z-index);
     display: flex;
     flex-direction: column;
     gap: var(--medium-padding);
@@ -25,6 +25,7 @@
         left: var(--main-padding);
         max-width: 360px;
         background-color: hsl(var(--nextui-background) / 60%);
+        border-radius: 8px;
         transform: translateX(0);
     }
 
@@ -39,6 +40,14 @@
     }
 }
 
+.end {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 300px;
+    margin-inline-start: auto;
+}
+
 .bottom {
     display: flex;
     gap: var(--main-padding);
@@ -47,6 +56,10 @@
 
     &.compact {
         flex-direction: column;
+
+        .end {
+            max-width: 100%;
+        }
     }
 
     &.mobile {
@@ -57,4 +70,8 @@
             margin-inline-start: auto;
         }
     }
+}
+
+.button {
+    margin-inline-start: auto;
 }

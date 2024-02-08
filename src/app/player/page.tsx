@@ -1,9 +1,9 @@
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 import { appRoutes } from '@/routes';
 import { getLoggedProfile } from '@/api/getLoggedProfile';
 import { isAdminOrStaff } from '@/utils/isAdminOrStaff';
+import { PlayerPage } from '@/_pages/PlayerPage';
 
 const Page = async () => {
     const profile = await getLoggedProfile();
@@ -14,14 +14,7 @@ const Page = async () => {
         return redirect(appRoutes.root());
     }
 
-    return (
-        <section>
-            <header>
-                <h1>Player</h1>
-            </header>
-            <Link href={appRoutes.root()}>Back</Link>
-        </section>
-    );
+    return <PlayerPage />;
 };
 
 export default Page;

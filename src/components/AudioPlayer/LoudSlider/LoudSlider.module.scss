@@ -1,9 +1,7 @@
 .loud-slider {
     width: 200px;
-    margin-inline-start: auto;
 
     &.compact {
-        margin-inline-start: 0;
         width: 100%;
     }
 }

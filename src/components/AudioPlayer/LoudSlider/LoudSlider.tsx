@@ -43,10 +43,6 @@ export const LoudSlider = ({ className, ...props }: LoudSliderProps) => {
         };
     }, [audioRef]);
 
-    if (view === 'mobile') {
-        return null;
-    }
-
     return (
         <div {...props} className={cx('loud-slider', className, view)}>
             <Slider

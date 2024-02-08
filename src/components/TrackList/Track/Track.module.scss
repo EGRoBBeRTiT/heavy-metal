@@ -1,0 +1,130 @@
+.song {
+    overflow: hidden;
+    border-radius: 4px;
+
+    @include hover {
+        > div {
+            background-color: hsl(var(--nextui-foreground-50) / 50%);
+        }
+
+        &:active > div {
+            background-color: hsl(var(--nextui-foreground-50) / 10%);
+        }
+    }
+
+    &:nth-child(2n + 1) {
+        > div {
+            background-color: hsl(var(--nextui-foreground-50));
+        }
+
+        @include hover {
+            > div {
+                background-color: hsl(var(--nextui-foreground-100) / 80%);
+            }
+        }
+
+        &:active > div {
+            background-color: hsl(var(--nextui-foreground-50));
+        }
+    }
+}
+
+.play-pause-icon {
+    width: fit-content !important;
+    transition: all 200ms ease-in-out;
+
+    @include desktop {
+        transform: scale(0.6);
+        filter: opacity(0);
+    }
+}
+
+.song-content {
+    position: relative;
+    display: flex;
+    gap: var(--main-padding);
+    align-items: center;
+    transition: background-color 100ms ease-in-out;
+    padding-block: 6px;
+    padding-inline: var(--main-padding);
+    contain: content;
+
+    &::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 2px solid transparent;
+        border-radius: 6px;
+        transition: all 200ms ease-in-out;
+        content: '';
+    }
+
+    &.active {
+        &::before {
+            border-color: hsl(var(--nextui-primary-300));
+        }
+
+        &,
+        * {
+            color: hsl(var(--nextui-primary-400)) !important;
+        }
+
+        .play-pause-icon {
+            transform: scale(1);
+            filter: opacity(1);
+        }
+    }
+
+    @include hover {
+        .play-pause-icon,
+        .download-button {
+            transform: scale(1);
+            filter: opacity(1);
+        }
+    }
+}
+
+.cover {
+    position: relative;
+    min-width: 50px;
+    min-height: 50px;
+    overflow: hidden;
+    border-radius: 4px;
+    filter: opacity(1);
+    transition: all 200ms ease-in-out;
+    aspect-ratio: 1;
+    object-fit: cover;
+
+    &:active {
+        filter: opacity(0.1);
+    }
+
+    @include hover {
+        filter: opacity(0.5);
+    }
+}
+
+.add-info {
+    color: hsl(var(--nextui-foreground-400));
+}
+
+.info {
+    h1,
+    p {
+        transition: color 200ms ease-in-out;
+
+        @include cut-for-n-rows(1);
+    }
+}
+
+.download-button {
+    transition: all 200ms ease-in-out;
+    margin-inline-start: auto;
+
+    @include desktop {
+        transform: scale(0.6);
+        filter: opacity(0);
+    }
+}

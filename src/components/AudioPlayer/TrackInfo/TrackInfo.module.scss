@@ -16,6 +16,16 @@
     aspect-ratio: 1;
     border-radius: 4px;
     cursor: pointer;
+    filter: opacity(1);
+    transition: filter 200ms ease-in-out;
+
+    &:active {
+        filter: opacity(0.1);
+    }
+
+    @include hover {
+        filter: opacity(0.5);
+    }
 }
 
 .add-info {
