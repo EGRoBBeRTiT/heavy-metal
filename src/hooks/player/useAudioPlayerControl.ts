@@ -5,6 +5,7 @@ import { useAlbums } from '@/contexts/StoreProvider';
 import { useTrackIndexFromLocalStorage } from '@/hooks/player/useTrackIndexFromLocalStorage';
 import {
     setPlaybackState,
+    updatePositionState,
     useUpdateSessionMetaData,
 } from '@/hooks/player/useUpdateSessionMetaData';
 import type { Song } from '@/shared/albums';
@@ -44,6 +45,7 @@ export const useAudioPlayerControl = () => {
     const index = useRef(initialTrackIndex);
 
     const handlePlay = useCallback(async () => {
+        setPlaybackState('playing');
         setActiveTrack(trackList[index.current]);
 
         try {
@@ -73,10 +75,12 @@ export const useAudioPlayerControl = () => {
         } catch (error) {
             console.error(error);
             setIsPlaying(false);
+            setPlaybackState('paused');
         }
     }, [trackList, updateMetadata]);
 
     const handlePause = useCallback(() => {
+        setPlaybackState('paused');
         audioRef.current.pause();
         setIsPlaying(false);
     }, []);
@@ -133,6 +137,11 @@ export const useAudioPlayerControl = () => {
         };
 
         audioRef.current.ontimeupdate = () => {
+            updatePositionState({
+                duration: audioRef.current.duration || 0,
+                playbackRate: audioRef.current.playbackRate || 1,
+                position: audioRef.current.currentTime || 0,
+            });
             timeChange?.(audioRef.current.currentTime);
         };
 

@@ -9,13 +9,17 @@ export const setPlaybackState = (state?: MediaSessionPlaybackState) => {
     }
 };
 
-export const updatePositionState = (audio: HTMLAudioElement | null) => {
+export const updatePositionState = (state?: MediaPositionState) => {
     if ('setPositionState' in navigator.mediaSession) {
-        navigator.mediaSession.setPositionState({
-            duration: audio?.duration || 0,
-            playbackRate: audio?.playbackRate || 1,
-            position: audio?.currentTime || 0,
-        });
+        navigator.mediaSession.setPositionState(
+            state
+                ? {
+                      duration: state?.duration,
+                      playbackRate: state?.playbackRate,
+                      position: state?.position,
+                  }
+                : state,
+        );
     }
 };
 
