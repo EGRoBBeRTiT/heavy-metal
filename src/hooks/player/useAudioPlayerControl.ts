@@ -81,10 +81,10 @@ export const useAudioPlayerControl = () => {
         setIsPlaying(false);
     }, []);
 
-    // const handleStop = useCallback(() => {
-    //     handlePause();
-    //     audioRef.current.currentTime = 0;
-    // }, [handlePause]);
+    const handleStop = useCallback(() => {
+        handlePause();
+        audioRef.current.currentTime = 0;
+    }, [handlePause]);
 
     const handleTogglePlaying = useCallback(async () => {
         if (audioRef.current.paused) {
@@ -218,8 +218,8 @@ export const useAudioPlayerControl = () => {
         previousTrack: handlePrevTrack,
         nextTrack: handleNextTrack,
         seekTo: handleSeekTo,
-        // play: handlePlay,
-        // stop: handleStop,
+        play: handlePlay,
+        stop: handleStop,
         pause: handlePause,
     });
 
