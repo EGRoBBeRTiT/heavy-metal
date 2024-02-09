@@ -137,6 +137,7 @@ export const useAudioPlayerControl = () => {
         };
 
         audioRef.current.ontimeupdate = () => {
+            setPlaybackState('playing');
             updatePositionState({
                 duration: audioRef.current.duration || 0,
                 playbackRate: audioRef.current.playbackRate || 1,

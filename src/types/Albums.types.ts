@@ -17,4 +17,7 @@ export enum Band {
     HEAVEN_AND_HELL = 'Heaven & Hell',
     ANTHRAX = 'Anthrax',
     MEGADETH = 'Megadeth',
+    METALLICA = 'Metallica',
+    RAMMSTEIN = 'Rammstein',
+    KERRY_KING = 'Kerry King',
 }
