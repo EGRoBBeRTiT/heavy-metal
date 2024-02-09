@@ -180,25 +180,24 @@ export const useAudioPlayerControl = () => {
         [handlePlay, handleTogglePlaying, trackList.length],
     );
 
-    // const handleSeekTo = useCallback(
-    //     (details: MediaSessionActionDetails) => {
-    //         if (
-    //             details.fastSeek &&
-    //             details.seekTime !== undefined &&
-    //             'fastSeek' in audioRef.current
-    //         ) {
-    //             audioRef.current.fastSeek(
-    //                 getSafeIndex(details.seekTime, audioRef.current.duration),
-    //             );
-    //             updatePositionState(audioRef.current);
+    const handleSeekTo = useCallback(
+        (details: MediaSessionActionDetails) => {
+            if (
+                details.fastSeek &&
+                details.seekTime !== undefined &&
+                'fastSeek' in audioRef.current
+            ) {
+                audioRef.current.fastSeek(
+                    getSafeIndex(details.seekTime, audioRef.current.duration),
+                );
 
-    //             return;
-    //         }
+                return;
+            }
 
-    //         handleChangeCurrentTime(details.seekTime);
-    //     },
-    //     [handleChangeCurrentTime],
-    // );
+            handleChangeCurrentTime(details.seekTime);
+        },
+        [handleChangeCurrentTime],
+    );
 
     useEffect(() => {
         handleSetListeners();
@@ -213,6 +212,7 @@ export const useAudioPlayerControl = () => {
         seekForward: undefined,
         previousTrack: handlePrevTrack,
         nextTrack: handleNextTrack,
+        seekTo: handleSeekTo,
         play: handlePlay,
         stop: handleStop,
         pause: handlePause,
