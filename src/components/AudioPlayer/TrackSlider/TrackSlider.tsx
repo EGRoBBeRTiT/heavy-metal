@@ -31,7 +31,6 @@ export const TrackSlider = ({
     const { duration, handleChangeCurrentTime, setTimeChange } =
         useAudioPlayer();
     const [canChangeSliderValue, setCanChangeSliderValue] = useState(true);
-    // const canChangeSliderValue = useRef(true);
     const canAnimate = useRef(false);
 
     const { view } = useAudioPlayerView();
