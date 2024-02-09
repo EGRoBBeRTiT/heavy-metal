@@ -3,7 +3,10 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useAlbums } from '@/contexts/StoreProvider';
 import { useTrackIndexFromLocalStorage } from '@/hooks/player/useTrackIndexFromLocalStorage';
-import { useUpdateSessionMetaData } from '@/hooks/player/useUpdateSessionMetaData';
+import {
+    setPlaybackState,
+    useUpdateSessionMetaData,
+} from '@/hooks/player/useUpdateSessionMetaData';
 import type { Song } from '@/shared/albums';
 import { useSpaceListener } from '@/hooks/useSpaceListener';
 import { useSetMediaSessionHandlers } from '@/hooks/useSetMediaSessionHandlers';
@@ -78,10 +81,10 @@ export const useAudioPlayerControl = () => {
         setIsPlaying(false);
     }, []);
 
-    const handleStop = useCallback(() => {
-        handlePause();
-        audioRef.current.currentTime = 0;
-    }, [handlePause]);
+    // const handleStop = useCallback(() => {
+    //     handlePause();
+    //     audioRef.current.currentTime = 0;
+    // }, [handlePause]);
 
     const handleTogglePlaying = useCallback(async () => {
         if (audioRef.current.paused) {
@@ -116,10 +119,12 @@ export const useAudioPlayerControl = () => {
 
         audioRef.current.onplay = () => {
             setIsPlaying(true);
+            setPlaybackState('playing');
         };
 
         audioRef.current.onpause = () => {
             setIsPlaying(false);
+            setPlaybackState('paused');
         };
 
         audioRef.current.onloadedmetadata = () => {
@@ -213,8 +218,8 @@ export const useAudioPlayerControl = () => {
         previousTrack: handlePrevTrack,
         nextTrack: handleNextTrack,
         seekTo: handleSeekTo,
-        play: handlePlay,
-        stop: handleStop,
+        // play: handlePlay,
+        // stop: handleStop,
         pause: handlePause,
     });
 

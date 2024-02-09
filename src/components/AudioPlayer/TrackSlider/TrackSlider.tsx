@@ -30,7 +30,9 @@ export const TrackSlider = ({
     const [sliderValue, setSliderValue] = useState(0);
     const { duration, handleChangeCurrentTime, setTimeChange } =
         useAudioPlayer();
-    const canChangeSliderValue = useRef(true);
+    const [canChangeSliderValue, setCanChangeSliderValue] = useState(true);
+    // const canChangeSliderValue = useRef(true);
+    const canAnimate = useRef(false);
 
     const { view } = useAudioPlayerView();
 
@@ -48,11 +50,18 @@ export const TrackSlider = ({
             throttle((time: number) => {
                 handleSetTime(time || 0);
 
-                if (canChangeSliderValue.current) {
+                if (canChangeSliderValue) {
                     setSliderValue(time || 0);
+
+                    if (Math.abs(currentTime - time) <= 1) {
+                        canAnimate.current = true;
+
+                        return;
+                    }
                 }
+                canAnimate.current = false;
             }, 1000),
-        [handleSetTime],
+        [handleSetTime, canChangeSliderValue, currentTime],
     );
 
     const handleTimeChange = useCallback(
@@ -60,9 +69,9 @@ export const TrackSlider = ({
             if (time < 0.5) {
                 handleSetTime(time);
                 setSliderValue(time);
-                canChangeSliderValue.current = false;
+                setCanChangeSliderValue(false);
             } else {
-                canChangeSliderValue.current = true;
+                setCanChangeSliderValue(true);
                 throttledTimeChange(time);
             }
         },
@@ -82,7 +91,7 @@ export const TrackSlider = ({
         <div
             {...props}
             className={cx('slider-container', className, {
-                animate: canChangeSliderValue.current,
+                animate: canChangeSliderValue && canAnimate.current,
             })}
         >
             <Slider
@@ -98,7 +107,7 @@ export const TrackSlider = ({
                     content: convertNumberToTimeString(sliderValue),
                 }}
                 onChange={(time) => {
-                    canChangeSliderValue.current = false;
+                    setCanChangeSliderValue(false);
 
                     if (typeof time === 'number') {
                         setSliderValue(time || 0);
@@ -109,7 +118,7 @@ export const TrackSlider = ({
                         handleChangeCurrentTime(value || 0);
                     }
 
-                    canChangeSliderValue.current = true;
+                    setCanChangeSliderValue(true);
                 }}
             />
             {view !== 'mobile' && (
