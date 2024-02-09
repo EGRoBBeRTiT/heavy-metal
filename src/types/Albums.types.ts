@@ -16,4 +16,5 @@ export enum Band {
     CHERNIY_KOFE = 'Черный кофе',
     HEAVEN_AND_HELL = 'Heaven & Hell',
     ANTHRAX = 'Anthrax',
+    MEGADETH = 'Megadeth',
 }
