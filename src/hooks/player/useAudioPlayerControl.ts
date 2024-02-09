@@ -3,11 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useAlbums } from '@/contexts/StoreProvider';
 import { useTrackIndexFromLocalStorage } from '@/hooks/player/useTrackIndexFromLocalStorage';
-import {
-    setPlaybackState,
-    updatePositionState,
-    useUpdateSessionMetaData,
-} from '@/hooks/player/useUpdateSessionMetaData';
+import { useUpdateSessionMetaData } from '@/hooks/player/useUpdateSessionMetaData';
 import type { Song } from '@/shared/albums';
 import { useSpaceListener } from '@/hooks/useSpaceListener';
 import { useSetMediaSessionHandlers } from '@/hooks/useSetMediaSessionHandlers';
@@ -80,7 +76,6 @@ export const useAudioPlayerControl = () => {
     const handlePause = useCallback(() => {
         audioRef.current.pause();
         setIsPlaying(false);
-        setPlaybackState('paused');
     }, []);
 
     const handleStop = useCallback(() => {
@@ -98,6 +93,12 @@ export const useAudioPlayerControl = () => {
     useSpaceListener(handleTogglePlaying);
 
     const handlePrevTrack = useCallback(() => {
+        if (audioRef.current.currentTime > 5) {
+            audioRef.current.currentTime = 0;
+
+            return;
+        }
+
         index.current =
             (index.current - 1 + trackList.length) % trackList.length;
 
@@ -122,13 +123,11 @@ export const useAudioPlayerControl = () => {
         };
 
         audioRef.current.onloadedmetadata = () => {
-            updatePositionState(audioRef.current);
             setIsAudioLoaded(true);
             setDuration(audioRef.current.duration || 0);
         };
 
         audioRef.current.ontimeupdate = () => {
-            updatePositionState(audioRef.current);
             timeChange?.(audioRef.current.currentTime);
         };
 
@@ -142,7 +141,6 @@ export const useAudioPlayerControl = () => {
             const safeTime = getSafeIndex(time, audioRef.current.duration);
 
             audioRef.current.currentTime = safeTime;
-            updatePositionState(audioRef.current);
         }
     }, []);
 
@@ -182,25 +180,25 @@ export const useAudioPlayerControl = () => {
         [handlePlay, handleTogglePlaying, trackList.length],
     );
 
-    const handleSeekTo = useCallback(
-        (details: MediaSessionActionDetails) => {
-            if (
-                details.fastSeek &&
-                details.seekTime !== undefined &&
-                'fastSeek' in audioRef.current
-            ) {
-                audioRef.current.fastSeek(
-                    getSafeIndex(details.seekTime, audioRef.current.duration),
-                );
-                updatePositionState(audioRef.current);
+    // const handleSeekTo = useCallback(
+    //     (details: MediaSessionActionDetails) => {
+    //         if (
+    //             details.fastSeek &&
+    //             details.seekTime !== undefined &&
+    //             'fastSeek' in audioRef.current
+    //         ) {
+    //             audioRef.current.fastSeek(
+    //                 getSafeIndex(details.seekTime, audioRef.current.duration),
+    //             );
+    //             updatePositionState(audioRef.current);
 
-                return;
-            }
+    //             return;
+    //         }
 
-            handleChangeCurrentTime(details.seekTime);
-        },
-        [handleChangeCurrentTime],
-    );
+    //         handleChangeCurrentTime(details.seekTime);
+    //     },
+    //     [handleChangeCurrentTime],
+    // );
 
     useEffect(() => {
         handleSetListeners();
@@ -215,7 +213,6 @@ export const useAudioPlayerControl = () => {
         seekForward: undefined,
         previousTrack: handlePrevTrack,
         nextTrack: handleNextTrack,
-        seekTo: handleSeekTo,
         play: handlePlay,
         stop: handleStop,
         pause: handlePause,
