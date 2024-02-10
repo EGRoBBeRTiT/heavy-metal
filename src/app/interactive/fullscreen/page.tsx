@@ -13,9 +13,18 @@ export async function generateMetadata({
 
     const album = albumsMap.has(index) ? albumsMap.get(index) : null;
 
+    const title = `${album?.album ?? ''} от ${album?.band ?? ''} | Fullscreen`;
+    const description = `Альбом • ${new Date(
+        album?.releasedAt ?? '',
+    ).getFullYear()} • Песен - ${album?.songs?.length || 0}`;
+
     return {
-        title: `${album?.album ?? ''} • ${album?.band ?? ''} | Fullscreen`,
+        title,
+        description,
         openGraph: {
+            title,
+            description,
+            siteName: "Hard 'N' Heavy",
             images: [album?.imageSrc ?? ''],
         },
     };

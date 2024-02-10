@@ -10,6 +10,13 @@ export const metadata: Metadata = {
     title: "Hard 'N' Heavy | Плеер",
     description:
         'Слушайте оригинальную музыку онлайн бесплатно и в хорошем качестве',
+    openGraph: {
+        title: "Hard 'N' Heavy | Плеер",
+        description:
+            'Слушайте оригинальную музыку онлайн бесплатно и в хорошем качестве',
+        siteName: "Hard 'N' Heavy",
+        images: ['/logo/logo-rect-256.png'],
+    },
 };
 
 const Page = async () => {
