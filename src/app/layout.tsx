@@ -47,7 +47,7 @@ export const metadata: Metadata = {
             "Сборник Hard 'N' Heavy — лучшие альбомы в лучшем качестве, расположенные в хронологическом порядке. Просмотр обложки, песен в необычном исполнении и, возможно, кое-что еще...",
         siteName: "Hard 'N' Heavy",
         locale: 'ru-RU',
-        images: ['/logo/logo-256.png'],
+        images: ['https://hardnheavy.vercel.app/logo/logo-256.png'],
     },
 };
 
