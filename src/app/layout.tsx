@@ -13,6 +13,10 @@ import { isAdminOrStaff } from '@/utils/isAdminOrStaff';
 import { getLoggedProfile } from '@/api/getLoggedProfile';
 
 export const metadata: Metadata = {
+    metadataBase: new URL('https://hardnheavy.vercel.app'),
+    alternates: {
+        canonical: '/',
+    },
     title: "Hard 'N' Heavy — Сборник альбомов мировых икон в мире hard 'n' heavy и rock 'n' roll'а в лучшем качестве",
     description:
         "Сборник Hard 'N' Heavy — лучшие альбомы в лучшем качестве, расположенные в хронологическом порядке. Просмотр обложки, песен в необычном исполнении и, возможно, кое-что еще...",
@@ -47,7 +51,7 @@ export const metadata: Metadata = {
             "Сборник Hard 'N' Heavy — лучшие альбомы в лучшем качестве, расположенные в хронологическом порядке. Просмотр обложки, песен в необычном исполнении и, возможно, кое-что еще...",
         siteName: "Hard 'N' Heavy",
         locale: 'ru-RU',
-        images: ['https://hardnheavy.vercel.app/logo/logo-256.png'],
+        images: ['/logo/logo-256.png'],
     },
 };
 
