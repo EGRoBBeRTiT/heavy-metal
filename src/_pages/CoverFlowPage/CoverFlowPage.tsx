@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo } from 'react';
-import { notFound } from 'next/navigation';
+import { notFound, useSearchParams } from 'next/navigation';
 import cnBind from 'classnames/bind';
 import { Modal, ModalContent, ModalBody, Button } from '@nextui-org/react';
 
@@ -17,13 +17,12 @@ import styles from './CoverFlowPage.module.scss';
 
 const cx = cnBind.bind(styles);
 
-export interface CoverFlowPageProps {
-    albumId?: string;
-}
-
-export const CoverFlowPage = ({ albumId }: CoverFlowPageProps) => {
+export const CoverFlowPage = () => {
+    const searchParams = useSearchParams();
     const { back } = useHistory();
     const { albums } = useAlbums();
+
+    const albumId = searchParams.get('album');
 
     const { isMobile } = useScreenConfig();
 

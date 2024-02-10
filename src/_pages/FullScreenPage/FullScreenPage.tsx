@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { notFound } from 'next/navigation';
+import { notFound, useSearchParams } from 'next/navigation';
 import cnBind from 'classnames/bind';
 import { Button } from '@nextui-org/button';
 
@@ -19,13 +19,12 @@ import styles from './FullScreenPage.module.scss';
 
 const cx = cnBind.bind(styles);
 
-export interface FullScreenPageProps {
-    albumId?: string;
-}
+export const FullScreenPage = () => {
+    const searchParams = useSearchParams();
+    const albumId = searchParams.get('album');
 
-export const FullScreenPage = ({ albumId }: FullScreenPageProps) => {
     const { albums } = useAlbums();
-    const { back } = useHistory();
+    const { back, replace } = useHistory();
     const [mounted, setMounted] = useState(false);
     const [isFullScreenAccessed, setIsFullScreenAccessed] = useState(false);
 
@@ -69,13 +68,9 @@ export const FullScreenPage = ({ albumId }: FullScreenPageProps) => {
 
     const handleActiveIndexChange = useCallback(
         (index: number) => {
-            window.history.replaceState(
-                null,
-                '',
-                appRoutes.fullscreen(albums[index].id),
-            );
+            replace(appRoutes.fullscreen(albums[index].id));
         },
-        [albums],
+        [albums, replace],
     );
 
     const index = useMemo(() => {

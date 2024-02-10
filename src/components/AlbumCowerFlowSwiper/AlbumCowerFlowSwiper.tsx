@@ -45,14 +45,10 @@ export const AlbumCowerFlowSwiper = React.memo(
 
         const handleActiveIndexChange = useCallback(
             (swiper: SwiperProps) => {
-                window.history.replaceState(
-                    null,
-                    '',
-                    appRoutes.coverflow(albums[swiper.activeIndex].id),
-                );
+                replace(appRoutes.coverflow(albums[swiper.activeIndex].id));
                 setActiveIndex(swiper.activeIndex);
             },
-            [albums],
+            [albums, replace],
         );
 
         useEnterListener(() => {

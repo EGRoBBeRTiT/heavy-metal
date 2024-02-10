@@ -13,8 +13,9 @@ import { isAdminOrStaff } from '@/utils/isAdminOrStaff';
 import { getLoggedProfile } from '@/api/getLoggedProfile';
 
 export const metadata: Metadata = {
-    title: "The Best Rock 'n' Roll Albums",
-    description: "List of my favorite Rock 'n' Roll albums of all time",
+    title: "Hard 'N' Heavy — Сборник альбомов мировых икон в мире hard 'n' heavy и rock 'n' roll'а в лучшем качестве",
+    description:
+        "Сборник Hard 'N' Heavy — лучшие альбомы в лучшем качестве, расположенные в хронологическом порядке. Просмотр обложки, песен в необычном исполнении и, возможно, кое-что еще...",
     keywords: [
         'rock',
         "rock 'n' roll",
@@ -29,13 +30,25 @@ export const metadata: Metadata = {
         'best rock albums',
         'best metal albums',
         'best heavy albums',
+        'рок',
+        'метал',
+        'рок альбомы',
+        'альбомы хеви метала',
     ],
     appleWebApp: true,
-    applicationName: "The Best Rock 'n' Roll Albums",
+    applicationName: "Hard 'N' Heavy",
     authors: [{ url: 'https://github.com/EGRoBBeRTiT', name: 'Egor Titov' }],
     creator: 'Egor Titov',
     publisher: 'Vercel',
     manifest: '/manifest.json',
+    openGraph: {
+        title: "Hard 'N' Heavy — Сборник альбомов мировых икон в мире hard 'n' heavy и rock 'n' roll'а в лучшем качестве",
+        description:
+            "Сборник Hard 'N' Heavy — лучшие альбомы в лучшем качестве, расположенные в хронологическом порядке. Просмотр обложки, песен в необычном исполнении и, возможно, кое-что еще...",
+        siteName: "Hard 'N' Heavy",
+        locale: 'ru-RU',
+        images: ['/logo/logo-256.png'],
+    },
 };
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
@@ -44,7 +57,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
     const albums = await getAlbums();
 
     return (
-        <html lang="en-US" className="dark">
+        <html lang="ru-RU" className="dark">
             <body className={roboto.className}>
                 <Providers
                     profile={profile}
