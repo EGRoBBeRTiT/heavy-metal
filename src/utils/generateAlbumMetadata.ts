@@ -23,7 +23,13 @@ export const generateAlbumMetadata = async ({
             description,
             siteName: "Hard 'N' Heavy",
             images: [
-                album?.imageSrc ?? '',
+                {
+                    width: '750px',
+                    height: '750px',
+                    url: album?.imageSrc
+                        ? `_next/image?url=${album?.imageSrc}&w=750&q=00`
+                        : '',
+                },
                 {
                     width: '200px',
                     height: '200px',
