@@ -25,7 +25,11 @@ export async function generateMetadata({
             title,
             description,
             siteName: "Hard 'N' Heavy",
-            // images: [album?.imageSrc ?? ''],
+            images: [
+                album?.imageSrc
+                    ? `_next/image?url=${album?.imageSrc}&w=256&q=100`
+                    : '',
+            ],
         },
     };
 }
