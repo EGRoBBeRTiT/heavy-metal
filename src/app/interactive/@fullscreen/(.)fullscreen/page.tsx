@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 
-import { generateMetadata as generateFullscreenMetadata } from '@/app/interactive/fullscreen/page';
 import { FullScreenPage } from '@/_pages/FullScreenPage/FullScreenPage';
 import type { SearchParams } from '@/types/SearchParams.types';
+import { generateAlbumMetadata } from '@/utils';
 
 export function generateMetadata(props: SearchParams): Promise<Metadata> {
-    return generateFullscreenMetadata(props);
+    return generateAlbumMetadata(props);
 }
 
 const Page = () => <FullScreenPage />;
