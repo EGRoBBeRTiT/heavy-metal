@@ -1,9 +1,9 @@
 {
     "id": "/",
-    "lang": "en-US",
-    "short_name": "Best Rock Albums",
-    "name": "The Best Rock 'n' Roll Albums",
-    "description": "An application for viewing list of my favorite Rock 'n' Roll albums of all time",
+    "lang": "ru-RU",
+    "short_name": "Hard 'N' Heavy",
+    "name": "Hard 'N' Heavy — Сборник альбомов мировых икон в мире hard 'n' heavy и rock 'n' roll'а в лучшем качестве",
+    "description": "Сборник Hard 'N' Heavy — лучшие альбомы в лучшем качестве, расположенные в хронологическом порядке. Просмотр обложки, песен в необычном исполнении и, возможно, кое-что еще...",
     "prefer_related_applications": false,
     "icons": [
         {
