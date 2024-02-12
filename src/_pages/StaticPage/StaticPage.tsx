@@ -7,11 +7,8 @@ import styles from './StaticPage.module.scss';
 const cx = cnBind.bind(styles);
 
 export const StaticPage = () => (
-    <main>
-        <h1 className={cx('hidden')}>
-            List of My Favorite Rock &apos;N&apos; Roll Albums
-        </h1>
-        <section>
+    <div className={cx('page')}>
+        <section className={cx('section')}>
             <h1 className={cx('hidden')}>Albums list</h1>
             <AlbumList
                 width={5000}
@@ -20,5 +17,5 @@ export const StaticPage = () => (
                 withNextImage
             />
         </section>
-    </main>
+    </div>
 );

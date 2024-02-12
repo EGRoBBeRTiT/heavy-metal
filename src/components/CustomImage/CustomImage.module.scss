@@ -21,6 +21,12 @@
     );
 
     &.hidden {
+        position: absolute;
         display: none;
     }
+}
+
+.hidden {
+    position: absolute;
+    display: none;
 }

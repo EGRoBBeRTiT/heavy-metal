@@ -1,0 +1,17 @@
+.scroll-container {
+    overflow-y: auto;
+
+    @include max-height;
+}
+
+.content {
+    display: flex;
+    height: fit-content;
+    min-height: 100%;
+    padding-top: calc(var(--header-height) + var(--main-padding));
+    padding-bottom: calc(var(--player-height) + var(--main-padding));
+
+    @include desktop {
+        padding-inline: var(--main-padding);
+    }
+}

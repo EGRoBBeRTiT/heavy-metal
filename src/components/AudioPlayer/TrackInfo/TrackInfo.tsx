@@ -8,6 +8,7 @@ import { useAudioPlayerView } from '@/contexts/AudioPlayerViewProvider';
 import { appRoutes } from '@/routes';
 import { useAlbums } from '@/contexts/StoreProvider';
 import { useAudioPlayer } from '@/hooks/context/useAudioPlayer';
+import { TrackSlider } from '@/components/AudioPlayer/TrackSlider';
 
 import styles from './TrackInfo.module.scss';
 
@@ -55,6 +56,7 @@ export const TrackInfo = ({ className, ...props }: TrackInfoProps) => {
             )}
             {activeTrack && (
                 <div className={cx('info', view)}>
+                    {view === 'full' && <TrackSlider size="sm" />}
                     <h1>
                         <b>{activeTrack.title}</b>
                     </h1>

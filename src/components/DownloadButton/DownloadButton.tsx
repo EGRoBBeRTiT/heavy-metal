@@ -32,7 +32,7 @@ export const DownloadButton = ({
                 isIconOnly
                 variant="light"
                 radius="full"
-                size="lg"
+                size="md"
                 title={title}
                 aria-label={props['aria-label'] ?? 'Скачать трек'}
                 tabIndex={-1}

@@ -44,6 +44,14 @@ export const useAudioPlayerControl = () => {
 
     const index = useRef(initialTrackIndex);
 
+    if (!duration && audioRef.current.readyState > 0) {
+        setDuration(audioRef.current.duration || 0);
+    }
+
+    if (!isAudioLoaded && audioRef.current.readyState === 4) {
+        setIsAudioLoaded(true);
+    }
+
     const handlePlay = useCallback(async () => {
         setPlaybackState('playing');
         setActiveTrack(trackList[index.current]);
@@ -119,8 +127,6 @@ export const useAudioPlayerControl = () => {
     }, [handlePlay, trackList.length]);
 
     const handleSetListeners = useCallback(() => {
-        audioRef.current.preload = 'auto';
-
         audioRef.current.onplay = () => {
             setIsPlaying(true);
             setPlaybackState('playing');

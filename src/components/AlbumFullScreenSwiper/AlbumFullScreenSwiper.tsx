@@ -5,7 +5,7 @@
 import type { SwiperProps } from 'swiper/react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { CSSProperties } from 'react';
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Keyboard,
     Mousewheel,
@@ -15,14 +15,13 @@ import {
     Virtual,
 } from 'swiper/modules';
 import cnBind from 'classnames/bind';
-import { Spinner } from '@nextui-org/react';
 
 import { MainInfo } from '@/components/AlbumFullScreenSwiper/MainInfo';
 import { SongList } from '@/components/AlbumFullScreenSwiper/SongList';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
 import { useAlbums } from '@/contexts/StoreProvider';
-import { LazyImage } from '@/components/LazyImage';
+import { CustomImage } from '@/components/CustomImage';
 import 'swiper/css';
 
 import styles from './AlbumFullScreenSwiper.module.scss';
@@ -110,26 +109,19 @@ export const AlbumFullScreenSwiper = React.memo(
                                             'swiper-zoom-container',
                                         )}
                                     >
-                                        <Suspense
-                                            key={index}
-                                            fallback={<Spinner />}
-                                        >
-                                            <LazyImage
-                                                loading="lazy"
-                                                decoding="async"
-                                                src={imageSrc}
-                                                alt={album}
-                                                quality={100}
-                                                className={cx(
-                                                    'image',
-                                                    'swiper-lazy',
-                                                )}
-                                                unoptimized={
-                                                    !isMobile && !isTablet
-                                                }
-                                                fill
-                                            />
-                                        </Suspense>
+                                        <CustomImage
+                                            loading="lazy"
+                                            src={imageSrc}
+                                            alt={album}
+                                            quality={100}
+                                            className={cx(
+                                                'image',
+                                                'swiper-lazy',
+                                            )}
+                                            unoptimized={!isMobile && !isTablet}
+                                            fill
+                                            placeholder="blur"
+                                        />
                                     </div>
                                     <div className="swiper-lazy-preloader swiper-lazy-preloader-white" />
                                 </SwiperSlide>

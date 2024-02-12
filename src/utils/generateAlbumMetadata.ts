@@ -27,14 +27,14 @@ export const generateAlbumMetadata = async ({
                     width: '750px',
                     height: '750px',
                     url: album?.imageSrc
-                        ? `_next/image?url=${album?.imageSrc}&w=750&q=00`
+                        ? `/_next/image?url=${album?.imageSrc}&w=750&q=100`
                         : '',
                 },
                 {
                     width: '200px',
                     height: '200px',
                     url: album?.imageSrc
-                        ? `_next/image?url=${album?.imageSrc}&w=256&q=100`
+                        ? `/_next/image?url=${album?.imageSrc}&w=256&q=100`
                         : '',
                 },
             ],

@@ -1,0 +1,14 @@
+.avatar {
+    z-index: 2;
+
+    --avatar-size: 40px;
+
+    min-width: var(--avatar-size);
+    min-height: var(--avatar-size);
+    cursor: pointer;
+    margin-inline-start: auto;
+
+    @include tablet {
+        --avatar-size: 32px;
+    }
+}

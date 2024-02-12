@@ -1,8 +1,14 @@
 .loud-slider {
     width: 200px;
+    filter: opacity(0.5);
+    transition: filter 200ms ease-in-out;
 
     &.compact {
         width: 100%;
+    }
+
+    @include hover {
+        filter: opacity(1);
     }
 }
 

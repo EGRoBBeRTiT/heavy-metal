@@ -1,23 +1,30 @@
 import { redirect } from 'next/navigation';
-import type { Metadata } from 'next';
+import type { Metadata, ResolvingMetadata } from 'next';
 
 import { appRoutes } from '@/routes';
 import { getLoggedProfile } from '@/api/getLoggedProfile';
 import { isAdminOrStaff } from '@/utils/isAdminOrStaff';
 import { PlayerPage } from '@/_pages/PlayerPage';
+import type { SearchParams } from '@/types/SearchParams.types';
 
-export const metadata: Metadata = {
-    title: "Hard 'N' Heavy | Плеер",
-    description:
-        'Слушайте оригинальную музыку онлайн бесплатно и в хорошем качестве',
-    openGraph: {
+export async function generateMetadata(
+    props: SearchParams,
+    parent: ResolvingMetadata,
+): Promise<Metadata> {
+    const parentOpenGraph = (await parent).openGraph ?? {};
+
+    return {
         title: "Hard 'N' Heavy | Плеер",
         description:
             'Слушайте оригинальную музыку онлайн бесплатно и в хорошем качестве',
-        siteName: "Hard 'N' Heavy",
-        images: ['/logo/logo-rect-256.png'],
-    },
-};
+        openGraph: {
+            ...parentOpenGraph,
+            title: "Hard 'N' Heavy | Плеер",
+            description:
+                'Слушайте оригинальную музыку онлайн бесплатно и в хорошем качестве',
+        },
+    };
+}
 
 const Page = async () => {
     const profile = await getLoggedProfile();

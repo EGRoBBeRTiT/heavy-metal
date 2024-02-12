@@ -31,4 +31,8 @@
     &.compact {
         color: hsl(var(--nextui-foreground-400));
     }
+
+    &.full {
+        justify-content: flex-end;
+    }
 }

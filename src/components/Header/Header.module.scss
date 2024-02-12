@@ -1,13 +1,26 @@
 .header {
-    position: sticky;
+    /* //? На мобилке не работает просто position: fixed. Вот решение: */
+    position: fixed !important;
+    overflow: hidden !important;
+
+    @include desktop {
+        min-height: 80px;
+    }
+
+    /* Конец решения */
+
+    /* stylelint-disable-next-line order/properties-order */
     top: 0;
     left: 0;
     z-index: var(--header-z-index);
     display: flex;
     flex-basis: 60px;
+    gap: 32px;
     justify-content: center;
     align-items: center;
-    padding: var(--main-padding);
+    width: 100%;
+    padding-inline: var(--main-padding);
+    padding-block: var(--medium-padding);
     text-align: center;
     background-color: hsl(0deg 0% 0% / 42.5%);
     border-bottom: 1px solid hsl(var(--nextui-foreground-200));
@@ -15,26 +28,27 @@
         rgb(50 50 93 / 25%) 0 6px 12px -2px,
         rgb(0 0 0 / 30%) 0 3px 7px -3px;
     backdrop-filter: blur(10px);
+
+    &::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 400px;
+        height: 100%;
+        content: '';
+        background: linear-gradient(
+            to right,
+            hsl(var(--nextui-background)),
+            hsl(var(--nextui-background)),
+            transparent
+        );
+    }
 }
 
 button.back-button {
     z-index: 2;
     margin-inline-end: auto;
-}
-
-.avatar {
-    z-index: 2;
-
-    --avatar-size: 40px;
-
-    min-width: var(var(--avatar-size));
-    min-height: var(--avatar-size);
-    cursor: pointer;
-    margin-inline-start: auto;
-
-    @include tablet {
-        --avatar-size: 32px;
-    }
 }
 
 .title {
@@ -46,4 +60,11 @@ button.back-button {
     @include tablet {
         font-size: 1.5rem;
     }
+}
+
+.player-container {
+    width: 100%;
+    padding-inline: var(--main-padding);
+    border-inline-start: 1px solid hsl(var(--nextui-foreground-100));
+    border-inline-end: 1px solid hsl(var(--nextui-foreground-100));
 }

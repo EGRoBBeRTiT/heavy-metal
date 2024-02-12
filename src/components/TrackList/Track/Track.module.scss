@@ -79,7 +79,7 @@
 
     @include hover {
         .play-pause-icon,
-        .download-button {
+        .more-button {
             transform: scale(1);
             filter: opacity(1);
         }
@@ -93,17 +93,8 @@
     overflow: hidden;
     border-radius: 4px;
     filter: opacity(1);
-    transition: all 200ms ease-in-out;
     aspect-ratio: 1;
     object-fit: cover;
-
-    &:active {
-        filter: opacity(0.1);
-    }
-
-    @include hover {
-        filter: opacity(0.5);
-    }
 }
 
 .add-info {
@@ -119,7 +110,7 @@
     }
 }
 
-.download-button {
+.more-button {
     transition: all 200ms ease-in-out;
     margin-inline-start: auto;
 

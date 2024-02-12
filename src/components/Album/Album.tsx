@@ -11,6 +11,7 @@ import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
 import { PlayPauseIcon } from '@/components/PlayPauseIcon';
 import { useAlbums } from '@/contexts/StoreProvider';
 import { useAudioPlayer } from '@/hooks/context/useAudioPlayer';
+import { CustomImage } from '@/components/CustomImage';
 
 import styles from './Album.module.scss';
 
@@ -92,13 +93,14 @@ export const Album = React.memo(
                     offset={60}
                 >
                     <div className={cx('image-container')}>
-                        <Image
+                        <CustomImage
                             className={cx('image')}
                             src={imageSrc}
                             alt={album}
                             width={200}
                             height={200}
                             quality={100}
+                            placeholder="blur"
                         />
                     </div>
                 </Tooltip>

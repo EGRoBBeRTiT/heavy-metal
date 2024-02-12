@@ -1,17 +1,24 @@
-import type { Metadata } from 'next';
+import type { Metadata, ResolvingMetadata } from 'next';
 
 import { StaticPage } from '@/_pages/StaticPage/StaticPage';
+import type { SearchParams } from '@/types/SearchParams.types';
 
-export const metadata: Metadata = {
-    title: 'Статический просмотр альбомов',
-    description: 'Альбомы, и ничего лишнего без потери качества',
-    openGraph: {
+export async function generateMetadata(
+    props: SearchParams,
+    parent: ResolvingMetadata,
+): Promise<Metadata> {
+    const parentOpenGraph = (await parent).openGraph ?? {};
+
+    return {
         title: 'Статический просмотр альбомов',
         description: 'Альбомы, и ничего лишнего без потери качества',
-        siteName: "Hard 'N' Heavy",
-        images: ['/logo/logo-rect-256.png'],
-    },
-};
+        openGraph: {
+            ...parentOpenGraph,
+            title: 'Статический просмотр альбомов',
+            description: 'Альбомы, и ничего лишнего без потери качества',
+        },
+    };
+}
 
 const Page = () => <StaticPage />;
 

@@ -4,21 +4,14 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import type SwiperProps from 'swiper';
 import Image from 'next/image';
 import type { CSSProperties } from 'react';
-import React, {
-    Suspense,
-    useCallback,
-    useEffect,
-    useRef,
-    useState,
-} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { EffectCoverflow, Keyboard, Mousewheel } from 'swiper/modules';
 import cnBind from 'classnames/bind';
 
 import { cloisterBlack } from '@/styles/fonts';
 import { appRoutes } from '@/routes';
 import { useEnterListener } from '@/hooks/useEnterListener';
-import { AlbumSkeleton } from '@/components/Album';
-import { LazyImage } from '@/components/LazyImage';
+import { CustomImage } from '@/components/CustomImage';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
 import { useAlbums } from '@/contexts/StoreProvider';
 import { useHistory } from '@/hooks/context/useHistory';
@@ -102,42 +95,30 @@ export const AlbumCowerFlowSwiper = React.memo(
                                         hidden: !canShow,
                                     })}
                                 >
-                                    <Suspense
-                                        fallback={
-                                            <AlbumSkeleton
-                                                className={cx('skeleton')}
-                                            />
+                                    <CustomImage
+                                        id={`image-${index}`}
+                                        loading="lazy"
+                                        decoding="async"
+                                        className={cx(
+                                            'class-10',
+                                            'swiper-lazy',
+                                            'image',
+                                            { hidden: !canShow },
+                                        )}
+                                        hidden={!canShow}
+                                        src={album.imageSrc}
+                                        alt={album.album}
+                                        width={isMobile || isTablet ? 300 : 750}
+                                        height={
+                                            isMobile || isTablet ? 300 : 750
                                         }
-                                    >
-                                        <LazyImage
-                                            id={`image-${index}`}
-                                            loading="lazy"
-                                            decoding="async"
-                                            className={cx(
-                                                'class-10',
-                                                'swiper-lazy',
-                                                'image',
-                                                { hidden: !canShow },
-                                            )}
-                                            hidden={!canShow}
-                                            src={album.imageSrc}
-                                            alt={album.album}
-                                            width={
-                                                isMobile || isTablet ? 300 : 750
-                                            }
-                                            height={
-                                                isMobile || isTablet ? 300 : 750
-                                            }
-                                            onClick={() => {
-                                                replace(
-                                                    appRoutes.fullscreen(
-                                                        album.id,
-                                                    ),
-                                                );
-                                            }}
-                                            withReflect={canShow}
-                                        />
-                                    </Suspense>
+                                        onClick={() => {
+                                            replace(
+                                                appRoutes.fullscreen(album.id),
+                                            );
+                                        }}
+                                        withReflect={canShow}
+                                    />
                                     <div
                                         className="swiper-lazy-preloader swiper-lazy-preloader-white"
                                         hidden={!canShow}

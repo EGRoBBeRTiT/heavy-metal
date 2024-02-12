@@ -38,7 +38,10 @@ export const useUpdateSessionMetaData = () => {
                           album: album?.album ?? '',
                           artwork: [
                               {
-                                  src: album?.imageSrc ?? '',
+                                  src: album?.imageSrc
+                                      ? `/_next/image?url=${album?.imageSrc}&w=750&q=70`
+                                      : '',
+                                  type: 'image/webp',
                               },
                           ],
                       })

@@ -1,3 +1,15 @@
+.page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: calc(var(--player-z-index) + 1);
+    width: 100vw;
+    overflow-y: auto;
+    background-color: hsl(var(--nextui-background));
+
+    @include max-height;
+}
+
 .hidden {
     position: absolute;
     visibility: hidden;

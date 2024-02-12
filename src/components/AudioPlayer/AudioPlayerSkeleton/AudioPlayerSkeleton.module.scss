@@ -1,0 +1,20 @@
+.skeleton {
+    &.mobile {
+        /* //? На мобилке не работает просто position: fixed. Вот решение: */
+        position: fixed !important;
+        overflow: hidden !important;
+
+        /* Конец решения */
+
+        /* stylelint-disable-next-line order/properties-order */
+        bottom: 0;
+        left: 0;
+        z-index: var(--player-z-index);
+        width: 100%;
+        height: 62px;
+        background-color: hsl(var(--nextui-background) / 40%);
+        box-shadow: rgb(0 0 0 / 56%) 0 22px 70px 4px;
+        backdrop-filter: blur(16px);
+        border-block-start: 1px solid hsl(var(--nextui-foreground-200));
+    }
+}

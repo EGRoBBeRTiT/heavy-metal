@@ -2,15 +2,12 @@ import cnBind from 'classnames/bind';
 import type { DetailedHTMLProps } from 'react';
 import React, { useCallback } from 'react';
 import Image from 'next/image';
-import { Tooltip } from '@nextui-org/react';
 
 import type { Song } from '@/shared/albums';
 import { useAlbums } from '@/contexts/StoreProvider';
 import { PlayPauseIcon } from '@/components/PlayPauseIcon';
-import { DownloadButton } from '@/components/DownloadButton';
 import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
-import { useHistory } from '@/hooks/context/useHistory';
-import { appRoutes } from '@/routes';
+import { TrackMorePopover } from '@/components/TrackList/Track/TrackMorePopover';
 
 import styles from './Track.module.scss';
 
@@ -36,7 +33,6 @@ export const Track = React.memo(
         isActive,
         ...props
     }: TrackProps) => {
-        const { push } = useHistory();
         const { isMobile } = useScreenConfig();
         const { albumsMap } = useAlbums();
         const album = albumsMap.get(song.albumId);
@@ -65,23 +61,16 @@ export const Track = React.memo(
                         />
                     )}
                     {album?.imageSrc && (
-                        <Tooltip content="Открыть альбом">
-                            <Image
-                                loading="lazy"
-                                src={album?.imageSrc}
-                                width={50}
-                                height={50}
-                                alt={`${album.band} ${album.album ?? ''}`}
-                                className={cx('cover')}
-                                title="Открыть альбом"
-                                aria-label="Открыть альбом"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-
-                                    push(appRoutes.fullscreen(album.id));
-                                }}
-                            />
-                        </Tooltip>
+                        <Image
+                            loading="lazy"
+                            src={album?.imageSrc}
+                            width={50}
+                            height={50}
+                            alt={`${album.band} ${album.album ?? ''}`}
+                            className={cx('cover')}
+                            title="Открыть альбом"
+                            aria-label="Открыть альбом"
+                        />
                     )}
                     <div className={cx('info')}>
                         <h1>
@@ -95,10 +84,10 @@ export const Track = React.memo(
                                 : ''}
                         </p>
                     </div>
-                    <DownloadButton
-                        tabIndex={-1}
-                        href={song?.src}
-                        className={cx('download-button')}
+                    <TrackMorePopover
+                        className={cx('more-button')}
+                        albumId={album?.id ?? ''}
+                        trackSrc={song.src}
                     />
                 </div>
             </li>

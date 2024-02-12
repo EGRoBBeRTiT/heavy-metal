@@ -4,9 +4,9 @@
     left: 0;
     z-index: 10;
     width: 100vw;
-    height: 100dvh;
-    min-height: 100svh;
-    max-height: 100vh;
+    contain: content;
+
+    @include max-height;
 
     button[aria-label='Close'] {
         z-index: 10;

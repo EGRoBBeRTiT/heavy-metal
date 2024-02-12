@@ -2,6 +2,7 @@
     display: flex;
     gap: var(--main-padding);
     align-items: center;
+    width: 100%;
     font-size: 0.875rem;
 }
 
@@ -33,10 +34,19 @@
 }
 
 .info {
+    width: 100%;
+    text-align: start;
+
     &.mobile {
         h1,
         p {
             @include cut-for-n-rows(1);
+        }
+    }
+
+    &.full {
+        h1 {
+            margin-block-start: var(--medium-padding);
         }
     }
 }

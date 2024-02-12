@@ -30,7 +30,7 @@ export const ListButton = ({
                 isIconOnly
                 variant="light"
                 radius="full"
-                size="lg"
+                size="md"
                 title={title}
                 aria-label={
                     props['aria-label'] ?? 'Переключиться к списку песен'

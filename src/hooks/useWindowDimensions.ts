@@ -30,6 +30,8 @@ const getWindowConfig = (): WindowConfig => {
     };
 
     switch (true) {
+        case !innerWidth:
+            break;
         case innerWidth >= SCREEN_DESKTOP_MAX:
             config.isDesktop = true;
             config.isLargeMonitor = true;
@@ -49,7 +51,6 @@ const getWindowConfig = (): WindowConfig => {
             config.isMobile = true;
 
             break;
-
         default:
             break;
     }

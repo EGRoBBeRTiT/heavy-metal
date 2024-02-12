@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import type React from 'react';
+import cnBind from 'classnames/bind';
 
 import '@/styles/tailwind.css';
 import '@/styles/globalicons.css';
@@ -11,6 +12,10 @@ import { Header } from '@/components/Header';
 import { getAlbums } from '@/api/getAlbums';
 import { isAdminOrStaff } from '@/utils/isAdminOrStaff';
 import { getLoggedProfile } from '@/api/getLoggedProfile';
+
+import styles from './layout.module.scss';
+
+const cx = cnBind.bind(styles);
 
 export const metadata: Metadata = {
     metadataBase: new URL('https://hardnheavy.vercel.app'),
@@ -47,7 +52,14 @@ export const metadata: Metadata = {
         description:
             "Сборник Hard 'N' Heavy — лучшие альбомы в лучшем качестве, расположенные в хронологическом порядке. Просмотр обложки, песен в необычном исполнении и, возможно, кое-что еще...",
         siteName: "Hard 'N' Heavy",
-        images: ['/logo/logo-rect-256.png'],
+        images: [
+            {
+                width: '64px',
+                height: '64px',
+                type: 'image/png',
+                url: '/logo/logo-rect-256.png',
+            },
+        ],
     },
 };
 
@@ -64,8 +76,10 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
                     albums={albums}
                     withPlayer={isAdminOrStaff(profile)}
                 >
-                    <Header />
-                    {children}
+                    <Header withPlayer={isAdminOrStaff(profile)} />
+                    <div className={cx('scroll-container')}>
+                        <div className={cx('content')}>{children}</div>
+                    </div>
                 </Providers>
             </body>
         </html>

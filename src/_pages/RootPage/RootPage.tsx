@@ -25,9 +25,6 @@ export const RootPage = () => {
     return (
         <>
             <div className={cx('main', cloisterBlack.className)}>
-                <div className={cx(cloisterBlack.className)}>
-                    <h1>My favorite Rock &apos;N&apos; Roll Albums</h1>
-                </div>
                 <nav>
                     <ul>
                         <li>
@@ -42,7 +39,7 @@ export const RootPage = () => {
                                     router.push(appRoutes.interactive());
                                 }}
                             >
-                                Open Interactive View
+                                Interactive View
                             </Link>
                         </li>
                         <li>
@@ -57,7 +54,7 @@ export const RootPage = () => {
                                     router.push(appRoutes.static());
                                 }}
                             >
-                                Open Static View
+                                Static View
                             </Link>
                         </li>
                         {showPlayerLink && (
@@ -73,7 +70,7 @@ export const RootPage = () => {
                                         router.push(appRoutes.player());
                                     }}
                                 >
-                                    Open Player
+                                    Player
                                 </Link>
                             </li>
                         )}

@@ -1,0 +1,8 @@
+.logo-icon {
+    width: 74px;
+    height: fit-content;
+
+    @include tablet {
+        width: 56px;
+    }
+}

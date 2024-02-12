@@ -89,9 +89,14 @@ export const TrackSlider = ({
     return (
         <div
             {...props}
-            className={cx('slider-container', className, {
-                animate: canChangeSliderValue && canAnimate.current,
-            })}
+            className={cx(
+                'slider-container',
+                className,
+                {
+                    animate: canChangeSliderValue && canAnimate.current,
+                },
+                view,
+            )}
         >
             <Slider
                 aria-labelledby="time-track"
@@ -121,9 +126,17 @@ export const TrackSlider = ({
                 }}
             />
             {view !== 'mobile' && (
-                <div className={cx('time', view)} aria-label="vdfv">
-                    <div>{convertNumberToTimeString(currentTime)}</div>
-                    <div>{convertNumberToTimeString(duration)}</div>
+                <div className={cx('time', view)}>
+                    {view === 'full' ? (
+                        <div>{`${convertNumberToTimeString(
+                            currentTime,
+                        )} / ${convertNumberToTimeString(duration)}`}</div>
+                    ) : (
+                        <>
+                            <div>{convertNumberToTimeString(currentTime)}</div>
+                            <div>{convertNumberToTimeString(duration)}</div>
+                        </>
+                    )}
                 </div>
             )}
         </div>

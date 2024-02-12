@@ -1,23 +1,28 @@
 .aside {
-    position: sticky;
-    bottom: 0;
-    left: 0;
-    z-index: var(--player-z-index);
-    display: flex;
-    flex-direction: column;
-    gap: var(--medium-padding);
-    width: calc(100%);
-    padding: var(--small-padding);
-    background-color: hsl(var(--nextui-background) / 40%);
-    border-radius: 8px 8px 0 0;
-    box-shadow: rgb(0 0 0 / 56%) 0 22px 70px 4px;
-    backdrop-filter: blur(16px);
-    padding-inline: var(--medium-padding);
-    border-block-start: 1px solid hsl(var(--nextui-foreground-200));
-    transition: padding 50ms ease;
+    &.compact,
+    &.mobile {
+        /* //? На мобилке не работает просто position: fixed. Вот решение: */
+        position: fixed !important;
+        overflow: hidden !important;
 
-    @include hover {
-        padding-block-start: var(--main-padding);
+        /* Конец решения */
+
+        /* stylelint-disable-next-line order/properties-order */
+        bottom: 0;
+        left: 0;
+        z-index: var(--player-z-index);
+        display: flex;
+        flex-direction: column;
+        gap: var(--medium-padding);
+        width: 100%;
+        padding: var(--small-padding);
+        background-color: hsl(var(--nextui-background) / 40%);
+        border-radius: 8px 8px 0 0;
+        box-shadow: rgb(0 0 0 / 56%) 0 22px 70px 4px;
+        backdrop-filter: blur(16px);
+        transition: padding 50ms ease;
+        padding-inline: var(--medium-padding);
+        border-block-start: 1px solid hsl(var(--nextui-foreground-200));
     }
 
     &.compact {
@@ -30,13 +35,12 @@
     }
 
     &.mobile {
-        position: sticky;
-        bottom: 0;
-        left: 0;
         padding: 0;
         border-radius: 0;
-        transform: translateX(0);
-        padding-block-start: 0;
+    }
+
+    &.full {
+        width: 100%;
     }
 }
 

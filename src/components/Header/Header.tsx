@@ -1,30 +1,25 @@
 'use client';
 
 import cnBind from 'classnames/bind';
-import { useEffect, useRef, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { Suspense, cache, useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { Button } from '@nextui-org/button';
 import type { AvatarProps } from '@nextui-org/react';
-import {
-    Avatar,
-    Listbox,
-    ListboxItem,
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-    Tooltip,
-} from '@nextui-org/react';
+import { Tooltip } from '@nextui-org/react';
 
-import { cloisterBlack } from '@/styles/fonts';
 import { appRoutes } from '@/routes';
-import { signOut } from '@/auth';
 import { useProfile } from '@/contexts/StoreProvider';
 import { getStringHash } from '@/utils';
-import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
 import { isAdminOrStaff } from '@/utils/isAdminOrStaff';
 import { useHistory } from '@/hooks/context/useHistory';
+import { useAudioPlayerView } from '@/contexts/AudioPlayerViewProvider';
+import { LazyAudioPlayer } from '@/components/AudioPlayer';
+import { useScreenConfig } from '@/contexts/ScreenConfigProvider';
 
 import styles from './Header.module.scss';
+import { LazyLogo } from './Logo';
+import { LazyTitle } from './Title';
+import { LazyAvatarPopover } from './AvatarPopover';
 
 const cx = cnBind.bind(styles);
 
@@ -36,10 +31,22 @@ const AVATAR_COLORS: AvatarProps['color'][] = [
     'warning',
 ];
 
-export const Header = () => {
-    const profile = useProfile();
+const setHeaderHeight = cache((height: number) => {
+    document.documentElement.style.setProperty(
+        '--header-height',
+        `${height}px`,
+    );
+});
 
-    const { isMobile, isTablet } = useScreenConfig();
+export interface HeaderProps {
+    withPlayer?: boolean;
+}
+
+export const Header = ({ withPlayer }: HeaderProps) => {
+    const profile = useProfile();
+    const { view } = useAudioPlayerView();
+    const { isMobile } = useScreenConfig();
+    const [mounted, setMounted] = useState(false);
 
     const nameForAvatar = profile
         ? `${profile.firstName?.[0] ?? ''}${profile.lastName?.[0] ?? ''}`
@@ -55,35 +62,39 @@ export const Header = () => {
 
     const isPrimary = isAdminOrStaff(profile);
 
-    const [popoverOpened, setPopoverOpened] = useState(false);
     const pathname = usePathname();
-    const router = useRouter();
 
     const [showBackButton, setShowBackButton] = useState(false);
     const { back } = useHistory();
-    const headerRef = useRef<HTMLElement>(null);
-
-    useEffect(() => {
-        document.documentElement.style.setProperty(
-            '--header-height',
-            `${(headerRef.current?.clientHeight ?? 0) + 1}px`,
-        );
-    }, []);
 
     useEffect(() => {
         setShowBackButton(pathname !== appRoutes.root());
     }, [pathname]);
 
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
     return (
-        <header ref={headerRef} className={cx('header')}>
+        <header
+            ref={(node) => {
+                setHeaderHeight(node?.offsetHeight || 0);
+            }}
+            className={cx('header')}
+        >
+            {!isMobile && mounted && (
+                <Suspense fallback={null}>
+                    <LazyLogo />
+                </Suspense>
+            )}
             {showBackButton && (
                 <Tooltip content="Назад">
                     <Button
                         onClick={back}
                         variant="light"
-                        size="lg"
+                        size="md"
                         className={cx('back-button')}
-                        isIconOnly={isMobile || isTablet}
+                        isIconOnly
                     >
                         <span className="material-symbols-outlined" aria-hidden>
                             keyboard_backspace
@@ -91,60 +102,26 @@ export const Header = () => {
                     </Button>
                 </Tooltip>
             )}
-            <h1 className={cx('title', cloisterBlack.className)}>
-                The Best Rock &apos;n&apos; Roll Albums
-            </h1>
-            <Popover
-                showArrow
-                placement="top-end"
-                isOpen={popoverOpened}
-                onOpenChange={(open) => setPopoverOpened(open)}
-            >
-                <PopoverTrigger>
-                    <Avatar
-                        className={cx('avatar')}
+            {view === 'full' && withPlayer ? (
+                <div className={cx('player-container')}>
+                    <Suspense fallback={null}>
+                        <LazyAudioPlayer />
+                    </Suspense>
+                </div>
+            ) : (
+                <Suspense fallback={<div className={cx('title')} />}>
+                    <LazyTitle className={cx('title')} />
+                </Suspense>
+            )}
+            {mounted && (
+                <Suspense fallback={<div />}>
+                    <LazyAvatarPopover
                         name={nameForAvatar}
-                        color={avatarColor}
-                        size="md"
                         isBordered={isPrimary}
-                        isFocusable
-                        aria-controls="avatar-popover"
-                        role="button"
+                        color={avatarColor}
                     />
-                </PopoverTrigger>
-                <PopoverContent>
-                    <Listbox
-                        id="avatar-popover"
-                        aria-label="Actions"
-                        onAction={() => setPopoverOpened(false)}
-                    >
-                        {profile ? (
-                            <ListboxItem
-                                key="delete"
-                                className="text-danger"
-                                color="danger"
-                                onClick={() => {
-                                    void signOut();
-                                }}
-                            >
-                                Выйти
-                            </ListboxItem>
-                        ) : (
-                            <ListboxItem
-                                key="login"
-                                href={appRoutes.login()}
-                                onClick={(e) => {
-                                    e.preventDefault();
-
-                                    router.push(appRoutes.login());
-                                }}
-                            >
-                                Войти
-                            </ListboxItem>
-                        )}
-                    </Listbox>
-                </PopoverContent>
-            </Popover>
+                </Suspense>
+            )}
         </header>
     );
 };
