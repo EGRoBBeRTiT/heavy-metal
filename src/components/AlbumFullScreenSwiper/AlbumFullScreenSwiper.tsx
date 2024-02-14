@@ -6,14 +6,7 @@ import type { SwiperClass, SwiperProps } from 'swiper/react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { CSSProperties } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
-import {
-    Keyboard,
-    Mousewheel,
-    Pagination,
-    Zoom,
-    Scrollbar,
-    Virtual,
-} from 'swiper/modules';
+import { Keyboard, Zoom, Virtual } from 'swiper/modules';
 import cnBind from 'classnames/bind';
 
 import { MainInfo } from '@/components/AlbumFullScreenSwiper/MainInfo';
@@ -42,19 +35,11 @@ export interface AlbumFullScreenSwiperProps
 
 const SWIPER_CONFIG: SwiperProps = {
     slidesPerView: 1,
-    pagination: {
-        dynamicBullets: true,
-        clickable: true,
-    },
-    modules: [Keyboard, Pagination, Zoom, Scrollbar, Mousewheel, Virtual],
-    mousewheel: true,
+    modules: [Keyboard, Zoom, Virtual],
     centeredSlides: true,
     zoom: true,
     keyboard: {
         enabled: true,
-    },
-    scrollbar: {
-        hide: true,
     },
     virtual: true,
 };
@@ -87,6 +72,7 @@ export const AlbumFullScreenSwiper = React.memo(
 
             useEffect(() => {
                 if (initialSlide !== activeIndexRef.current) {
+                    activeIndexRef.current = initialSlide;
                     swiperRef.current?.slideTo(initialSlide);
                 }
             }, [initialSlide]);

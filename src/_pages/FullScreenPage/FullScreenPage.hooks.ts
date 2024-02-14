@@ -1,5 +1,5 @@
 import type { MutableRefObject } from 'react';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export const useFullScreen = (
     element?: MutableRefObject<HTMLElement | null>,
@@ -7,10 +7,12 @@ export const useFullScreen = (
     onError?: () => void,
     onClose?: () => void,
 ) => {
+    const onCloseRef = useRef(onClose);
+    onCloseRef.current = onClose;
     useEffect(() => {
         const screenChangeListener = () => {
             if (!document.fullscreenElement) {
-                onClose?.();
+                onCloseRef.current?.();
             }
         };
 
@@ -22,7 +24,13 @@ export const useFullScreen = (
                 screenChangeListener,
             );
         };
-    }, [onClose]);
+    }, []);
+
+    const onErrorRef = useRef(onError);
+    onErrorRef.current = onError;
+
+    const onSuccessRef = useRef(onSuccess);
+    onSuccessRef.current = onSuccess;
 
     useEffect(() => {
         if (
@@ -34,15 +42,15 @@ export const useFullScreen = (
             element?.current
                 .requestFullscreen({ navigationUI: 'auto' })
                 .then(() => {
-                    onSuccess?.();
+                    onSuccessRef.current?.();
                 })
                 .catch((error) => {
-                    onError?.();
+                    onErrorRef.current?.();
                     // eslint-disable-next-line no-console
                     console.error(error);
                 });
         } else if (document.fullscreenElement) {
             void document.exitFullscreen();
         }
-    }, [element, onError, onSuccess]);
+    }, [element]);
 };

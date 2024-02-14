@@ -36,35 +36,35 @@ export const HistoryProvider = ({ children }: { children: ReactNode }) => {
 
     const historyRef = useRef<string[]>(getHistoryFromSession());
 
-    const routerRef = useRef(router);
-    routerRef.current = router;
+    // const routerRef = useRef(router);
+    // router = router;
 
     const value = useMemo<HistoryContextProps>(
         () => ({
             back: () => {
                 if (historyRef.current.length > 1) {
-                    routerRef.current.back();
+                    router.back();
                 } else {
                     historyRef.current[0] = appRoutes.root();
                     setHistoryToStorage(historyRef.current);
 
-                    routerRef.current.replace(appRoutes.root());
+                    router.replace(appRoutes.root());
                 }
             },
             push: (path: string, options?: NavigateOptions) => {
-                routerRef.current.push(path, options);
+                router.push(path, options);
             },
             replace: (path: string, options?: NavigateOptions) => {
                 historyRef.current[historyRef.current.length - 1] = path;
                 setHistoryToStorage(historyRef.current);
 
-                routerRef.current.replace(path, options);
+                router.replace(path, options);
             },
             forward: () => {
-                routerRef.current.forward();
+                router.forward();
             },
         }),
-        [],
+        [router],
     );
 
     useEffect(() => {
