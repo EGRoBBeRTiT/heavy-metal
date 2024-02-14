@@ -2,10 +2,10 @@
 
 /* eslint-disable react/no-unused-prop-types */
 
-import type { SwiperProps } from 'swiper/react';
+import type { SwiperClass, SwiperProps } from 'swiper/react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import type { CSSProperties } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     Keyboard,
     Mousewheel,
@@ -65,11 +65,13 @@ export const AlbumFullScreenSwiper = React.memo(
             { onActiveIndexChange, initialSlide = 0, className, ...props },
             ref,
         ) => {
+            const swiperRef = useRef<SwiperClass | null>(null);
             const { albums } = useAlbums();
 
             const { isMobile, isTablet } = useScreenConfig();
             const [zoomed, setZoomed] = useState(false);
             const [activeIndex, setActiveIndex] = useState(initialSlide);
+            const activeIndexRef = useRef(activeIndex);
 
             const [styles, setStyle] = useState<CSSProperties>({});
 
@@ -82,6 +84,12 @@ export const AlbumFullScreenSwiper = React.memo(
                     });
                 }
             }, [height, width]);
+
+            useEffect(() => {
+                if (initialSlide !== activeIndexRef.current) {
+                    swiperRef.current?.slideTo(initialSlide);
+                }
+            }, [initialSlide]);
 
             return (
                 <div
@@ -96,8 +104,12 @@ export const AlbumFullScreenSwiper = React.memo(
                             }}
                             initialSlide={initialSlide}
                             onActiveIndexChange={(swiper) => {
+                                activeIndexRef.current = swiper.activeIndex;
                                 setActiveIndex(swiper.activeIndex);
                                 onActiveIndexChange?.(swiper.activeIndex ?? 0);
+                            }}
+                            onSwiper={(swiper) => {
+                                swiperRef.current = swiper;
                             }}
                             {...SWIPER_CONFIG}
                         >

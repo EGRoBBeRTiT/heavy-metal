@@ -1,5 +1,5 @@
 import { useMemo, type ReactNode, useEffect, useRef } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { NavigateOptions } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 import type { HistoryContextProps } from '@/contexts/HistoryContext';
@@ -21,9 +21,19 @@ const getHistoryFromSession = (): string[] => {
     return [];
 };
 
+const setHistoryToStorage = (history: string[]) => {
+    sessionStorage.setItem(LocalStorageItem.HISTORY, JSON.stringify(history));
+};
+
 export const HistoryProvider = ({ children }: { children: ReactNode }) => {
     const router = useRouter();
     const pathname = usePathname();
+    const searchParams = useSearchParams();
+
+    const fullPathName = searchParams.toString()
+        ? `${pathname}?${searchParams.toString()}`
+        : pathname;
+
     const historyRef = useRef<string[]>(getHistoryFromSession());
 
     const routerRef = useRef(router);
@@ -35,6 +45,9 @@ export const HistoryProvider = ({ children }: { children: ReactNode }) => {
                 if (historyRef.current.length > 1) {
                     routerRef.current.back();
                 } else {
+                    historyRef.current[0] = appRoutes.root();
+                    setHistoryToStorage(historyRef.current);
+
                     routerRef.current.replace(appRoutes.root());
                 }
             },
@@ -43,6 +56,7 @@ export const HistoryProvider = ({ children }: { children: ReactNode }) => {
             },
             replace: (path: string, options?: NavigateOptions) => {
                 historyRef.current[historyRef.current.length - 1] = path;
+                setHistoryToStorage(historyRef.current);
 
                 routerRef.current.replace(path, options);
             },
@@ -56,23 +70,16 @@ export const HistoryProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         const last = historyRef.current[historyRef.current.length - 1];
 
-        if (last !== pathname) {
-            historyRef.current = [...historyRef.current, pathname];
-            sessionStorage.setItem(
-                LocalStorageItem.HISTORY,
-                JSON.stringify(historyRef.current),
-            );
+        if (last !== fullPathName) {
+            historyRef.current = [...historyRef.current, fullPathName];
+            setHistoryToStorage(historyRef.current);
         }
-    }, [pathname]);
+    }, [fullPathName]);
 
     useEffect(() => {
         const listener = () => {
             historyRef.current.pop();
-            historyRef.current = [...historyRef.current];
-            sessionStorage.setItem(
-                LocalStorageItem.HISTORY,
-                JSON.stringify(historyRef.current),
-            );
+            setHistoryToStorage(historyRef.current);
         };
         window.addEventListener('popstate', listener);
 

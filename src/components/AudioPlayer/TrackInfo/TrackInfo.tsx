@@ -1,7 +1,12 @@
 import cnBind from 'classnames/bind';
 import Image from 'next/image';
-import { useMemo, type DetailedHTMLProps, type HTMLAttributes } from 'react';
-import { useRouter } from 'next/navigation';
+import {
+    useMemo,
+    type DetailedHTMLProps,
+    type HTMLAttributes,
+    useCallback,
+} from 'react';
+import { usePathname } from 'next/navigation';
 import { Tooltip } from '@nextui-org/react';
 
 import { useAudioPlayerView } from '@/contexts/AudioPlayerViewProvider';
@@ -9,6 +14,7 @@ import { appRoutes } from '@/routes';
 import { useAlbums } from '@/contexts/StoreProvider';
 import { useAudioPlayer } from '@/hooks/context/useAudioPlayer';
 import { TrackSlider } from '@/components/AudioPlayer/TrackSlider';
+import { useHistory } from '@/hooks/context/useHistory';
 
 import styles from './TrackInfo.module.scss';
 
@@ -21,8 +27,9 @@ export type TrackInfoProps = Omit<
 
 export const TrackInfo = ({ className, ...props }: TrackInfoProps) => {
     const { albumsMap } = useAlbums();
-    const router = useRouter();
+    const pathname = usePathname();
     const { activeTrack } = useAudioPlayer();
+    const { push, replace } = useHistory();
 
     const { view } = useAudioPlayerView();
 
@@ -31,6 +38,16 @@ export const TrackInfo = ({ className, ...props }: TrackInfoProps) => {
             activeTrack?.albumId ? albumsMap.get(activeTrack?.albumId) : null,
         [activeTrack?.albumId, albumsMap],
     );
+
+    const handleImageClick = useCallback(() => {
+        if (activeTrack?.id) {
+            if (pathname.startsWith(appRoutes.fullscreen())) {
+                replace(appRoutes.fullscreen(activeTrack.albumId));
+            } else {
+                push(appRoutes.fullscreen(activeTrack.albumId));
+            }
+        }
+    }, [activeTrack?.albumId, activeTrack?.id, pathname, push, replace]);
 
     return (
         <div {...props} className={cx('track-info', className)}>
@@ -44,13 +61,7 @@ export const TrackInfo = ({ className, ...props }: TrackInfoProps) => {
                         height={50}
                         quality={70}
                         role="img"
-                        onClick={() => {
-                            if (activeTrack?.id) {
-                                router.push(
-                                    appRoutes.fullscreen(activeTrack.albumId),
-                                );
-                            }
-                        }}
+                        onClick={handleImageClick}
                     />
                 </Tooltip>
             )}

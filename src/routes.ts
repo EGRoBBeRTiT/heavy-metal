@@ -5,8 +5,8 @@ class AppRoutes {
 
     static = () => '/static' as const;
 
-    fullscreen = (albumId: string) =>
-        `/interactive/fullscreen?album=${albumId}` as const;
+    fullscreen = (albumId?: string) =>
+        `/interactive/fullscreen${albumId ? `?album=${albumId}` : ''}` as const;
 
     coverflow = (albumId: string) =>
         `/interactive/coverflow?album=${albumId}` as const;

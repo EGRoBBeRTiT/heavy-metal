@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { notFound, useSearchParams } from 'next/navigation';
 import cnBind from 'classnames/bind';
 import { Button } from '@nextui-org/button';
+import { debounce } from 'lodash';
 
 import { AlbumFullScreenSwiper } from '@/components/AlbumFullScreenSwiper';
 import { IcClose } from '@/icons';
@@ -64,13 +65,21 @@ export const FullScreenPage = () => {
         setIsFullScreenAccessed(false);
     }, []);
 
-    useFullScreen(divRef, handleSuccess, handleError, back);
+    useFullScreen(divRef, handleSuccess, handleError, handleError);
 
-    const handleActiveIndexChange = useCallback(
-        (index: number) => {
-            replace(appRoutes.fullscreen(albums[index].id));
-        },
-        [albums, replace],
+    const handleActiveIndexChange = useMemo(
+        () =>
+            debounce((index: number) => {
+                if (isFullScreenAccessed) {
+                    window.history.replaceState(
+                        null,
+                        appRoutes.fullscreen(albums[index].id),
+                    );
+                } else {
+                    replace(appRoutes.fullscreen(albums[index].id));
+                }
+            }, 100),
+        [albums, isFullScreenAccessed, replace],
     );
 
     const index = useMemo(() => {
@@ -84,22 +93,19 @@ export const FullScreenPage = () => {
     }, [albumId, albums]);
 
     return (
-        <div className={cx('page', { mounted })}>
+        <div ref={divRef} className={cx('page', { mounted })}>
             <AlbumFullScreenSwiper
-                ref={divRef}
                 initialSlide={index}
                 onActiveIndexChange={handleActiveIndexChange}
             />
-            {!isFullScreenAccessed && (
-                <Button
-                    isIconOnly
-                    className={cx('close-button')}
-                    onPress={back}
-                    size="lg"
-                >
-                    <IcClose />
-                </Button>
-            )}
+            <Button
+                isIconOnly
+                className={cx('close-button')}
+                onPress={back}
+                size="lg"
+            >
+                <IcClose />
+            </Button>
         </div>
     );
 };
