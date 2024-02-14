@@ -122,7 +122,11 @@ export const AlbumFullScreenSwiper = React.memo(
                                         )}
                                     >
                                         <CustomImage
-                                            loading="lazy"
+                                            loading={
+                                                index === activeIndex
+                                                    ? 'eager'
+                                                    : 'lazy'
+                                            }
                                             src={imageSrc}
                                             alt={album}
                                             quality={100}
