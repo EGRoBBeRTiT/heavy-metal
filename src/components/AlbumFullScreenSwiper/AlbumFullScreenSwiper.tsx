@@ -120,7 +120,6 @@ export const AlbumFullScreenSwiper = React.memo(
                                             )}
                                             unoptimized={!isMobile && !isTablet}
                                             fill
-                                            placeholder="blur"
                                         />
                                     </div>
                                     <div className="swiper-lazy-preloader swiper-lazy-preloader-white" />
