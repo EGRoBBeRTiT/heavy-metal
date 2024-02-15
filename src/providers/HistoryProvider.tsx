@@ -54,11 +54,22 @@ export const HistoryProvider = ({ children }: { children: ReactNode }) => {
             push: (path: string, options?: NavigateOptions) => {
                 router.push(path, options);
             },
-            replace: (path: string, options?: NavigateOptions) => {
+            replace: (
+                path: string,
+                useWindowHistory?: boolean,
+                options?: NavigateOptions,
+            ) => {
                 historyRef.current[historyRef.current.length - 1] = path;
                 setHistoryToStorage(historyRef.current);
 
-                router.replace(path, options);
+                if (useWindowHistory) {
+                    window.history.replaceState(
+                        null,
+                        appRoutes.fullscreen(path),
+                    );
+                } else {
+                    router.replace(path, options);
+                }
             },
             forward: () => {
                 router.forward();
@@ -68,7 +79,9 @@ export const HistoryProvider = ({ children }: { children: ReactNode }) => {
     );
 
     useEffect(() => {
-        const last = historyRef.current[historyRef.current.length - 1];
+        const last = historyRef.current.length
+            ? historyRef.current[historyRef.current.length - 1]
+            : '';
 
         if (last !== fullPathName) {
             historyRef.current = [...historyRef.current, fullPathName];

@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { notFound, useSearchParams } from 'next/navigation';
 import cnBind from 'classnames/bind';
 import { Button } from '@nextui-org/button';
-import { debounce } from 'lodash';
 
 import { AlbumFullScreenSwiper } from '@/components/AlbumFullScreenSwiper';
 import { IcClose } from '@/icons';
@@ -67,18 +66,13 @@ export const FullScreenPage = () => {
 
     useFullScreen(divRef, handleSuccess, handleError, handleError);
 
-    const handleActiveIndexChange = useMemo(
-        () =>
-            debounce((index: number) => {
-                if (isFullScreenAccessed) {
-                    window.history.replaceState(
-                        null,
-                        appRoutes.fullscreen(albums[index].id),
-                    );
-                } else {
-                    replace(appRoutes.fullscreen(albums[index].id));
-                }
-            }, 100),
+    const handleActiveIndexChange = useCallback(
+        (index: number) => {
+            replace(
+                appRoutes.fullscreen(albums[index].id),
+                isFullScreenAccessed,
+            );
+        },
         [albums, isFullScreenAccessed, replace],
     );
 

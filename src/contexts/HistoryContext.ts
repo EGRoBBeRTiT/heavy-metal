@@ -19,7 +19,11 @@ export interface HistoryContextProps {
      * Navigate to the provided href.
      * Replaces the current history entry.
      */
-    replace: (path: string, options?: NavigateOptions) => void;
+    replace: (
+        path: string,
+        useWindowHistory?: boolean,
+        options?: NavigateOptions,
+    ) => void;
 }
 
 const defaultValue: HistoryContextProps = {
