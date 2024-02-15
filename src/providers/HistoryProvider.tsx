@@ -63,10 +63,7 @@ export const HistoryProvider = ({ children }: { children: ReactNode }) => {
                 setHistoryToStorage(historyRef.current);
 
                 if (useWindowHistory) {
-                    window.history.replaceState(
-                        null,
-                        appRoutes.fullscreen(path),
-                    );
+                    window.history.replaceState(null, '', path);
                 } else {
                     router.replace(path, options);
                 }
