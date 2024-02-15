@@ -118,13 +118,13 @@ export const AlbumFullScreenSwiper = React.memo(
                                             quality={100}
                                             className={cx(
                                                 'image',
-                                                'swiper-lazy',
+                                                // 'swiper-lazy',
                                             )}
                                             unoptimized={!isMobile && !isTablet}
                                             fill
                                         />
                                     </div>
-                                    <div className="swiper-lazy-preloader swiper-lazy-preloader-white" />
+                                    {/* <div className="swiper-lazy-preloader swiper-lazy-preloader-white" /> */}
                                 </SwiperSlide>
                             ))}
                         </Swiper>
