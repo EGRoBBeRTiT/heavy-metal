@@ -36,9 +36,6 @@ export const HistoryProvider = ({ children }: { children: ReactNode }) => {
 
     const historyRef = useRef<string[]>(getHistoryFromSession());
 
-    // const routerRef = useRef(router);
-    // router = router;
-
     const value = useMemo<HistoryContextProps>(
         () => ({
             back: () => {

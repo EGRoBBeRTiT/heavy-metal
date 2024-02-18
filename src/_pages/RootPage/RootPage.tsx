@@ -2,7 +2,6 @@
 
 import cnBind from 'classnames/bind';
 import { Link } from '@nextui-org/react';
-import { useRouter } from 'next/navigation';
 
 import { appRoutes } from '@/routes';
 import { cloisterBlack } from '@/styles/fonts';
@@ -10,13 +9,14 @@ import { AnimatedAlbumList } from '@/components/AnimatedAlbumList';
 import { AnimatedBands } from '@/components/AnimatedBands';
 import { useProfile } from '@/contexts/StoreProvider';
 import { isAdminOrStaff } from '@/utils/isAdminOrStaff';
+import { useHistory } from '@/hooks/context/useHistory';
 
 import styles from './RootPage.module.scss';
 
 const cx = cnBind.bind(styles);
 
 export const RootPage = () => {
-    const router = useRouter();
+    const { push } = useHistory();
 
     const profile = useProfile();
 
@@ -36,7 +36,7 @@ export const RootPage = () => {
                                 onClick={(e) => {
                                     e.preventDefault();
 
-                                    router.push(appRoutes.interactive());
+                                    push(appRoutes.interactive());
                                 }}
                             >
                                 Interactive View
@@ -51,7 +51,7 @@ export const RootPage = () => {
                                 onClick={(e) => {
                                     e.preventDefault();
 
-                                    router.push(appRoutes.static());
+                                    push(appRoutes.static());
                                 }}
                             >
                                 Static View
@@ -67,7 +67,7 @@ export const RootPage = () => {
                                     onClick={(e) => {
                                         e.preventDefault();
 
-                                        router.push(appRoutes.player());
+                                        push(appRoutes.player());
                                     }}
                                 >
                                     Player

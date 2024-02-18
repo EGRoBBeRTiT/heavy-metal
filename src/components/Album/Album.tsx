@@ -3,7 +3,6 @@ import VanillaTilt from 'vanilla-tilt';
 import cnBind from 'classnames/bind';
 import { Button } from '@nextui-org/button';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { Tooltip } from '@nextui-org/react';
 
 import { type AlbumType } from '@/shared/albums';
@@ -12,6 +11,7 @@ import { PlayPauseIcon } from '@/components/PlayPauseIcon';
 import { useAlbums } from '@/contexts/StoreProvider';
 import { useAudioPlayer } from '@/hooks/context/useAudioPlayer';
 import { CustomImage } from '@/components/CustomImage';
+import { useHistory } from '@/hooks/context/useHistory';
 
 import styles from './Album.module.scss';
 
@@ -35,7 +35,7 @@ export const Album = React.memo(
         songs: albumSongs,
     }: AlbumProps) => {
         const { songs } = useAlbums();
-        const router = useRouter();
+        const { push } = useHistory();
         const { isMobile, isTablet } = useScreenConfig();
         const imageRef = useRef<HTMLDivElement | null>(null);
 
@@ -80,7 +80,7 @@ export const Album = React.memo(
             <div
                 onClick={() => {
                     if (href) {
-                        router.push(href);
+                        push(href);
                     }
                 }}
                 ref={imageRef}
@@ -142,7 +142,7 @@ export const Album = React.memo(
                             className={cx('button', 'carousel-button')}
                             onPress={() => {
                                 if (coverFlowHref) {
-                                    router.push(coverFlowHref);
+                                    push(coverFlowHref);
                                 }
                             }}
                         >
@@ -163,7 +163,7 @@ export const Album = React.memo(
                             className={cx('button', 'carousel-button')}
                             onPress={() => {
                                 if (fullScreenHref) {
-                                    router.push(fullScreenHref);
+                                    push(fullScreenHref);
                                 }
                             }}
                             aria-hidden
