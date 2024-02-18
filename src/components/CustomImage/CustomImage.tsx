@@ -2,6 +2,9 @@ import type { ImageProps } from 'next/image';
 import Image from 'next/image';
 import cnBind from 'classnames/bind';
 import React, { useEffect, useRef, useState } from 'react';
+import { Skeleton } from '@nextui-org/react';
+
+import { isString } from '@/utils';
 
 import styles from './CustomImage.module.scss';
 
@@ -9,70 +12,84 @@ const cx = cnBind.bind(styles);
 
 export interface LazyImageProps extends ImageProps {
     withReflect?: boolean;
+    withBackground?: boolean;
+    withSkeleton?: boolean;
 }
 
 export const CustomImage = React.memo<LazyImageProps>(
-    ({ alt, id, withReflect, className, src, placeholder, ...props }) => {
-        const [blurUrl, setBlurUrl] = useState<string | undefined>(undefined);
-        const imageRef = useRef<HTMLImageElement | null>(null);
-        const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    ({
+        alt,
+        id,
+        withReflect,
+        className,
+        src,
+        loading,
+        decoding,
+        placeholder,
+        withBackground = true,
+        withSkeleton = true,
+        ...props
+    }) => {
+        const skeletonRef = useRef<HTMLImageElement | null>(null);
+        const [mounted, setMounted] = useState(false);
+        const [loaded, setLoaded] = useState(false);
+
+        const withBlur = placeholder === 'blur';
+        const showBlurImage = withBlur && mounted && isString(src) && src;
+        const hideImage = withBlur && !loaded;
+        const showSkeleton = withSkeleton && !loaded;
 
         useEffect(() => {
-            if (
-                canvasRef.current &&
-                imageRef.current &&
-                placeholder === 'blur'
-            ) {
-                canvasRef.current.width = imageRef.current.width;
-                canvasRef.current.height = imageRef.current.height;
-
-                const ctx = canvasRef.current.getContext('2d');
-
-                ctx?.drawImage(imageRef.current, 0, 0);
-
-                const dataURL = canvasRef.current.toDataURL('image/webp');
-
-                setBlurUrl(dataURL);
+            if (!withBlur) {
+                return;
             }
-        }, [placeholder]);
+
+            setTimeout(() => {
+                setLoaded(false);
+                setMounted(false);
+
+                setTimeout(() => {
+                    setMounted(true);
+                });
+            });
+        }, [withBlur, src]);
 
         return (
-            <>
-                {placeholder === 'blur' && (
-                    <>
-                        <Image
-                            ref={imageRef}
-                            loading="eager"
-                            unoptimized
-                            src={`/_next/image?url=${
-                                typeof src === 'string' ? src : ''
-                            }&w=16&q=1`}
-                            alt={alt}
-                            hidden
-                            className={cx('hidden')}
-                            width={16}
-                            height={16}
-                        />
-                        <canvas
-                            ref={canvasRef}
-                            hidden
-                            className={cx('hidden')}
-                        />
-                    </>
-                )}
-                {(blurUrl || placeholder !== 'blur') && (
+            <div
+                className={cx('container', className, {
+                    'with-reflect': withReflect,
+                })}
+            >
+                {withBackground && <div className={cx('background')} />}
+                <Image
+                    {...props}
+                    loading={loading}
+                    decoding={decoding}
+                    src={src}
+                    className={cx('image', {
+                        'with-reflect': withReflect,
+                        hidden: hideImage,
+                    })}
+                    alt={alt}
+                    id={id}
+                    onLoad={() => {
+                        setLoaded(true);
+                    }}
+                />
+                {showBlurImage && (
                     <Image
                         {...props}
-                        src={src}
-                        className={cx('image', className, {
-                            'with-reflect': withReflect,
+                        ref={skeletonRef}
+                        loading="eager"
+                        className={cx('skeleton-image', {
+                            hidden: loaded,
                         })}
+                        src={`/_next/image?url=${src}&w=32&q=70`}
                         alt={alt}
-                        id={id}
-                        placeholder={placeholder}
-                        blurDataURL={blurUrl}
+                        unoptimized
                     />
                 )}
+                {showSkeleton && <Skeleton className={cx('skeleton')} />}
                 <div
                     className={cx('reflect', { hidden: !withReflect })}
                     style={{
@@ -80,9 +97,9 @@ export const CustomImage = React.memo<LazyImageProps>(
                     }}
                     hidden={!withReflect}
                 />
-            </>
+            </div>
         );
     },
 );
 
-CustomImage.displayName = 'Ref (LazyImage)';
+CustomImage.displayName = 'Memo (CustomImage)';

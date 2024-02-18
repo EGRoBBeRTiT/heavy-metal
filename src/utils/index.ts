@@ -6,3 +6,4 @@ export { makeDownloadSrc } from './makeDownloadSrc';
 export { stopPropagation } from './stopPropagation';
 export { getBase64FromSrc } from './getBase64FromSrc';
 export { noop } from './noop';
+export { isString } from './isString';

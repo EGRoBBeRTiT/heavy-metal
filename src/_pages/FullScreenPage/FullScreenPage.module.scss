@@ -13,15 +13,8 @@
     width: 100vw;
     overflow: hidden;
     background-color: hsl(var(--nextui-background));
-    transform: translateY(50px);
-    filter: opacity(0);
     transition: all 400ms ease-in-out;
     contain: content;
-
-    &.mounted {
-        transform: translateY(0);
-        filter: opacity(1);
-    }
 
     @include max-height;
 }

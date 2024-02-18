@@ -25,7 +25,6 @@ export const FullScreenPage = () => {
 
     const { albums } = useAlbums();
     const { back, replace } = useHistory();
-    const [mounted, setMounted] = useState(false);
     const [isFullScreenAccessed, setIsFullScreenAccessed] = useState(false);
 
     const { setStyles, setView } = useAudioPlayerView();
@@ -33,8 +32,6 @@ export const FullScreenPage = () => {
     const { isMobile } = useScreenConfig();
 
     useEffect(() => {
-        setMounted(true);
-
         if (isMobile) {
             setStyles({ position: 'fixed' });
 
@@ -87,7 +84,7 @@ export const FullScreenPage = () => {
     }, [albumId, albums]);
 
     return (
-        <div ref={divRef} className={cx('page', { mounted })}>
+        <div ref={divRef} className={cx('page')}>
             <AlbumFullScreenSwiper
                 initialSlide={index}
                 onActiveIndexChange={handleActiveIndexChange}

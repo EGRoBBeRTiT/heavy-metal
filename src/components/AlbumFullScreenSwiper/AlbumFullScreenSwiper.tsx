@@ -108,23 +108,20 @@ export const AlbumFullScreenSwiper = React.memo(
                                         )}
                                     >
                                         <CustomImage
-                                            loading={
-                                                index === activeIndex
-                                                    ? 'eager'
-                                                    : 'lazy'
-                                            }
+                                            // loading={
+                                            //     index === activeIndex
+                                            //         ? 'eager'
+                                            //         : 'lazy'
+                                            // }
                                             src={imageSrc}
                                             alt={album}
                                             quality={100}
-                                            className={cx(
-                                                'image',
-                                                // 'swiper-lazy',
-                                            )}
+                                            className={cx('image')}
                                             unoptimized={!isMobile && !isTablet}
                                             fill
+                                            placeholder="blur"
                                         />
                                     </div>
-                                    {/* <div className="swiper-lazy-preloader swiper-lazy-preloader-white" /> */}
                                 </SwiperSlide>
                             ))}
                         </Swiper>
