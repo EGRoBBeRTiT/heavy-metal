@@ -20,4 +20,5 @@ export enum Band {
     METALLICA = 'Metallica',
     RAMMSTEIN = 'Rammstein',
     KERRY_KING = 'Kerry King',
+    SLAYER = 'Slayer',
 }
