@@ -21,4 +21,5 @@ export enum Band {
     RAMMSTEIN = 'Rammstein',
     KERRY_KING = 'Kerry King',
     SLAYER = 'Slayer',
+    SUICIDAL_TENDENCIES = 'Suicidal Tendencies',
 }
