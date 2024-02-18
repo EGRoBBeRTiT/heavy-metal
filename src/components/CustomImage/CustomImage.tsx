@@ -46,13 +46,11 @@ export const CustomImage = React.memo<LazyImageProps>(
                 return;
             }
 
-            setTimeout(() => {
-                setLoaded(false);
-                setMounted(false);
+            setLoaded(false);
+            setMounted(false);
 
-                setTimeout(() => {
-                    setMounted(true);
-                });
+            setTimeout(() => {
+                setMounted(true);
             });
         }, [withBlur, src]);
 

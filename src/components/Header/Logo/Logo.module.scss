@@ -1,6 +1,7 @@
 .logo-icon {
     width: 74px;
     height: fit-content;
+    aspect-ratio: 1.19;
 
     @include tablet {
         width: 56px;
