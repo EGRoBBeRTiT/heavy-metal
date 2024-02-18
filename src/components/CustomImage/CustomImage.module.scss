@@ -5,9 +5,6 @@
 }
 
 .image {
-    position: relative;
-    z-index: 1;
-
     &.with-reflect {
         -webkit-box-reflect: below var(--reflect-margin)
             linear-gradient(transparent, rgb(0 0 0 / 85%), rgb(0 0 0 / 90%));
