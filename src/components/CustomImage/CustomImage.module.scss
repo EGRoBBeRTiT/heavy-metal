@@ -5,6 +5,9 @@
 }
 
 .image {
+    position: relative;
+    z-index: 1;
+
     &.with-reflect {
         -webkit-box-reflect: below var(--reflect-margin)
             linear-gradient(transparent, rgb(0 0 0 / 85%), rgb(0 0 0 / 90%));
@@ -86,8 +89,22 @@
     height: 100vmin;
     max-height: 100%;
     margin: 0 auto;
+    overflow: hidden;
     background-color: hsl(var(--nextui-foreground-400));
     transform: translateX(-50%) translateY(-50%);
     filter: opacity(0.5);
     aspect-ratio: 1;
+
+    &.with-image {
+        filter: opacity(1);
+    }
+}
+
+.bg-image {
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-clip: border-box;
+    filter: blur(10px);
 }

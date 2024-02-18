@@ -14,6 +14,7 @@ export interface LazyImageProps extends ImageProps {
     withReflect?: boolean;
     withBackground?: boolean;
     withSkeleton?: boolean;
+    withBlurBackground?: boolean;
 }
 
 export const CustomImage = React.memo<LazyImageProps>(
@@ -28,6 +29,7 @@ export const CustomImage = React.memo<LazyImageProps>(
         placeholder,
         withBackground = true,
         withSkeleton = true,
+        withBlurBackground,
         ...props
     }) => {
         const skeletonRef = useRef<HTMLImageElement | null>(null);
@@ -60,7 +62,24 @@ export const CustomImage = React.memo<LazyImageProps>(
                     'with-reflect': withReflect,
                 })}
             >
-                {withBackground && <div className={cx('background')} />}
+                {withBackground && (
+                    <div
+                        className={cx('background', {
+                            'with-image': withBlurBackground,
+                        })}
+                    >
+                        {withBlurBackground && (
+                            <div
+                                className={cx('bg-image')}
+                                style={{
+                                    backgroundImage: isString(src)
+                                        ? `url(/_next/image?url=${src}&w=32&q=70)`
+                                        : '',
+                                }}
+                            />
+                        )}
+                    </div>
+                )}
                 <Image
                     {...props}
                     loading={loading}
@@ -76,7 +95,7 @@ export const CustomImage = React.memo<LazyImageProps>(
                         setLoaded(true);
                     }}
                 />
-                {showBlurImage && (
+                {showBlurImage && !withBlurBackground && (
                     <Image
                         {...props}
                         ref={skeletonRef}

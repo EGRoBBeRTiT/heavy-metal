@@ -118,6 +118,8 @@ export const AlbumCowerFlowSwiper = React.memo(
                                             );
                                         }}
                                         withReflect={canShow}
+                                        placeholder="blur"
+                                        withBlurBackground
                                     />
                                     <div
                                         className="swiper-lazy-preloader swiper-lazy-preloader-white"
